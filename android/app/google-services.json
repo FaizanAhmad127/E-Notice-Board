@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "616072724427",
+    "project_id": "notice-board-c6d6d",
+    "storage_bucket": "notice-board-c6d6d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:616072724427:android:a62b2888b6821851b2004e",
+        "android_client_info": {
+          "package_name": "com.cityuniversity.fyp.notice_board"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "616072724427-5m2vsskn2vdoj6adigiup6iglml0v8m5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6c9vcvOn52hYVTlWb1GzZD81mq6l44Gs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "616072724427-5m2vsskn2vdoj6adigiup6iglml0v8m5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
