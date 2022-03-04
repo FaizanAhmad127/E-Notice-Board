@@ -1,0 +1,4 @@
+
+enum projectStatus{
+  finished,pending
+}

@@ -20,7 +20,7 @@ class StudentNotificationScreen extends StatelessWidget {
               itemBuilder: (context,index)
           {
             return SizedBox(
-              height: 97.h,
+              height: 110.h,
               width: 414.w,
               child: Card(
                 color: kPostBackgroundColor,

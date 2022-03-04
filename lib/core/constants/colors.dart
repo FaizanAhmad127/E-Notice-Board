@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 Color kBlackColor=Color(0xFF000000);
 Color kPrimaryColor=Color(0xFF0E273C);
+Color kSupervisedByColor=Color(0xFF0A0734);
 Color kWhiteColor=Color(0xFFFFFFFF);
 Color kPostBackgroundColor=Color(0xFFF6F6F6);
 Color kFinPenPressedColor=Color(0xFFE5E5E5);
