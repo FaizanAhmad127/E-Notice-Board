@@ -43,112 +43,185 @@ class SignupScreen extends StatelessWidget {
                     right: 19.w,
                   ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                    Text(
-                    "SIGN UP",
-                    style: kPoppinsRegular400.copyWith(
-                        color: kPrimaryColor,
-                        fontSize: 30.sp
+                    Expanded(
+                      flex: 2,
+                      child: Align(
+                        alignment: Alignment.bottomLeft,
+                        child: FittedBox(
+                          child: Text(
+                          "SIGN UP",
+                          style: kPoppinsRegular400.copyWith(
+                              color: kPrimaryColor,
+                              fontSize: 30.sp
+                          ),
+                  ),
+                        ),
+                      ),
+                    ),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Text(
+                          "Let's help to meet up your task",
+                          style: kPoppinsLight300.copyWith(
+                              color: kPrimaryColor,
+                              height: 1.sp,
+                              fontSize: 16.sp
+                          ),),
+                      ),
                     ),
                   ),
-                  Text(
-                    "Let's help to meet up your task",
-                    style: kPoppinsLight300.copyWith(
-                        color: kPrimaryColor,
-                        height: 1.sp,
-                        fontSize: 16.sp
-                    ),),
-                      SizedBox(
-                        height: 17.h,
-                      ),
-                      CustomUserTF(
-                        textEditingController: emailTextEditingController,
-                        hintText: "Enter your email",
-                        icon: Icon(
-                          Icons.alarm,
-                          color: kWhiteColor,
+                      const Expanded(
+                          child: SizedBox()),
+                      Expanded(
+                        child: CustomUserTF(
+                          textEditingController: emailTextEditingController,
+                          hintText: "Enter your email",
+                          icon: Icon(
+                            Icons.alarm,
+                            color: kWhiteColor,
+                          ),
                         ),
                       ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                      CustomUserTF(
-                        textEditingController: uniIdTextEditingController,
-                        hintText: "Enter University ID",
-                        icon: Icon(
-                          Icons.account_circle,
-                          color: kWhiteColor,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      CustomUserTF(
-                        textEditingController: fullNameTextEditingController,
-                        hintText: "Enter Full Name",
-                        icon: Icon(
-                          Icons.account_circle,
-                          color: kWhiteColor,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 11.h,
-                      ),
-                      CustomPasswordTF(
-                        textEditingController: passwordTextEditingController,
-                        hintText: "Enter Password",
-                      ),
-                      SizedBox(
-                        height: 11.h,
-                      ),
-                      CustomPasswordTF(
-                        textEditingController: confirmPasswordTextEditingController,
-                        hintText: "Confirm Password",
-                      ),
-                      SizedBox(
-                        height: 26.h,
-                      ),
-                      LoginRegisterButton(
-                        buttonText: "REGISTER",
-                        onPressed: ()
-                        {
-
-                        },
-                      ),
-                      SizedBox(
-                        height: 15.h,
-                      ),
-                      Center(
+                    const Expanded(
                         child: SizedBox(
-                          height: 23.h,
-                          child: Wrap(
-                              children: [
-                                Text(
-                                  "Already have an account? ",
-                                  style: kPoppinsLight300.copyWith(
-                                      fontSize: 16.sp,
-                                      color: kDateColor
+                        )),
+                      Expanded(
+                        child: CustomUserTF(
+                          textInputType: TextInputType.number,
+                          textEditingController: uniIdTextEditingController,
+                          hintText: "Enter University ID",
+                          icon: Icon(
+                            Icons.account_circle,
+                            color: kWhiteColor,
+                          ),
+                        ),
+                      ),
+                      const Expanded(
+                          child: SizedBox()),
+                      Expanded(
+                        child: CustomUserTF(
+                          textEditingController: fullNameTextEditingController,
+                          hintText: "Enter Full Name",
+                          icon: Icon(
+                            Icons.account_circle,
+                            color: kWhiteColor,
+                          ),
+                        ),
+                      ),
+                      const Expanded(
+                          child: SizedBox()),
+                      Expanded(
+                        child: FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: CustomPasswordTF(
+                            textEditingController: passwordTextEditingController,
+                            hintText: "Enter Password",
+                          ),
+                        ),
+                      ),
+                      const Expanded(
+                          child: SizedBox()),
+                      Expanded(
+                        child: FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: CustomPasswordTF(
+                            textEditingController: confirmPasswordTextEditingController,
+                            hintText: "Confirm Password",
+                          ),
+                        ),
+                      ),
+                      const Expanded(
+                          child: SizedBox()),
+                      //USER TYPE RADIO BUTTON
+                      Expanded(
+                        child: FittedBox(
+                          child: SizedBox(
+                              height: 20.h,
+                              width: 276.w,
+                              child:Row(
+                                children: <Widget>[
+                                  _myRadioButton(
+                                      title: "Student",
+                                      value: 0,
+                                      context: context
+                                    // onChanged: (newValue) => setState(() => _groupValue = newValue),
                                   ),
-                                ),
-                                GestureDetector(
-                                  onTap: (){
-                                    Navigator.pushReplacement(context, PageTransition(
-                                        duration: Duration(milliseconds: 500),
-                                        type: PageTransitionType.leftToRightWithFade, child: LoginScreen(
-                                    )));
-                                  },
-                                  child: Text(
-                                    "LOGIN ",
-                                    style: kPoppinsLight300.copyWith(
-                                      fontSize: 16.sp,
-
+                                  SizedBox(
+                                    width: 20.w,
+                                  ),
+                                  _myRadioButton(
+                                      title: "Teacher",
+                                      value: 1,
+                                      context: context
+                                    //onChanged: (newValue) => setState(() => _groupValue = newValue),
+                                  ),
+                                ],
+                              )
+                          ),
+                        ),
+                      ),
+                      const Expanded(
+                          child: SizedBox()),
+                      Expanded(
+                        child: FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: LoginRegisterButton(
+                            buttonText: "REGISTER",
+                            onPressed: ()
+                            {
+                              Provider.of<SignupScreenVM>(context,listen: false).signup(
+                                  context,
+                                  emailTextEditingController.text,
+                                  passwordTextEditingController.text,
+                                  confirmPasswordTextEditingController.text,
+                                  fullNameTextEditingController.text,
+                                  uniIdTextEditingController.text);
+                            },
+                          ),
+                        ),
+                      ),
+                      const Expanded(
+                          child: SizedBox()),
+                      Expanded(
+                        child: FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: Center(
+                            child: SizedBox(
+                              height: 23.h,
+                              child: Wrap(
+                                  children: [
+                                    Text(
+                                      "Already have an account? ",
+                                      style: kPoppinsLight300.copyWith(
+                                          fontSize: 16.sp,
+                                          color: kDateColor
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              ]
+                                    GestureDetector(
+                                      onTap: (){
+                                        Navigator.pushReplacement(context, PageTransition(
+                                            duration: Duration(milliseconds: 500),
+                                            type: PageTransitionType.leftToRightWithFade, child: LoginScreen(
+                                        )));
+                                      },
+                                      child: Text(
+                                        "LOGIN ",
+                                        style: kPoppinsLight300.copyWith(
+                                          fontSize: 16.sp,
+
+                                        ),
+                                      ),
+                                    ),
+                                  ]
 
 
+                              ),
+                            ),
                           ),
                         ),
                       )
@@ -161,4 +234,37 @@ class SignupScreen extends StatelessWidget {
       ),
     ));
   }
+
+Widget _myRadioButton({required String title, required int value,required BuildContext context}) {
+  return Row(
+      children:[
+        Text(
+          title,
+          style: kPoppinsRegular400.copyWith(
+            fontSize: 14.sp,
+          ),),
+        Container(
+          width: 25.w,
+          child: Transform.scale(
+            scale: 0.75.r,
+            child: Radio(
+              activeColor: kPrimaryColor,
+              value: value,
+              groupValue: Provider.of<SignupScreenVM>(context).getGroupValue,
+              onChanged: (int ?newValue) {
+                Provider.of<SignupScreenVM>(context,listen: false).setGroupValue=newValue!;
+              },
+            ),
+          ),
+        )
+      ]
+
+  );
+
+
+
 }
+}
+
+
+

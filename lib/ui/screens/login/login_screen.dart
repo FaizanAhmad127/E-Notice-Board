@@ -24,7 +24,7 @@ class LoginScreen extends StatelessWidget {
               create: (context) =>LoginScreenVM(),
               builder: (context, viewModel) {
                 return SizedBox(
-                  height: 400.h,
+                  height: 359.h,
                   width: 309.w,
                   child: Card(
                     color: kPostBackgroundColor,
@@ -34,34 +34,49 @@ class LoginScreen extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.only(left: 14.w,top: 19.h,right: 19.w),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Text(
-                            "LOGIN",
-                            style: kPoppinsRegular400.copyWith(
-                                color: kPrimaryColor,
-                                fontSize: 30.sp
+                          Expanded(
+                            flex: 1,
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: FittedBox(
+                                child: Text(
+                                  "LOGIN",
+                                  style: kPoppinsRegular400.copyWith(
+                                      color: kPrimaryColor,
+                                      fontSize: 30.sp
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                          Text(
-                            "Welcome to Portal",
-                            style: kPoppinsLight300.copyWith(
-                                color: kPrimaryColor,
-                                height: 1.sp,
-                                fontSize: 18.sp
+                          Expanded(
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  "Welcome to Portal",
+                                  style: kPoppinsLight300.copyWith(
+                                      color: kPrimaryColor,
+                                      height: 1.sp,
+                                      fontSize: 18.sp
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                          SizedBox(
-                            height: 14.h,
-                          ),
-
+                         
                           //UNIVERSITY ID TEXTFIELD
-                          CustomUserTF(
-                            textEditingController: emailTextEditingController,
-                            hintText: "Enter your email",
-                            icon: Icon(
-                              Icons.account_circle,
-                              color: kWhiteColor,
+                          Expanded(
+                            child: CustomUserTF(
+                              textEditingController: emailTextEditingController,
+                              hintText: "Enter your email",
+                              icon: Icon(
+                                Icons.account_circle,
+                                color: kWhiteColor,
+                              ),
                             ),
                           ),
                           SizedBox(
@@ -69,129 +84,140 @@ class LoginScreen extends StatelessWidget {
                           ),
 
                           //PASSWORD TEXTFIELD
-                          CustomPasswordTF(
-                            textEditingController: passwordTextEditingController,
-                            hintText: "Enter Password",
+                          Expanded(
+                            child: CustomPasswordTF(
+                              textEditingController: passwordTextEditingController,
+                              hintText: "Enter Password",
+                            ),
                           ),
                           SizedBox(
                             height: 27.h,
                           ),
 
                           //LOGIN BUTTON
-                          LoginRegisterButton(
-                            buttonText: "LOG IN",
-                            onPressed: ()
-                            {
+                          Expanded(
+                            child: FittedBox(
+                              fit: BoxFit.fitWidth,
+                              child: LoginRegisterButton(
+                                buttonText: "LOG IN",
+                                onPressed: ()
+                                {
 
-                              Provider.of<LoginScreenVM>(context).
-                              login(emailTextEditingController.text,
-                                  passwordTextEditingController.text);
-                            },
+                                  Provider.of<LoginScreenVM>(context,listen:false).
+                                  login(emailTextEditingController.text,
+                                      passwordTextEditingController.text);
+                                },
+                              ),
+                            ),
                           ),
                           SizedBox(
                             height: 6.h,
                           ),
 
                           //ROW CONTAINING TOGGLE AND FORGOT PASSWORD
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
+                          Expanded(
+                            child: SizedBox(
+                              width: 1.sw,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("Keep Logged In",
-                                    style: kPoppinsLight300.copyWith(
-                                      fontSize: 10.sp,
-                                      color: kPrimaryColor,
-                                    ),),
-                                  //Toggle Switch
-                                  Container(
-                                    height: 30, //set desired REAL HEIGHT
-                                    width: 35, //set desired REAL WIDTH
-                                    child: Transform.scale(
-                                      transformHitTests: false,
-                                      scale: .35,
-                                      child: CupertinoSwitch(
-                                        value: Provider.of<LoginScreenVM>(context).getIsToggled,
-                                        onChanged: (value) {
-                                          Provider.of<LoginScreenVM>(context,listen: false).setIsToggled=value;
-                                        },
-                                        trackColor: kNavDisabledColor,
-                                        thumbColor: kPrimaryColor,
-                                        activeColor: Colors.green,
+                                  Expanded(
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: FittedBox(
+                                              child: Text("Keep Logged In",
+                                                style: kPoppinsLight300.copyWith(
+                                                  fontSize: 10.sp,
+                                                  color: kPrimaryColor,
+                                                ),),
+                                            ),
+                                          ),
+                                          //Toggle Switch
+                                          Expanded(
+                                            child: FittedBox(
+                                              child: SizedBox(
+                                                height: 30, //set desired REAL HEIGHT
+                                                width: 35, //set desired REAL WIDTH
+                                                child: Transform.scale(
+                                                  transformHitTests: false,
+                                                  scale: 0.32.r,
+                                                  child: CupertinoSwitch(
+                                                    value: Provider.of<LoginScreenVM>(context).getIsToggled,
+                                                    onChanged: (value) {
+                                                      Provider.of<LoginScreenVM>(context,listen: false).setIsToggled=value;
+                                                    },
+                                                    trackColor: kNavDisabledColor,
+                                                    thumbColor: kPrimaryColor,
+                                                    activeColor: Colors.green,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Align(
+                                      alignment: Alignment.centerRight,
+                                      child: FittedBox(
+
+                                        child: Text("Forgot Password",
+                                          style: kPoppinsLight300.copyWith(
+                                            fontSize: 10.sp,
+                                            color: kPrimaryColor,
+                                          ),),
                                       ),
                                     ),
                                   ),
                                 ],
+
                               ),
-                              Text("Forgot Password",
-                                style: kPoppinsLight300.copyWith(
-                                  fontSize: 10.sp,
-                                  color: kPrimaryColor,
-                                ),),
-                            ],
-
+                            ),
                           ),
 
-                          //USER TYPE RADIO BUTTON
-                          SizedBox(
-                              height: 20.h,
-                              width: 276.w,
-                              child:Row(
-                                children: <Widget>[
-                                  _myRadioButton(
-                                      title: "Student",
-                                      value: 0,
-                                      context: context
-                                    // onChanged: (newValue) => setState(() => _groupValue = newValue),
-                                  ),
-                                  SizedBox(
-                                    width: 20.w,
-                                  ),
-                                  _myRadioButton(
-                                      title: "Teacher",
-                                      value: 1,
-                                      context: context
-                                    //onChanged: (newValue) => setState(() => _groupValue = newValue),
-                                  ),
-                                ],
-                              )
-                          ),
-                          SizedBox(
-                            height: 15.h,
-                          ),
 
                           //NOT A MEMBER SIGNIN
-                          Center(
-                            child: SizedBox(
-                              height: 23.h,
-                              width:170.w,
-                              child: Wrap(
-                                  children: [
-                                    Text(
-                                      "Not a Member? ",
-                                      style: kPoppinsLight300.copyWith(
-                                          fontSize: 15.sp,
-                                          color: kDateColor
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: (){
-                                        Navigator.pushReplacement(context, PageTransition(
-                                            duration: Duration(milliseconds: 500),
-                                            type: PageTransitionType.leftToRightWithFade, child: SignupScreen(
-                                        )));
-                                      },
-                                      child: Text(
-                                        "SIGN IN",
-                                        style: kPoppinsLight300.copyWith(
-                                          fontSize: 15.sp,
-
+                          Expanded(
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Center(
+                                child: SizedBox(
+                                  height: 23.h,
+                                  width:170.w,
+                                  child: Wrap(
+                                      children: [
+                                        Text(
+                                          "Not a Member? ",
+                                          style: kPoppinsLight300.copyWith(
+                                              fontSize: 15.sp,
+                                              color: kDateColor
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                  ]
+                                        GestureDetector(
+                                          onTap: (){
+                                            Navigator.pushReplacement(context, PageTransition(
+                                                duration: Duration(milliseconds: 500),
+                                                type: PageTransitionType.leftToRightWithFade, child: SignupScreen(
+                                            )));
+                                          },
+                                          child: Text(
+                                            "SIGN IN",
+                                            style: kPoppinsLight300.copyWith(
+                                              fontSize: 15.sp,
+
+                                            ),
+                                          ),
+                                        ),
+                                      ]
 
 
+                                  ),
+                                ),
                               ),
                             ),
                           )
@@ -207,35 +233,6 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
     );
-
-  }
-  Widget _myRadioButton({required String title, required int value,required BuildContext context}) {
-    return Row(
-      children:[
-        Text(
-          title,
-        style: kPoppinsRegular400.copyWith(
-          fontSize: 14.sp,
-        ),),
-        Container(
-          width: 25.w,
-          child: Transform.scale(
-            scale: 0.75.r,
-            child: Radio(
-              activeColor: kPrimaryColor,
-              value: value,
-              groupValue: Provider.of<LoginScreenVM>(context).getGroupValue,
-              onChanged: (int ?newValue) {
-                Provider.of<LoginScreenVM>(context,listen: false).setGroupValue=newValue!;
-              },
-            ),
-          ),
-        )
-      ]
-
-    );
-
-
 
   }
 }

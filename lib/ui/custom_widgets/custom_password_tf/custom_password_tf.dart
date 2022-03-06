@@ -19,75 +19,78 @@ class CustomPasswordTF extends StatelessWidget {
       create: (context)=>CustomPasswordTfVM(),
       builder: (context,viewModel)
       {
-        return  Container(
-          height: 40.h,
-          width: 276.w,
-          decoration: BoxDecoration(
-              color: kTfFillColor,
-              borderRadius: BorderRadius.circular(5.r)
-          ),
-          child: Row(
-            children: [
-              Container(
-                height: 40.h,
-                width: 50.w,
-                decoration: BoxDecoration(
-                    color: kPrimaryColor,
-                    borderRadius: BorderRadius.circular(5.r)
-                ),
-                child: Center(
-                  child: Icon(
-                    Icons.lock,
-                    color: kWhiteColor,
+        return  FittedBox(
+          fit: BoxFit.fitWidth,
+          child: Container(
+            height: 40.h,
+            width: 276.w,
+            decoration: BoxDecoration(
+                color: kTfFillColor,
+                borderRadius: BorderRadius.circular(5.r)
+            ),
+            child: Row(
+              children: [
+                Container(
+                  height: 40.h,
+                  width: 50.w,
+                  decoration: BoxDecoration(
+                      color: kPrimaryColor,
+                      borderRadius: BorderRadius.circular(5.r)
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.lock,
+                      color: kWhiteColor,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                width: 10.w,
-              ),
-              Container(
-                  height: 40.h,
-                  width: 206.w,
-                  child: TextField(
-                    obscureText: Provider.of<CustomPasswordTfVM>(context).getIsObscure,
-                    controller: textEditingController,
-                    style: kPoppinsLight300.copyWith(
-                        fontSize: 14.sp,
-                        letterSpacing: 1
-                    ),
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: hintText,
-                      hintStyle: kPoppinsLight300.copyWith(
-                        fontSize: 14.sp,
+                SizedBox(
+                  width: 10.w,
+                ),
+                Container(
+                    height: 40.h,
+                    width: 216.w,
+                    child: TextField(
+                      obscureText: Provider.of<CustomPasswordTfVM>(context).getIsObscure,
+                      controller: textEditingController,
+                      style: kPoppinsLight300.copyWith(
+                          fontSize: 14.sp,
+                          letterSpacing: 1
                       ),
-                      suffixIcon: GestureDetector(
-                        onTap: ()
-                        {
-                          if(Provider.of<CustomPasswordTfVM>(context,listen: false).getIsObscure==false)
-                            {
-                              Provider.of<CustomPasswordTfVM>(context,listen: false).setIsObscure=true;
-                            }
-                          else
-                            {
-                              Provider.of<CustomPasswordTfVM>(context,listen: false).setIsObscure=false;
-                            }
-                        },
-                        child: Provider.of<CustomPasswordTfVM>(context).getIsObscure==false?Icon(
-                          Icons.visibility,
-                          size: 22.r,
-
-                        ):Icon(
-                          Icons.visibility_off,
-                          size: 22.r,
-
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: hintText,
+                        hintStyle: kPoppinsLight300.copyWith(
+                          fontSize: 14.sp,
                         ),
+                        suffixIcon: GestureDetector(
+                          onTap: ()
+                          {
+                            if(Provider.of<CustomPasswordTfVM>(context,listen: false).getIsObscure==false)
+                              {
+                                Provider.of<CustomPasswordTfVM>(context,listen: false).setIsObscure=true;
+                              }
+                            else
+                              {
+                                Provider.of<CustomPasswordTfVM>(context,listen: false).setIsObscure=false;
+                              }
+                          },
+                          child: Provider.of<CustomPasswordTfVM>(context).getIsObscure==false?Icon(
+                            Icons.visibility,
+                            size: 22.r,
+
+                          ):Icon(
+                            Icons.visibility_off,
+                            size: 22.r,
+
+                          ),
+                        ),
+
+
                       ),
-
-
-                    ),
-                  ))
-            ],
+                    ))
+              ],
+            ),
           ),
         );
       },

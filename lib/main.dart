@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -39,6 +40,8 @@ class MyApp extends StatelessWidget {
    minTextAdapt: true,
       designSize:  const Size(414,640) ,//414x707 figma size,
       builder:()=> MaterialApp(
+        builder: BotToastInit(),
+        navigatorObservers: [BotToastNavigatorObserver()],
         debugShowCheckedModeBanner: false,
         title: 'E-Notice Board',
         theme: ThemeData(

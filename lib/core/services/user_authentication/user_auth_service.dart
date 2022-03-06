@@ -4,7 +4,7 @@ import 'package:logger/logger.dart';
 
 class UserAuthService {
   final FirebaseAuth _firebaseAuth=FirebaseAuth.instance;
-  late UserCredential? _userCredential;
+  String uid="";
   final _logger=Logger();
 
   Future<String> userLogin(String _email, String _password)async
@@ -12,28 +12,35 @@ class UserAuthService {
     BotToast.showLoading();
     try
     {
-      _userCredential=await _firebaseAuth.signInWithEmailAndPassword(email: _email, password: _password);
+      await _firebaseAuth.signInWithEmailAndPassword(email: _email, password: _password)
+      .then((value) {
+        uid=value.user!.uid;
+        _logger.d("uid is $uid");
+      });
     }
     catch(error)
     {
-      _logger.e("Error at userLogin method, services/UserAuthService.dart");
+      _logger.e("Error at userLogin method, services/UserAuthService.dart $error");
     }
     BotToast.closeAllLoading();
-    return _userCredential!.user!.uid;
+    return uid;
   }
   Future<String> userSignup(String _email, String _password)async
   {
     BotToast.showLoading();
     try
     {
-      _userCredential=await _firebaseAuth.createUserWithEmailAndPassword(email: _email, password: _password);
+      await _firebaseAuth.createUserWithEmailAndPassword(email: _email, password: _password)
+      .then((value) {
+        uid=value.user!.uid;
+      });
     }
     catch(error)
     {
-      _logger.e("Error at userLogin method, services/UserAuthService.dart");
+      _logger.e("Error at userLogin method, services/UserAuthService.dart $error");
     }
     BotToast.closeAllLoading();
-    return _userCredential!.user!.uid;
+    return uid;
   }
 
 
