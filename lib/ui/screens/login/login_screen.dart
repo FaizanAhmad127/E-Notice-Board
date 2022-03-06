@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
   TextEditingController passwordTextEditingController=TextEditingController();
-  TextEditingController uniIdTextEditingController=TextEditingController();
+  TextEditingController emailTextEditingController=TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,8 +57,8 @@ class LoginScreen extends StatelessWidget {
 
                           //UNIVERSITY ID TEXTFIELD
                           CustomUserTF(
-                            textEditingController: passwordTextEditingController,
-                            hintText: "Enter University ID",
+                            textEditingController: emailTextEditingController,
+                            hintText: "Enter your email",
                             icon: Icon(
                               Icons.account_circle,
                               color: kWhiteColor,
@@ -70,7 +70,7 @@ class LoginScreen extends StatelessWidget {
 
                           //PASSWORD TEXTFIELD
                           CustomPasswordTF(
-                            textEditingController: uniIdTextEditingController,
+                            textEditingController: passwordTextEditingController,
                             hintText: "Enter Password",
                           ),
                           SizedBox(
@@ -83,6 +83,9 @@ class LoginScreen extends StatelessWidget {
                             onPressed: ()
                             {
 
+                              Provider.of<LoginScreenVM>(context).
+                              login(emailTextEditingController.text,
+                                  passwordTextEditingController.text);
                             },
                           ),
                           SizedBox(

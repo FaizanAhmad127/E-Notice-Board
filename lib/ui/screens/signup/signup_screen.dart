@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 
 class SignupScreen extends StatelessWidget {
    SignupScreen({Key? key}) : super(key: key);
-  final TextEditingController creditTextEditingController=TextEditingController();
+  final TextEditingController emailTextEditingController=TextEditingController();
    final TextEditingController uniIdTextEditingController=TextEditingController();
    final TextEditingController fullNameTextEditingController=TextEditingController();
    final TextEditingController passwordTextEditingController=TextEditingController();
@@ -63,8 +63,8 @@ class SignupScreen extends StatelessWidget {
                         height: 17.h,
                       ),
                       CustomUserTF(
-                        textEditingController: creditTextEditingController,
-                        hintText: "Enter Passed Credit Hours",
+                        textEditingController: emailTextEditingController,
+                        hintText: "Enter your email",
                         icon: Icon(
                           Icons.alarm,
                           color: kWhiteColor,
