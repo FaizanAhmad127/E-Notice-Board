@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:notice_board/core/enums/enums.dart';
 
+
 class StudentProjectStatusScreenVM extends ChangeNotifier
 {
+
+
   projectStatus status=projectStatus.finished;
+
 
   projectStatus get getStatus=>status;
 
@@ -12,4 +16,5 @@ class StudentProjectStatusScreenVM extends ChangeNotifier
     status=s;
     notifyListeners();
   }
+
 }

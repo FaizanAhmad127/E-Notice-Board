@@ -105,7 +105,7 @@ class LoginScreen extends StatelessWidget {
 
                                   Provider.of<LoginScreenVM>(context,listen:false).
                                   login(emailTextEditingController.text,
-                                      passwordTextEditingController.text);
+                                      passwordTextEditingController.text,context);
                                 },
                               ),
                             ),

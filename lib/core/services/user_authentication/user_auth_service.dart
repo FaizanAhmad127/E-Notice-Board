@@ -15,11 +15,11 @@ class UserAuthService {
       await _firebaseAuth.signInWithEmailAndPassword(email: _email, password: _password)
       .then((value) {
         uid=value.user!.uid;
-        _logger.d("uid is $uid");
       });
     }
     catch(error)
     {
+
       _logger.e("Error at userLogin method, services/UserAuthService.dart $error");
     }
     BotToast.closeAllLoading();
@@ -41,6 +41,33 @@ class UserAuthService {
     }
     BotToast.closeAllLoading();
     return uid;
+  }
+
+  Future userSignOut()async
+  {
+    BotToast.showLoading();
+    try{
+      await _firebaseAuth.signOut();
+    }
+    catch(error)
+    {
+      _logger.e("Error at userSignOut method, services/UserAuthService.dart $error");
+    }
+    BotToast.closeAllLoading();
+  }
+
+  String isUserLoggedIn()
+  {
+    String uid;
+    try{
+      uid=_firebaseAuth.currentUser!.uid;
+    }
+    catch(e)
+    {
+      uid="";
+    }
+    return uid;
+
   }
 
 

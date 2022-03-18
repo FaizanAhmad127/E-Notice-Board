@@ -1,12 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_it/get_it.dart';
 import 'package:notice_board/core/constants/colors.dart';
-import 'package:notice_board/core/constants/text_styles.dart';
 import 'package:notice_board/ui/screens/student/student_Project_Status_Screen/student_project_status_screen.dart';
 import 'package:notice_board/ui/screens/student/student_home_screen/student_home_screen.dart';
 import 'package:notice_board/ui/screens/student/student_notification_screen/student_notification_screen.dart';
+import 'package:notice_board/ui/screens/student/student_root_screen/drawer_screen/drawer_screen.dart';
+import 'package:notice_board/ui/screens/student/student_root_screen/student_root_screen_vm.dart';
+import 'package:notice_board/ui/screens/student/student_teacherList_screen/student_teacherList_screen.dart';
+import 'package:provider/provider.dart';
 
-class StudentRootScreen extends StatefulWidget{
+import '../../../../core/services/user_documents/user_profile_service.dart';
+
+class StudentRootScreen extends StatefulWidget {
    const StudentRootScreen({Key? key}) : super(key: key);
 
   @override
@@ -14,134 +21,92 @@ class StudentRootScreen extends StatefulWidget{
 }
 
 class _StudentRootScreenState extends State<StudentRootScreen> with
-SingleTickerProviderStateMixin{
+SingleTickerProviderStateMixin, WidgetsBindingObserver{
    late TabController controller;
+
+   final UserProfileService _userProfileService=GetIt.I.get<UserProfileService>();
+   final FirebaseAuth _firebaseAuth=FirebaseAuth.instance;
+
+   Future setUserOnlineStatus(String status)async
+   {
+     await _userProfileService.postOnlineStatus("student",
+         _firebaseAuth.currentUser!.uid, status);
+   }
 
    @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance!.addObserver(this);
+    setUserOnlineStatus("online");
     controller=TabController(length: 4, vsync: this);
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if(state==AppLifecycleState.resumed)
+      {
+        setUserOnlineStatus("online");
+      }
+    else
+      {
+        setUserOnlineStatus("offline");
+      }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      drawer: Drawer(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 2,
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: SizedBox(
-                  width: 1.sw,
-                  child: FittedBox(child:
-            Image(
-                  image: NetworkImage("https://blog.hubspot.com/hubfs/how-to-be-a-thought-leader-on-linkedin.jpg"),
-            ),),
-                ),
-              )),
-          Expanded(child: Padding(
-            padding: EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "University ID",
-                    style: kPoppinsMedium500.copyWith(
-                      fontSize: 20.sp
-                    ),
+    return ChangeNotifierProvider(
+      create: (context)=>StudentRootScreenVM(),
+      builder: (context,viewModel)
+      {
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+
+          drawer: const DrawerScreen(),
+          appBar: AppBar(
+            backgroundColor: kPrimaryColor,
+
+            actions: [
+              Icon(
+                  Icons.message_rounded
+              ),SizedBox(width: 15.w,),
+            ],
+            bottom: PreferredSize(
+              preferredSize: new Size(1.sw, 20.0),
+              child: TabBar(
+                controller: controller,
+                indicatorColor: kBlackColor,
+                tabs: const [
+                  Icon(
+                      Icons.home_rounded
                   ),
-                  Row(
-
-                    children: [
-                      Icon(Icons.account_circle_rounded),
-                      SizedBox(width: 10.w,),
-                      Text("23864398",
-                        style: kPoppinsRegular400.copyWith(
-                            fontSize: 16.sp
-                        ),),
-                    ],
-                  )
-                ],
-              ))),
-          Expanded(child: Padding(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Email Address",
-                    style: kPoppinsMedium500.copyWith(
-                        fontSize: 20.sp
-                    ),
+                  Icon(
+                      Icons.notifications
                   ),
-                  Row(
+                  Icon(
+                      Icons.business_center
+                  ),
+                  Icon(
+                      Icons.people_alt
+                  ),
 
-                    children: [
-                      Icon(Icons.email_outlined),
-                      SizedBox(width: 10.w,),
-                      Text("Justinehr@gmail.com",
-                        style: kPoppinsRegular400.copyWith(
-                            fontSize: 16.sp
-                        ),),
-                    ],
-                  )
                 ],
-              ))),
+              ),
+            ),
 
-          Expanded(flex:1,child: Container())
-        ],
-      ),
-      ),
-      appBar: AppBar(
-        backgroundColor: kPrimaryColor,
-        // leading: Icon(
-        //   Icons.view_headline_sharp
-        // ),
-
-        actions: [
-          Icon(
-            Icons.message_rounded
-          ),SizedBox(width: 15.w,),
-        ],
-        bottom: PreferredSize(
-          preferredSize: new Size(1.sw, 20.0),
-          child: TabBar(
+          ),
+          body: TabBarView(
             controller: controller,
-               indicatorColor: kBlackColor,
-            tabs: [
-              Icon(
-                Icons.home_rounded
-              ),
-              Icon(
-                  Icons.notifications
-              ),
-              Icon(
-                  Icons.business_center
-              ),
-              Icon(
-                  Icons.people_alt
-              ),
+            children: [
+              StudentHomeScreen(),
+              StudentNotificationScreen(),
+              StudentProjectStatusScreen(),
+              StudentTeacherListScreen(),
 
             ],
           ),
-        ),
-
-      ),
-      body: TabBarView(
-        controller: controller,
-        children: [
-          StudentHomeScreen(),
-          StudentNotificationScreen(),
-          StudentProjectStatusScreen(),
-          Center(child: Text("Tab 4"),),
-
-        ],
-      ),
+        );
+      },
     );
   }
 }

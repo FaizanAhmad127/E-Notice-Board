@@ -1,6 +1,9 @@
+import 'dart:core';
+
+
 class UserSignupModel {
 
-  UserSignupModel(this._email, this._universityId, this._fullName,this._uid);
+  UserSignupModel(this._email, this._universityId, this._fullName,this._uid,this._occupation);
 
   String? _email;
   String? _universityId;
@@ -8,8 +11,12 @@ class UserSignupModel {
   String? _uid;
   String _profilePicture="";
   String _available="yes";
+   List<String> _ideaList=[];
+  String? _occupation;
+  String _onlineStatus="offline";
 
 
+  List<String> get ideaList=>_ideaList;
   String get available => _available;
 
   String? get profilePicture => _profilePicture;
@@ -22,6 +29,10 @@ class UserSignupModel {
 
   String? get fullName => _fullName;
 
+  String? get occupation=>_occupation;
+
+  String get onlineStatus=>_onlineStatus;
+
   UserSignupModel.fromJson(dynamic json)
 {
   _email=json['email'];
@@ -29,15 +40,21 @@ class UserSignupModel {
   _fullName=json['fullName'];
   _profilePicture=json['profilePicture'];
   _available=json['available'];
+  _ideaList=List<String>.from(json['ideaList']);
+  _occupation=json['occupation'];
+  _onlineStatus=json['onlineStatus'];
 }
 
 Map<String, dynamic> toJson() {
   final map = <String, dynamic>{};
   map['email'] = _email;
-  map['universityId'] = universityId;
+  map['universityId'] = _universityId;
   map['fullName']=_fullName;
   map['profilePicture']=_profilePicture;
   map['available']=_available;
+  map['ideaList']=_ideaList;
+  map['occupation']=_occupation;
+  map['onlineStatus']=_onlineStatus;
 
   return map;
 }

@@ -18,7 +18,6 @@ class SignupScreen extends StatelessWidget {
    final TextEditingController fullNameTextEditingController=TextEditingController();
    final TextEditingController passwordTextEditingController=TextEditingController();
    final TextEditingController confirmPasswordTextEditingController=TextEditingController();
-
    @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +25,7 @@ class SignupScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child:  ChangeNotifierProvider(
             create: (context) =>SignupScreenVM(),
+
             builder: (context, viewModel) {
               return SizedBox(
                   height: 497.h,

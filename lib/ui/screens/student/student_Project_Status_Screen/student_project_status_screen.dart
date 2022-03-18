@@ -4,8 +4,8 @@ import 'package:notice_board/core/constants/colors.dart';
 import 'package:notice_board/core/constants/text_styles.dart';
 import 'package:notice_board/core/enums/enums.dart';
 import 'package:notice_board/ui/custom_widgets/custom_search_field/custom_search_field.dart';
-import 'package:notice_board/ui/screens/student/student_Project_Status_Screen/finished_screen.dart';
-import 'package:notice_board/ui/screens/student/student_Project_Status_Screen/pending_screen.dart';
+import 'package:notice_board/ui/screens/student/student_Project_Status_Screen/finished_screen/finished_screen.dart';
+import 'package:notice_board/ui/screens/student/student_Project_Status_Screen/pending_screen/pending_screen.dart';
 import 'package:notice_board/ui/screens/student/student_Project_Status_Screen/student_project_status_screen_vm.dart';
 import 'package:provider/provider.dart';
 

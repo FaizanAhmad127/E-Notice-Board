@@ -14,4 +14,5 @@ Color kSearchTFHintColor=Color(0xFF808080);
 Color kDateColor=Color(0xFF585858);
 Color kAcceptedColor=Color(0xFF1BE21B);
 Color kRejectedColor=Color(0xFFF51515);
+Color kAvatarBackgroundColor=Color(0xFF333397);
 

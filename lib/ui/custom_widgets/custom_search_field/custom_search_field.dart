@@ -51,7 +51,7 @@ class custom_search_field extends StatelessWidget {
                           letterSpacing: 1
 
                       ),
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.text,
                       decoration: InputDecoration(
                         //contentPadding: EdgeInsets.only(bottom: 10.h),
                         border: InputBorder.none,
