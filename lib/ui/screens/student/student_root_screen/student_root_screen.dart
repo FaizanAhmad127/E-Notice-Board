@@ -62,7 +62,7 @@ SingleTickerProviderStateMixin, WidgetsBindingObserver{
         return Scaffold(
           resizeToAvoidBottomInset: false,
 
-          drawer: const DrawerScreen(),
+          drawer:  DrawerScreen(),
           appBar: AppBar(
             backgroundColor: kPrimaryColor,
 

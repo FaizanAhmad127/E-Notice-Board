@@ -1,16 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:notice_board/core/models/idea/idea_model.dart';
+import 'package:notice_board/core/services/date_time_service.dart';
 
 import '../../../../../core/constants/colors.dart';
 import '../../../../../core/constants/text_styles.dart';
 class ListItem extends StatelessWidget {
-  const ListItem({Key? key}) : super(key: key);
+  const ListItem(this._ideaModel,{Key? key}) : super(key: key);
+  final IdeaModel _ideaModel;
+
+  String ideaStatus(String status)
+  {
+    if(status=="accepted")
+      {
+        return "Accepted";
+      }
+    else if(status=="rejected")
+      {
+        return "Rejected";
+      }
+    else if(status=="pending")
+      {
+        return "Pending";
+      }
+    else
+      {
+        return "Finished";
+      }
+  }
+  Color ideaColor(String status)
+  {
+    if(status=="accepted")
+    {
+      return kAcceptedColor;
+    }
+    else if(status=="rejected")
+    {
+      return kRejectedColor;
+    }
+    else if(status=="pending")
+    {
+      return kPrimaryColor;
+    }
+    else
+    {
+      return kAcceptedColor;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 116.h,
-      width: 124.w,
+      width: 150.w,
       child: Card(
         elevation: 2,
         child: Padding(
@@ -24,10 +66,10 @@ class ListItem extends StatelessWidget {
                   child: Container(
                     width: 86.w,
                     height:22.h ,
-                    color: kAcceptedColor,
+                    color: ideaColor(_ideaModel.status),
                     child: Center(
                       child: FittedBox(
-                        child: Text("Approved",
+                        child: Text(ideaStatus(_ideaModel.status),
                           style: kPoppinsMedium500.copyWith(
                               fontSize: 15.sp,
                               color: kWhiteColor
@@ -45,21 +87,21 @@ class ListItem extends StatelessWidget {
                       children: [
                         Expanded(
                           child: FittedBox(child:
-                          Text("E-Notice Board",
+                          Text(_ideaModel.ideaTitle,
                             style: kPoppinsMedium500.copyWith(
                               fontSize: 15.sp,
                             ),),),
                         ),
                         Expanded(
                           child: FittedBox(child:
-                          Text("3 March, 2022",
+                          Text(DateTimeService().getDMY(timeStamp: _ideaModel.timestamp),
                             style: kPoppinsLight300.copyWith(
                               fontSize: 12.sp,
                             ),),),
                         ),
                         Expanded(
                           child: FittedBox(child:
-                          Text("Teacher: Ali Khan",
+                          Text("Teacher ${_ideaModel.acceptedBy==""?"None":_ideaModel.acceptedBy}",
                             style: kPoppinsMedium500.copyWith(
                               fontSize: 10.sp,
                             ),),),
@@ -77,7 +119,7 @@ class ListItem extends StatelessWidget {
                       child:
                   Container(
                     height: 5.h,
-                    width: 124.w,
+                    width: 150.w,
                     color: kPrimaryColor,
                   )),
                 ),
