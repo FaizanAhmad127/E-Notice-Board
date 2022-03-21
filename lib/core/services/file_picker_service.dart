@@ -1,13 +1,9 @@
 
-import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
-import 'package:notice_board/core/constants/strings.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class FilePickerService
@@ -49,6 +45,32 @@ class FilePickerService
    }
     return file;
 
+ }
+
+ Future<List<PlatformFile>> multipleFilePicker()async
+ {
+   List<PlatformFile> files=[];
+   try
+       {
+         PermissionStatus status=await Permission.storage.request();
+         if(status.isGranted)
+           {
+             FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true);
+             if (result == null) return [];
+
+            // List<File> files = result.paths.map((path) => File(path!)).toList();
+               files =result.files;
+           }
+         else
+           {
+             BotToast.showText(text: "Permission needed first");
+           }
+
+       }
+   catch(error){
+     _logger.e('error at multipleFilePicker/FilePickerImage.dart');
+   }
+   return files;
  }
 
 

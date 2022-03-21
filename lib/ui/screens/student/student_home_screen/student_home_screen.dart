@@ -65,7 +65,7 @@ class StudentHomeScreen extends StatelessWidget {
                 onPressed: ()
                 {
 
-                  NavigationService().navigatePush(context, const AddIdeaScreen());
+                  NavigationService().navigatePushReplacement(context,  AddIdeaScreen());
                 },
                 backgroundColor: kPrimaryColor,
                 child: Icon(

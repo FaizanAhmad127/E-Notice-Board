@@ -17,7 +17,8 @@ class StudentHomeScreenVM extends ChangeNotifier{
   List<IdeaModel> _searchList=[];
   final TextEditingController _searchController=TextEditingController();
   bool isFirstTime=true;
-  late StreamSubscription streamSubscription;
+  late StreamSubscription postStreamSubscription;
+  late StreamSubscription userStreamSubscription;
   bool isDispose=false;
 
 
@@ -36,11 +37,18 @@ class StudentHomeScreenVM extends ChangeNotifier{
     try
     {
 
-        DocumentReference<Map<String,dynamic>> documentRef= _firebaseFirestore.collection("student")
-          .doc(_firebaseAuth.currentUser!.uid);
-       documentRef.snapshots().listen((docSnap) {
-        UserSignupModel.fromJson(docSnap).available=="no"?
-        setIsAvailable=false:setIsAvailable=true;
+        userStreamSubscription= _firebaseFirestore.collection("student")
+          .doc(_firebaseAuth.currentUser!.uid).snapshots().listen((docSnap) {
+            if(isDispose==false)
+              {
+                print("listen called at studenthomescreevm");
+                UserSignupModel.fromJson(docSnap).available=="no"?
+                setIsAvailable=false:setIsAvailable=true;
+              }
+            else{
+              userStreamSubscription.cancel();
+            }
+
       });
 
     }
@@ -54,7 +62,7 @@ class StudentHomeScreenVM extends ChangeNotifier{
   {
     IdeaModel ideaModel;
       try {
-        streamSubscription=_firebaseFirestore.collection("post")
+        postStreamSubscription=_firebaseFirestore.collection("post")
             .snapshots().listen((querySnap) {
               if(isDispose==false)
                 {
@@ -77,7 +85,7 @@ class StudentHomeScreenVM extends ChangeNotifier{
                 }
               else
                 {
-                  streamSubscription.cancel();
+                  postStreamSubscription.cancel();
                 }
                 }
         );
@@ -136,6 +144,8 @@ class StudentHomeScreenVM extends ChangeNotifier{
     super.dispose();
     isDispose=true;
     _searchController.dispose();
+
+
 
   }
 }

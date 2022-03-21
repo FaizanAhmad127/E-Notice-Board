@@ -70,4 +70,36 @@ class Validate{
       }
     }
   }
+  bool validateIdea(String title,String desc, int studentLength, int teacherLength,int filesLength)
+  {
+    bool isValid=false;
+    if(title.isEmpty || desc.isEmpty)
+      {
+        BotToast.showText(text: "Please fill in Text Field",duration: Duration(seconds: 3));
+        isValid=false;
+      }
+    else
+      {
+         if(studentLength==0)
+           {
+             BotToast.showText(text: "Please select at least 1 team member",duration: Duration(seconds: 3));
+             isValid=false;
+           }
+         else
+           {
+              if(teacherLength==0)
+                {
+                  BotToast.showText(text: "Please select at least 1 teacher",duration: Duration(seconds: 3));
+                  isValid=false;
+                }
+              else
+                {
+                  isValid=true;
+                }
+           }
+      }
+
+    return isValid;
+
+  }
 }

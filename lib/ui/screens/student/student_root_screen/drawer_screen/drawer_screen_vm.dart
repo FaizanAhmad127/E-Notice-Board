@@ -46,7 +46,7 @@ class DrawerScreenVM extends ChangeNotifier
   {
     try
     {
-      await _userProfileService.postOnlineStatus("student", _userAuthService.uid, "offline").then((value) {
+      await _userProfileService.postOnlineStatus("student", uid, "offline").then((value) {
         _userAuthService.userSignOut().then((value) {
           Navigator.pushReplacement(context, PageTransition(
               duration: const Duration(milliseconds: 700),

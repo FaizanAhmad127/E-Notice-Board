@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:notice_board/core/models/idea/file_model.dart';
 
 class IdeaModel{
 
@@ -15,7 +16,7 @@ class IdeaModel{
   String _acceptedBy="";
   List<String> _students=[];
   List<String> _teachers=[];
-  List<String> _fileUrls=[];
+  List<FileModel> _filesList=[];
   IdeaModel(
       this._ideaId,
       this._ideaType,
@@ -25,7 +26,7 @@ class IdeaModel{
       this._noOfTeachers,
       this._students,
       this._teachers,
-      this._fileUrls,
+      this._filesList,
       this._timestamp);
 
   String get ideaType => _ideaType;
@@ -40,7 +41,7 @@ class IdeaModel{
   int get timestamp => _timestamp;
   List<String> get students => _students;
   List<String> get teachers => _teachers;
-  List<String> get fileUrls => _fileUrls;
+  List<FileModel> get filesList => _filesList;
 
   IdeaModel.fromJson(dynamic json){
     _ideaId=json['ideaId'];
@@ -56,7 +57,10 @@ class IdeaModel{
     _timestamp=json['timeStamp'];
     _students=List<String>.from(json['students']);
     _teachers=List<String>.from(json['teachers']);
-    _fileUrls=List<String>.from(json['fileUrls']);
+
+    Iterable list=json['filesList'];
+    _filesList = list.map((i) =>
+        FileModel.fromJson(i)).toList();
 
   }
 
@@ -75,7 +79,18 @@ class IdeaModel{
     map['status']=_status;
     map['students']=_students;
     map['teachers']=_teachers;
-    map['fileUrls']=_fileUrls;
+    List<Map<String,dynamic>> fileMapList=[];
+    _filesList.forEach((element) {
+      fileMapList.add(
+          {
+            'fileName':element.fileName,
+            'fileExtension':element.fileExtension,
+            'fileUrl':element.fileUrl,
+            'fileSize':element.fileSize,
+          }
+      );
+    });
+    map['filesList']=fileMapList;
 
 
 

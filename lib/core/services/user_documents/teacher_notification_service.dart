@@ -11,11 +11,10 @@ class TeacherNotificationService{
   {
     BotToast.showLoading();
     try{
-         for(String uid in teacherUid)
-          {
-            await _firebaseFirestore.collection("teacher").doc(uid)
-              .collection("notification").add(notificationModel.toJson());
-          }
+      await Future.forEach(teacherUid, (String uid)async {
+        await _firebaseFirestore.collection("teacher").doc(uid)
+            .collection("notification").add(notificationModel.toJson());
+      });
 
     }
     catch(error)

@@ -141,5 +141,49 @@ class UserProfileService{
       _logger.e("error at updateNameAndOccupation/UserProfileService.dart $error");
     }
   }
+  
+  Future<List<UserSignupModel>> getAvailableStudents(String uid)async
+  {
+    BotToast.showLoading();
+    List<UserSignupModel> listOfStudents=[];
+    try{
+      await _firebaseFirestore.collection("student").
+      where('available',isEqualTo: "yes").get().then((docsSnap) {
+        for (var doc in docsSnap.docChanges) {
+          if(doc.doc.id!=uid)
+            {
+              listOfStudents.add(UserSignupModel.fromJson(doc.doc));
+            }
+
+        }});
+    }
+    catch(error)
+    {
+      _logger.e("error at getAvailableStudents/UserProfileService.dart $error");
+    }
+    BotToast.closeAllLoading();
+    return listOfStudents;
+  }
+  Future<List<UserSignupModel>> getAvailableTeachers(String uid)async
+  {
+    BotToast.showLoading();
+    List<UserSignupModel> listOfStudents=[];
+    try{
+      await _firebaseFirestore.collection("teacher").
+      where('available',isEqualTo: "yes").get().then((docsSnap) {
+        for (var doc in docsSnap.docChanges) {
+          if(doc.doc.id!=uid)
+          {
+            listOfStudents.add(UserSignupModel.fromJson(doc.doc));
+          }
+        }});
+    }
+    catch(error)
+    {
+      _logger.e("error at getAvailableTeachers/UserProfileService.dart $error");
+    }
+    BotToast.closeAllLoading();
+    return listOfStudents;
+  }
 
 }

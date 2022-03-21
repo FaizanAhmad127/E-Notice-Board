@@ -39,6 +39,7 @@ class UserSignupModel {
   _universityId=json['universityId'];
   _fullName=json['fullName'];
   _profilePicture=json['profilePicture'];
+  _uid=json['uid'];
   _available=json['available'];
   _ideaList=List<String>.from(json['ideaList']);
   _occupation=json['occupation'];
@@ -51,6 +52,7 @@ Map<String, dynamic> toJson() {
   map['universityId'] = _universityId;
   map['fullName']=_fullName;
   map['profilePicture']=_profilePicture;
+  map['uid']=_uid;
   map['available']=_available;
   map['ideaList']=_ideaList;
   map['occupation']=_occupation;
