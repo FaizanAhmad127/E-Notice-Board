@@ -7,7 +7,7 @@ import 'package:notice_board/ui/custom_widgets/login_register_button/login_regis
 import 'package:notice_board/ui/screens/student/add_idea-screen/add_idea_screen_vm.dart';
 import 'package:notice_board/ui/screens/student/add_idea-screen/custom_multiselect_dropdown.dart';
 import 'package:notice_board/ui/screens/student/student_home_screen/student_home_screen.dart';
-import 'package:notice_board/ui/screens/student/student_root_screen/student_root_screen.dart';
+import 'package:notice_board/ui/screens/student/student_root_screen/student_root_screen/student_root_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/text_styles.dart';

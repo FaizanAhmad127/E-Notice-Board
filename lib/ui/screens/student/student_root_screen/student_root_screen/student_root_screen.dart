@@ -3,15 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:notice_board/core/constants/colors.dart';
+import 'package:notice_board/core/services/navigation_service.dart';
+import 'package:notice_board/ui/screens/chat_screen/chat_screen.dart';
 import 'package:notice_board/ui/screens/student/student_Project_Status_Screen/student_project_status_screen.dart';
 import 'package:notice_board/ui/screens/student/student_home_screen/student_home_screen.dart';
 import 'package:notice_board/ui/screens/student/student_notification_screen/student_notification_screen.dart';
-import 'package:notice_board/ui/screens/student/student_root_screen/drawer_screen/drawer_screen.dart';
-import 'package:notice_board/ui/screens/student/student_root_screen/student_root_screen_vm.dart';
+import 'package:notice_board/ui/screens/student/student_root_screen/student_drawer_screen/student_drawer_screen.dart';
+import 'package:notice_board/ui/screens/student/student_root_screen/student_root_screen/student_root_screen_vm.dart';
 import 'package:notice_board/ui/screens/student/student_teacherList_screen/student_teacherList_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../core/services/user_documents/user_profile_service.dart';
+import '../../../../../core/services/user_documents/user_profile_service.dart';
 
 class StudentRootScreen extends StatefulWidget {
    const StudentRootScreen({Key? key}) : super(key: key);
@@ -62,17 +64,22 @@ SingleTickerProviderStateMixin, WidgetsBindingObserver{
         return Scaffold(
           resizeToAvoidBottomInset: false,
 
-          drawer:  DrawerScreen(),
+          drawer:  StudentDrawerScreen(),
           appBar: AppBar(
             backgroundColor: kPrimaryColor,
 
             actions: [
-              Icon(
-                  Icons.message_rounded
+              GestureDetector(
+                onTap: (){
+                  NavigationService().navigatePush(context, ChatScreen("student",_firebaseAuth.currentUser!.uid));
+                },
+                child: const Icon(
+                    Icons.message_rounded
+                ),
               ),SizedBox(width: 15.w,),
             ],
             bottom: PreferredSize(
-              preferredSize: new Size(1.sw, 20.0),
+              preferredSize:  Size(1.sw, 20.0),
               child: TabBar(
                 controller: controller,
                 indicatorColor: kBlackColor,

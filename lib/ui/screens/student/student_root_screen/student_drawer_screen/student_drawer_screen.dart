@@ -1,17 +1,16 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:notice_board/core/constants/strings.dart';
-import 'package:notice_board/ui/screens/student/student_root_screen/drawer_screen/drawer_screen_vm.dart';
-import 'package:notice_board/ui/screens/student/student_root_screen/drawer_screen/list_item.dart';
+import 'package:notice_board/ui/screens/student/student_root_screen/student_drawer_screen/student_drawer_screen_vm.dart';
 import 'package:provider/provider.dart';
 import '../../../../../core/constants/colors.dart';
 import '../../../../../core/constants/text_styles.dart';
 import '../../../../../core/services/cache_image_service.dart';
+import 'list_item.dart';
 
 
-class DrawerScreen extends StatelessWidget {
-   DrawerScreen({Key? key}) : super(key: key);
+class StudentDrawerScreen extends StatelessWidget {
+   StudentDrawerScreen({Key? key}) : super(key: key);
 
   TextEditingController fullNameController=TextEditingController();
   TextEditingController occupationController=TextEditingController();
@@ -21,9 +20,9 @@ class DrawerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => DrawerScreenVM(),
+      create: (context) => StudentDrawerScreenVM(),
       builder: (context, viewModel) {
-        return Consumer<DrawerScreenVM>(
+        return Consumer<StudentDrawerScreenVM>(
           builder: (context,vm,child)
           {
             if(vm.fullNameValue.isNotEmpty)
@@ -47,7 +46,7 @@ class DrawerScreen extends StatelessWidget {
                       height: 1.sh,
                       child: Drawer(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(bottomRight: Radius.circular(30)),
+                            borderRadius: const BorderRadius.only(bottomRight: Radius.circular(30)),
                             side: BorderSide(color: kPrimaryColor, width: 1),
                           ),
                           child: Stack(
@@ -67,16 +66,16 @@ class DrawerScreen extends StatelessWidget {
                                 height: 300.h,
                                 child: Stack(
                                   children: [
-                                    FittedBox(
-                                      fit: BoxFit.fill,
-                                      child: SizedBox(
-                                        height: 300.h,
-                                        width: 400.w,
+                                    SizedBox(
+                                      height: 250.h,
+                                      width: 400.w,
+                                      child: FittedBox(
+                                        fit: BoxFit.fill,
                                         child: CacheImageService()
-                                            .loadCacheImage(vm.signupModel?.profilePicture==""?vm.imageUrl:vm.signupModel?.profilePicture??""),
+                                            .loadCacheImage(vm.imageUrl),
                                       ),
                                     ),
-                                    Consumer<DrawerScreenVM>(
+                                    Consumer<StudentDrawerScreenVM>(
                                         builder: (context, vm, child) {
                                           return vm.isEditButtonClicked
                                               ? Positioned(
@@ -144,7 +143,7 @@ class DrawerScreen extends StatelessWidget {
                       ///
                       ///this expanded is for the half lower part
                       ///
-                      vm.isEditButtonClicked
+                      vm.isEditButtonClicked==true
                           ? Expanded(
                         child: Padding(
                           padding: EdgeInsets.symmetric(vertical: 10.h,horizontal: 30.w),
@@ -306,8 +305,8 @@ class DrawerScreen extends StatelessWidget {
                                       itemCount: vm.listOfIdeas!.length,
                                       itemBuilder: (context, index) {
                                         return vm.listOfIdeas!.isEmpty?
-                                            Center(
-                                              child: Text("Nothing to show yet.."),
+                                            const Center(
+                                              child: Text("Your ideas will appear here"),
                                             )
                                             : ListItem(vm.listOfIdeas![index]);
                                       })),
@@ -324,7 +323,7 @@ class DrawerScreen extends StatelessWidget {
                                       width: 100.w,
                                       child: TextButton(
                                         onPressed: () {
-                                          Provider.of<DrawerScreenVM>(
+                                          Provider.of<StudentDrawerScreenVM>(
                                               context,
                                               listen: false)
                                               .signOut(context);

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:bot_toast/bot_toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -9,6 +8,7 @@ import 'package:notice_board/core/models/idea/file_model.dart';
 import 'package:notice_board/core/models/idea/idea_model.dart';
 import 'package:notice_board/core/models/notification/teacher_notification_model.dart';
 import 'package:notice_board/core/services/user_documents/teacher_notification_service.dart';
+
 
 class StudentIdeaService {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
@@ -20,6 +20,7 @@ class StudentIdeaService {
   {
     BotToast.showLoading();
     try {
+      studentsUid.add(ownerUID);
 
       List<FileModel> fileModelList=[];
       /// Adding files to firebase Storage
@@ -45,7 +46,7 @@ class StudentIdeaService {
          )).then((value) async{
 
            ///adding idea id to selected Students
-           studentsUid.add(ownerUID); //current student is also a team member so add him/her
+           //current student is also a team member so add him/her
            await addIdeaIdToStudent(ideaId.toString(), studentsUid)
                .then((value) async{
 
@@ -142,5 +143,20 @@ class StudentIdeaService {
     }
     return ideasList;
   }
+  Future<IdeaModel?> getIdea(String ideaId)async
+  {
+       IdeaModel? ideaModel;
+       try {
+         await _firebaseFirestore.collection("post").doc(ideaId).get().then((docSnap){
+           ideaModel=IdeaModel.fromJson(docSnap);
+         });
+       }
+       catch (error) {
+         _logger.e(
+             "error at getAllUserIdeas getIdea/StudentIdeaService.dart $error");
+       }
+      return ideaModel;
+  }
+
 
 }

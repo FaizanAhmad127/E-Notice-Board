@@ -7,7 +7,7 @@ import 'package:notice_board/core/services/navigation_service.dart';
 import 'package:notice_board/core/services/notification/signup_request_service.dart';
 import 'package:notice_board/core/services/user_documents/user_profile_service.dart';
 import 'package:notice_board/ui/screens/login/login_screen.dart';
-import 'package:notice_board/ui/screens/student/student_root_screen/student_root_screen.dart';
+import 'package:notice_board/ui/screens/student/student_root_screen/student_root_screen/student_root_screen.dart';
 import '../../../core/services/user_authentication/user_auth_service.dart';
 import '../../../core/services/validate_service.dart';
 
@@ -47,7 +47,7 @@ class SignupScreenVM extends ChangeNotifier
                 userType: userType(), userSignupModel: userSignupModel).then((value){
 
              SignupRequestModel requestModel=SignupRequestModel(
-                 fullName, userType(), dateTime, uid, universityId)  ;
+                 fullName, userType(), dateTime, uid, universityId,email)  ;
 
              _requestService.createSignupRequestDocument(email, requestModel).then((value){
 

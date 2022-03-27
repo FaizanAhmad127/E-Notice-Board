@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:notice_board/core/models/user_authentication/user_signup_model.dart';
-import 'package:notice_board/core/services/file_picker_service.dart';
+import 'package:notice_board/core/services/file_management/file_picker_service.dart';
 import 'package:notice_board/core/services/user_documents/student_idea_service.dart';
 import 'package:notice_board/core/services/user_documents/teacher_notification_service.dart';
 import 'package:notice_board/core/services/user_documents/user_profile_service.dart';
@@ -13,7 +13,7 @@ import 'package:notice_board/core/services/validate_service.dart';
 
 import '../../../../core/services/navigation_service.dart';
 import '../student_home_screen/student_home_screen.dart';
-import '../student_root_screen/student_root_screen.dart';
+import '../student_root_screen/student_root_screen/student_root_screen.dart';
 
 class AddIdeaScreenVM extends ChangeNotifier
 {

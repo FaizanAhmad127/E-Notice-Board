@@ -43,7 +43,7 @@ class SignupRequestService {
      return requestModel;
 
    }
-   Future approveSignupRequest(String email)async
+   Future approveSignupRequest(String email, String isApproved)async
    {
      BotToast.showLoading();
      try
@@ -51,8 +51,10 @@ class SignupRequestService {
         await _firebaseFirestore.collection("approval").doc(email).
         set(
         {
-          'isApproved':'yes'
-        },SetOptions(merge: true));
+          'isApproved':isApproved
+        },SetOptions(merge: true)).then((value) {
+          BotToast.showText(text: "Request ${isApproved=='yes'?"Approved":"Rejected"}");
+        });
 
      }
      catch(error)

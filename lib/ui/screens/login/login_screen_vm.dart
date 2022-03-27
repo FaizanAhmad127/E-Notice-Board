@@ -6,9 +6,10 @@ import 'package:notice_board/core/services/notification/signup_request_service.d
 import 'package:notice_board/core/services/shared_pref_service.dart';
 import 'package:notice_board/core/services/user_authentication/user_auth_service.dart';
 import 'package:notice_board/core/services/validate_service.dart';
+import 'package:notice_board/ui/screens/coordinator/coordinator_root_screen/coordinator_root_screen/coordinator_root_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
-import '../student/student_root_screen/student_root_screen.dart';
+import '../student/student_root_screen/student_root_screen/student_root_screen.dart';
 
 class LoginScreenVM extends ChangeNotifier{
 
@@ -21,7 +22,7 @@ class LoginScreenVM extends ChangeNotifier{
   //this is the constructor and used to initialize the properties of a class
   LoginScreenVM()
   {
-    try {
+   try {
       _isToggled = false;
       _userAuthService = GetIt.I.get<UserAuthService>();
      _requestService = GetIt.I.get<SignupRequestService>();
@@ -33,39 +34,41 @@ class LoginScreenVM extends ChangeNotifier{
       BotToast.showText(text: "$error");
     }
   }
-  bool isUserLoggedIn()
+  String isUserLoggedIn()
   {
-    bool isUser=false;
+    String userType="";
     try{
       if(_userAuthService.isUserLoggedIn().isNotEmpty &&
           _sharedPref.retrieveBool("session")==true)
         {
-          isUser=true;
+          userType=_sharedPref.retrieveString("userType")??"";
         }
       else
         {
-          isUser=false;
+          userType="";
         }
 
     }
     catch(e)
     {
-      isUser=false;
+      userType="";
     }
-    return isUser;
+    return userType;
   }
 
   //this method is used to store the session of a user so he
   //won't login next time.
-  void storeUserSession()
+  void storeUserSession(String userType)
   {
     if(getIsToggled==true)
       {
         _sharedPref.storeBool("session", true);
+        _sharedPref.storeString('userType', userType);
       }
     else
       {
         _sharedPref.storeBool("session", false);
+        _sharedPref.storeString('userType', "");
       }
   }
 
@@ -86,12 +89,12 @@ class LoginScreenVM extends ChangeNotifier{
                     }
                   else
                     {
-                      storeUserSession();
+
+                      storeUserSession(requestModel.occupation??"");
                       BotToast.showText(text: "Logged In",duration: const Duration(seconds: 3));
                       Navigator.pushReplacement(context, PageTransition(
                           duration: const Duration(milliseconds: 700),
-                          type: PageTransitionType.leftToRightWithFade, child: const StudentRootScreen(
-                      )));
+                          type: PageTransitionType.leftToRightWithFade, child: getUserType(requestModel.occupation??"")??const SizedBox()));
                     }
 
                 });
@@ -109,7 +112,23 @@ class LoginScreenVM extends ChangeNotifier{
 
       }
     }
-
+   Widget? getUserType(String userType)
+   {
+     Widget? user;
+     if(userType=="student")
+       {
+         user=StudentRootScreen();
+       }
+     else if(userType=="teacher")
+       {
+         user=null;
+       }
+     else if(userType=="coordinator")
+       {
+         user=CoordinatorRootScreen();
+       }
+     return user;
+   }
 
 
   bool get getIsToggled=>_isToggled;

@@ -50,6 +50,7 @@ class UserProfileService{
 
 
   }
+
   Future<List<UserSignupModel>> getAllTeachers()async
   {
     List<UserSignupModel> teachersList=[];
@@ -80,7 +81,7 @@ class UserProfileService{
     }
     catch(error)
     {
-      _logger.e("error at getAllTeachers/UserProfileService.dart $error");
+      _logger.e("error at getAllStudents/UserProfileService.dart $error");
     }
     return studentList;
   }

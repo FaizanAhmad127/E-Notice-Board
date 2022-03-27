@@ -129,13 +129,13 @@ class StudentNotificationScreen extends StatelessWidget {
               width: 1.sw,
               child: Padding(
                 padding: EdgeInsets.only(top: 5.h,bottom: 5.h,right: 5.w,left: 5.w),
-                child: ListView.builder(
+                child: vm.getIdeasList.isEmpty?
+                const Center(child: Text("Nothing to show yet"),)
+                :ListView.builder(
                     itemCount: vm.getIdeasList.length,
                     itemBuilder: (context,index)
                     {
-                      return vm.getIdeasList.isEmpty?
-                          Center(child: Text("Nothing to show yet"),)
-                      :notificationCard(vm.getIdeasList[index]);
+                      return notificationCard(vm.getIdeasList[index]);
                     }),
               ),
             ),

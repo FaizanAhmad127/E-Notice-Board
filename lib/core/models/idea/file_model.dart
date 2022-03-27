@@ -18,20 +18,25 @@ class FileModel {
 
   FileModel.fromJson(dynamic json)
   {
-    _fileName=json['fileName'];
-    _fileExtension=json['fileExtension'];
-    _fileUrl=json['fileUrl'];
-    _fileSize=json['fileSize'];
+
+    _fileName=json['fileName']??"";
+    _fileExtension=json['fileExtension']??"";
+    _fileUrl=json['fileUrl']??"";
+    _fileSize=json['fileSize']??0;
 
   }
 
   Map<String,dynamic> toJson()
   {
     Map<String,dynamic> map={};
-    map['fileName']=_fileName;
-    map['fileExtension']=_fileExtension;
-    map['fileUrl']=_fileUrl;
-    map['fileSize']=_fileSize;
+    if(_fileUrl.isNotEmpty)
+      {
+        map['fileName']=_fileName;
+        map['fileExtension']=_fileExtension;
+        map['fileUrl']=_fileUrl;
+        map['fileSize']=_fileSize;
+      }
+
     return map;
   }
 

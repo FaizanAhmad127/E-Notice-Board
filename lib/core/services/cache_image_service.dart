@@ -35,7 +35,9 @@ class CacheImageService{
         return  SizedBox(
           height: 100.h,
             width: 100.w,
-            child: Icon(Icons.error));
+            child: const Center(
+              child: FittedBox(child: Text("No image found")),
+            ));
       },
     );
   }

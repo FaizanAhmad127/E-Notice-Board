@@ -45,6 +45,7 @@ class SupervisedByButton extends StatelessWidget {
                   child:
                      Text(
                         vm.getUserName,
+                        overflow: TextOverflow.ellipsis,
                         style: kPoppinsMedium500.copyWith(
                           fontSize: 15.sp,
                           color: kWhiteColor,

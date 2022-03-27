@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:notice_board/core/constants/colors.dart';
@@ -29,7 +30,7 @@ class CustomPostCard extends StatelessWidget {
           builder: (context,vm,child)
           {
             return SizedBox(
-              height: 173.h,
+              height: 150.h,
               child: Card(
                 elevation: 1,
                 color: kPostBackgroundColor,
@@ -52,11 +53,25 @@ class CustomPostCard extends StatelessWidget {
                                       flex:1,
                                       child: Align(
                                         alignment:Alignment.topLeft,
-                                        child: CircleAvatar(
-                                          radius: 30.r,
-                                          backgroundColor: Colors.grey,
-                                        ),
+                                        child:vm.pictureUrl.isEmpty? ClipOval(
+                                          child: Container(
+                                            color: Colors.grey,
+                                            height: 45.h,
+                                            width: 45.h,
+                                          ),
+                                        ):
+                                        ClipOval(
+                                          child: CachedNetworkImage(
+                                            imageUrl: vm.pictureUrl,
+                                            fit: BoxFit.fill,
+                                            height: 45.h,
+                                              width: 45.h,
+                                          ),
+                                        )
                                       ),
+                                    ),
+                                    SizedBox(
+                                      width: 10.w,
                                     ),
                                     Expanded(
                                         flex: 3,

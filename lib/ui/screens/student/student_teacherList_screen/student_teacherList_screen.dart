@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:notice_board/core/constants/text_styles.dart';
@@ -10,10 +11,9 @@ import '../../../custom_widgets/custom_search_field/custom_search_field.dart';
 
 
 class StudentTeacherListScreen extends StatelessWidget {
-   StudentTeacherListScreen({Key? key}) : super(key: key);
+  StudentTeacherListScreen({Key? key}) : super(key: key);
 
-  Widget getItem(UserSignupModel teacher)
-  {
+  Widget getItem(UserSignupModel teacher) {
     return SizedBox(
         width: double.infinity,
         height: 80.h,
@@ -26,124 +26,138 @@ class StudentTeacherListScreen extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Expanded(
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Stack(
-                          children: [
-                            CircleAvatar(
-                              radius: 30.r,
-                              backgroundColor: Colors.blueGrey,),
-                            teacher.onlineStatus=="offline"?
-                                SizedBox():
-                            Positioned(
-                              bottom: 1.h,
-                              right: 5.w,
-                              child:  CircleAvatar(
-                                backgroundColor: kAcceptedColor,
-                                radius: 7.r,
-                              ),)
-                          ],
-                        )
-                    )
-                ),
-
-                Expanded(
-                    flex: 3,
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child:
-                              Text(teacher.fullName??"Unknown",
-                                style: kPoppinsSemiBold600.copyWith(
-                                    fontSize: 20.sp
-                                ),),),
-                          ),
-                          Expanded(
-                            child: FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child:
-                              Text(teacher.onlineStatus,
-                                style: kPoppinsLight300.copyWith(
-                                    fontSize: 15.sp,
-                                    color: kDateColor
-                                ),),),
-                          )
-                        ],
-                      ),
-                    )),
-                Expanded(child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Column(
-                    children: [
-                      Expanded(
-                        flex:2,
-                        child: FittedBox(child:
-                        Icon(
-                          Icons.work_outline,
-                          color: kTfFillColor,
-                        )),),
-                      Expanded(
-                          flex:1,
-                          child: FittedBox(child:
-                          Text("${teacher.ideaList.length} "
-                              "${teacher.ideaList.length==1?"Project":"Projects"}",
-                            style: kPoppinsLight300.copyWith(
-                                fontSize: 15.sp,
-                                color: kDateColor
-                            ),),))
-                    ],
-                  ),
-                )),
-              ],
-            ),
+            Expanded(
+            child: Align(
+            alignment: Alignment.centerLeft,
+              child: Stack(
+                children: [
+              teacher.profilePicture==""? ClipOval(
+                child: Container(
+                color: Colors.grey,
+                height: 50.h,
+                width: 50.h,
+              ),
+            ):
+            ClipOval(
+            child: CachedNetworkImage(
+            imageUrl: teacher.profilePicture ?? "",
+            fit: BoxFit.fill,
+            height: 50.h,
+            width: 50.h,
           ),
-        )
+        ),
+        teacher.onlineStatus=="offline"?
+        SizedBox():
+    Positioned(
+    bottom: 1.h,
+    right: 5.w,
+    child: CircleAvatar(
+    backgroundColor: kAcceptedColor,
+    radius: 7.r,
+    ),)
+    ],
+    )
+    )
+    ),
+
+    Expanded(
+    flex: 3,
+    child: Align(
+    alignment: Alignment.centerLeft,
+    child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+    Expanded(
+    child: FittedBox(
+    fit: BoxFit.scaleDown,
+    child:
+    Text(teacher.fullName??"Unknown",
+    style: kPoppinsSemiBold600.copyWith(
+    fontSize: 20.sp
+    ),),),
+    ),
+    Expanded(
+    child: FittedBox(
+    fit: BoxFit.scaleDown,
+    child:
+    Text(teacher.onlineStatus,
+    style: kPoppinsLight300.copyWith(
+    fontSize: 15.sp,
+    color: kDateColor
+    ),),),
+    )
+    ],
+    ),
+    )),
+    Expanded(child: Align(
+    alignment: Alignment.centerRight,
+    child: Column(
+    children: [
+    Expanded(
+    flex:2,
+    child: FittedBox(child:
+    Icon(
+    Icons.work_outline,
+    color: kTfFillColor,
+    )),),
+    Expanded(
+    flex:1,
+    child: FittedBox(child:
+    Text("${teacher.ideaList.length} "
+    "${teacher.ideaList.length==1?"Project":"Projects"}",
+    style: kPoppinsLight300.copyWith(
+    fontSize: 15.sp,
+    color: kDateColor
+    ),),))
+    ],
+    ),
+    )),
+    ],
+    ),
+    ),
+    )
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create:(context)=>StudentTeacherListScreenVM(),
-      builder: (context,viewModel)
-      {
+      create: (context) => StudentTeacherListScreenVM(),
+      builder: (context, viewModel) {
         return Scaffold(
           backgroundColor: kWhiteColor,
           body: SingleChildScrollView(
             child: Consumer<StudentTeacherListScreenVM>(
-              builder: (context,vm,child)
-              { return Column(
-                children: [
+              builder: (context, vm, child) {
+                return Column(
+                  children: [
 
-                  // Search box
-                  custom_search_field(searchTextEditingController: vm.searchController),
-                  SizedBox(
-                    height: 16.h,
-                  ),
-                  vm.getSearchList.isEmpty?
-                  Center(child:Text("Nothing to show")):
-                  Padding(
-                    padding: EdgeInsets.only(left: 4.w, right: 4.w),
-                    child: SizedBox(
-                        height: 0.7.sh,
-                        child: ListView.builder(
-                            itemCount: vm.getSearchList.length,
-                            itemBuilder: (context,index){
-                              UserSignupModel teacher=vm.getSearchList[index];
-                              return getItem(teacher);
-                            })
+                    // Search box
+                    custom_search_field(
+                        searchTextEditingController: vm.searchController,
+                      hintText: "Search by name",),
+                    SizedBox(
+                      height: 16.h,
                     ),
-                  )
+                    vm.getSearchList.isEmpty ?
+                    Center(child: Text("Nothing to show")) :
+                    Padding(
+                      padding: EdgeInsets.only(left: 4.w, right: 4.w),
+                      child: SizedBox(
+                          height: 0.7.sh,
+                          child: ListView.builder(
+                              itemCount: vm.getSearchList.length,
+                              itemBuilder: (context, index) {
+                                UserSignupModel teacher = vm
+                                    .getSearchList[index];
+                                return getItem(teacher);
+                              })
+                      ),
+                    )
 
-                ],
-              );
+                  ],
+                );
               },
             ),
           ),

@@ -82,7 +82,8 @@ class StudentHomeScreen extends StatelessWidget {
               children: [
 
                 // Search box
-                custom_search_field(searchTextEditingController: vm.searchController),
+                custom_search_field(searchTextEditingController: vm.searchController,
+                  hintText: "Search by Title",),
                 SizedBox(
                   height: 16.h,
                 ),
@@ -139,16 +140,16 @@ class AcceptedRejectedButton extends StatelessWidget {
             bottomLeft: Radius.circular(7.r),topLeft: Radius.circular(7.r),
           )
         ),
-        child:  FittedBox(
-            fit: BoxFit.cover,
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 5.h,horizontal: 5.w),
+        child:  Padding(
+          padding: EdgeInsets.symmetric(vertical: 5.h,horizontal: 10.w),
+          child: FittedBox(
+              fit: BoxFit.fill,
               child: Text(text,
                 style: kPoppinsMedium500.copyWith(
                     fontSize: 15.sp,
                     color: kWhiteColor
-                ),),
-            )),
+                ),)),
+        ),
       ));
   }
 }

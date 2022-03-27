@@ -6,10 +6,11 @@ class custom_search_field extends StatelessWidget {
   const custom_search_field({
     Key? key,
     required this.searchTextEditingController,
+    required this.hintText,
   }) : super(key: key);
 
   final TextEditingController searchTextEditingController;
-
+  final String hintText;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -55,7 +56,7 @@ class custom_search_field extends StatelessWidget {
                       decoration: InputDecoration(
                         //contentPadding: EdgeInsets.only(bottom: 10.h),
                         border: InputBorder.none,
-                        hintText: "Search by Title",
+                        hintText: hintText,
                         hintStyle: kPoppinsLight300.copyWith(
                             fontSize: 16.sp,
                             color:kSearchTFHintColor,

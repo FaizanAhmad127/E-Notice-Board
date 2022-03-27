@@ -7,7 +7,7 @@ import 'package:logger/logger.dart';
 import 'package:notice_board/core/constants/strings.dart';
 import 'package:notice_board/core/models/idea/idea_model.dart';
 import 'package:notice_board/core/models/user_authentication/user_signup_model.dart';
-import 'package:notice_board/core/services/file_picker_service.dart';
+import 'package:notice_board/core/services/file_management/file_picker_service.dart';
 import 'package:notice_board/core/services/user_documents/student_idea_service.dart';
 import 'package:notice_board/core/services/user_documents/user_profile_service.dart';
 import 'package:page_transition/page_transition.dart';
@@ -15,7 +15,7 @@ import 'package:page_transition/page_transition.dart';
 import '../../../../../core/services/user_authentication/user_auth_service.dart';
 import '../../../login/login_screen.dart';
 
-class DrawerScreenVM extends ChangeNotifier
+class StudentDrawerScreenVM extends ChangeNotifier
 {
   final UserAuthService _userAuthService=GetIt.I.get<UserAuthService>();
   final UserProfileService _userProfileService=GetIt.I.get<UserProfileService>();
@@ -35,7 +35,7 @@ class DrawerScreenVM extends ChangeNotifier
   final Logger _logger=Logger();
   String uid="";
 
-  DrawerScreenVM()
+  StudentDrawerScreenVM()
   {
     uid=_firebaseAuth.currentUser!.uid;
     getUserData();
@@ -72,6 +72,7 @@ class DrawerScreenVM extends ChangeNotifier
         setSignupModel=doc!;
         setFullNameValue=doc.fullName!;
         setOccupationValue=doc.occupation!;
+        setImageURL=doc.profilePicture!;
       });
     }
     catch(error)

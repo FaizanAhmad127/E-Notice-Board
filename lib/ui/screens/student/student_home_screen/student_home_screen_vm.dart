@@ -41,7 +41,6 @@ class StudentHomeScreenVM extends ChangeNotifier{
           .doc(_firebaseAuth.currentUser!.uid).snapshots().listen((docSnap) {
             if(isDispose==false)
               {
-                print("listen called at studenthomescreevm");
                 UserSignupModel.fromJson(docSnap).available=="no"?
                 setIsAvailable=false:setIsAvailable=true;
               }

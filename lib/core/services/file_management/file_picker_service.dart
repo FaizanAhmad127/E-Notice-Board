@@ -28,13 +28,6 @@ class FilePickerService
              //Select Image
              image = await _picker.pickImage(source: ImageSource.gallery);
              file = File(image!.path);
-               //
-               // List<int> imageBase64 = file.readAsBytesSync();
-               // String imageAsString = base64Encode(imageBase64);
-               // Uint8List uint8list = base64.decode(imageAsString);
-               // images = Image.memory(uint8list);
-
-
            }
           else {
              BotToast.showText(text: "Permission needed first");
@@ -71,6 +64,30 @@ class FilePickerService
      _logger.e('error at multipleFilePicker/FilePickerImage.dart');
    }
    return files;
+ }
+
+ Future<PlatformFile?> singleFilePicker()async
+ {
+   PlatformFile? file;
+   try
+   {
+     PermissionStatus status=await Permission.storage.request();
+     if(status.isGranted)
+     {
+       FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: false);
+       if (result == null) return null;
+           file =result.files.first;
+     }
+     else
+     {
+       BotToast.showText(text: "Permission needed first");
+     }
+
+   }
+   catch(error){
+     _logger.e('error at multipleFilePicker/FilePickerImage.dart');
+   }
+   return file;
  }
 
 

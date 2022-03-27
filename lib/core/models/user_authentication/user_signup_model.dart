@@ -11,12 +11,16 @@ class UserSignupModel {
   String? _uid;
   String _profilePicture="";
   String _available="yes";
-   List<String> _ideaList=[];
+  List<String> _ideaList=[];
+  List<String> _chatList=[];
   String? _occupation;
   String _onlineStatus="offline";
 
 
   List<String> get ideaList=>_ideaList;
+
+  List<String> get chatList=>_chatList;
+
   String get available => _available;
 
   String? get profilePicture => _profilePicture;
@@ -42,6 +46,7 @@ class UserSignupModel {
   _uid=json['uid'];
   _available=json['available'];
   _ideaList=List<String>.from(json['ideaList']);
+  _chatList=List<String>.from(json['chatList']);
   _occupation=json['occupation'];
   _onlineStatus=json['onlineStatus'];
 }
@@ -55,6 +60,7 @@ Map<String, dynamic> toJson() {
   map['uid']=_uid;
   map['available']=_available;
   map['ideaList']=_ideaList;
+  map['chatList']=_chatList;
   map['occupation']=_occupation;
   map['onlineStatus']=_onlineStatus;
 
