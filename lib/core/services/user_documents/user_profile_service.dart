@@ -34,7 +34,6 @@ class UserProfileService{
   }
   Future<UserSignupModel?> getProfileDocument(String uid,String userType)async
   {
-    BotToast.showLoading();
     UserSignupModel? signupModel;
     try
     {
@@ -45,7 +44,6 @@ class UserProfileService{
     {
       _logger.e("error at getProfileDocument/UserProfileService.dart $error");
     }
-    BotToast.closeAllLoading();
     return signupModel;
 
 

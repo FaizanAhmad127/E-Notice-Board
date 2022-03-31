@@ -8,6 +8,7 @@ class CustomPostCardVM extends ChangeNotifier{
   final UserProfileService _userProfileService=GetIt.I.get<UserProfileService>();
   String _userName="";
   String _pictureUrl="";
+  bool isDispose=false;
   final Logger _logger=Logger();
 
   CustomPostCardVM(String uid)
@@ -20,8 +21,12 @@ class CustomPostCardVM extends ChangeNotifier{
     {
       UserSignupModel? _userSignupModel;
       _userSignupModel=await _userProfileService.getProfileDocument(uid,"student");
-      setUserName=_userSignupModel?.fullName??"Unknown";
-      setPictureUrl=_userSignupModel?.profilePicture??"";
+      if(isDispose==false)
+        {
+          setUserName=_userSignupModel?.fullName??"Unknown";
+          setPictureUrl=_userSignupModel?.profilePicture??"";
+        }
+
 
     }
     catch(error)
@@ -47,6 +52,11 @@ class CustomPostCardVM extends ChangeNotifier{
   {
     _pictureUrl=url;
     notifyListeners();
+  }
+ @override
+  void dispose() {
+    super.dispose();
+    isDispose=true;
   }
 
 }

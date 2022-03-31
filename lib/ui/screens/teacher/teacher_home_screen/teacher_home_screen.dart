@@ -8,10 +8,11 @@ import 'package:notice_board/ui/custom_widgets/custom_post_card/custom_post_card
 import 'package:notice_board/ui/custom_widgets/custom_search_field/custom_search_field.dart';
 import 'package:notice_board/ui/screens/student/add_idea-screen/add_idea_screen.dart';
 import 'package:notice_board/ui/screens/student/student_home_screen/student_home_screen_vm.dart';
+import 'package:notice_board/ui/screens/teacher/teacher_home_screen/teacher_home_screen_vm.dart';
 import 'package:provider/provider.dart';
 
-class StudentHomeScreen extends StatelessWidget {
-  StudentHomeScreen({Key? key}) : super(key: key);
+class TeacherHomeScreen extends StatelessWidget {
+  TeacherHomeScreen({Key? key}) : super(key: key);
  // final TextEditingController searchTextEditingController=TextEditingController();
 
 
@@ -53,30 +54,13 @@ class StudentHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create:(context)=>StudentHomeScreenVM(),
+        create:(context)=>TeacherHomeScreenVM(),
       builder: (context,viewModel)
       {
         return Scaffold(
           backgroundColor: kWhiteColor,
-          floatingActionButton: Consumer<StudentHomeScreenVM>(
-            builder: (context,viewModel,child)
-            {
-              return viewModel.isAvailable?FloatingActionButton(
-                onPressed: ()
-                {
-
-                  NavigationService().navigatePushReplacement(context,  AddIdeaScreen());
-                },
-                backgroundColor: kPrimaryColor,
-                child: Icon(
-                  Icons.add,
-                  size: 35.r,
-                ),
-              ):Container();
-            },
-          ),
           body: SingleChildScrollView(
-            child: Consumer<StudentHomeScreenVM>(
+            child: Consumer<TeacherHomeScreenVM>(
               builder: (context,vm,child)
               { return Column(
               children: [

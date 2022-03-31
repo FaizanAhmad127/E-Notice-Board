@@ -2,6 +2,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:notice_board/ui/screens/student/student_root_screen/student_drawer_screen/student_drawer_screen_vm.dart';
+import 'package:notice_board/ui/screens/teacher/teacher_root_screen/teacher_drawer_screen/teacher_drawer_screen_vm.dart';
 import 'package:provider/provider.dart';
 import '../../../../../core/constants/colors.dart';
 import '../../../../../core/constants/text_styles.dart';
@@ -9,8 +10,8 @@ import '../../../../../core/services/cache_image_service.dart';
 import 'list_item.dart';
 
 
-class StudentDrawerScreen extends StatelessWidget {
-   StudentDrawerScreen({Key? key}) : super(key: key);
+class TeacherDrawerScreen extends StatelessWidget {
+   TeacherDrawerScreen({Key? key}) : super(key: key);
 
   TextEditingController fullNameController=TextEditingController();
   TextEditingController occupationController=TextEditingController();
@@ -20,9 +21,9 @@ class StudentDrawerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => StudentDrawerScreenVM(),
+      create: (context) => TeacherDrawerScreenVM(),
       builder: (context, viewModel) {
-        return Consumer<StudentDrawerScreenVM>(
+        return Consumer<TeacherDrawerScreenVM>(
           builder: (context,vm,child)
           {
             if(vm.fullNameValue.isNotEmpty)
@@ -75,7 +76,7 @@ class StudentDrawerScreen extends StatelessWidget {
                                             .loadCacheImage(vm.imageUrl),
                                       ),
                                     ),
-                                    Consumer<StudentDrawerScreenVM>(
+                                    Consumer<TeacherDrawerScreenVM>(
                                         builder: (context, vm, child) {
                                           return vm.isEditButtonClicked
                                               ? Positioned(
@@ -323,7 +324,7 @@ class StudentDrawerScreen extends StatelessWidget {
                                       width: 100.w,
                                       child: TextButton(
                                         onPressed: () {
-                                          Provider.of<StudentDrawerScreenVM>(
+                                          Provider.of<TeacherDrawerScreenVM>(
                                               context,
                                               listen: false)
                                               .signOut(context);

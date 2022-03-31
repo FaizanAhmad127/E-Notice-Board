@@ -16,6 +16,7 @@ class ChatScreenVM extends ChangeNotifier {
   List<ChatModel> _listOfChatModel = [];
   String uid = "";
   String userType;
+  bool isDispose=false;
 
   ChatScreenVM(this.userType,this.uid) {
 
@@ -40,7 +41,11 @@ class ChatScreenVM extends ChangeNotifier {
             Future.forEach(chatIds, (String chatId) {
 
                _chatService.getChatDocument(chatId).onData((docSnap) {
-                 setListOfChatModel=ChatModel.fromJson(docSnap);
+                 if(isDispose==false)
+                   {
+                     setListOfChatModel=ChatModel.fromJson(docSnap);
+                   }
+
               });
 
             });
@@ -70,5 +75,11 @@ class ChatScreenVM extends ChangeNotifier {
       }
 
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    isDispose=true;
   }
 }

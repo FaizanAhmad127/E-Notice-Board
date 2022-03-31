@@ -73,11 +73,11 @@ class _CoordinatorRootScreenState extends State<CoordinatorRootScreen> with
           appBar: AppBar(
             backgroundColor: kPrimaryColor,
 
-            actions: [
-              const Icon(
-                  Icons.message_rounded
-              ),SizedBox(width: 15.w,),
-            ],
+            // actions: [
+            //   const Icon(
+            //       Icons.message_rounded
+            //   ),SizedBox(width: 15.w,),
+            // ],
             bottom: PreferredSize(
               preferredSize:  Size(1.sw, 20.0),
               child: TabBar(

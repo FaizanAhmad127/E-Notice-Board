@@ -15,7 +15,7 @@ import 'package:page_transition/page_transition.dart';
 import '../../../../../core/services/user_authentication/user_auth_service.dart';
 import '../../../login/login_screen.dart';
 
-class StudentDrawerScreenVM extends ChangeNotifier
+class TeacherDrawerScreenVM extends ChangeNotifier
 {
   final UserAuthService _userAuthService=GetIt.I.get<UserAuthService>();
   final UserProfileService _userProfileService=GetIt.I.get<UserProfileService>();
@@ -35,7 +35,7 @@ class StudentDrawerScreenVM extends ChangeNotifier
   final Logger _logger=Logger();
   String uid="";
 
-  StudentDrawerScreenVM()
+  TeacherDrawerScreenVM()
   {
     uid=_firebaseAuth.currentUser!.uid;
     getUserData();
@@ -46,7 +46,7 @@ class StudentDrawerScreenVM extends ChangeNotifier
   {
     try
     {
-      await _userProfileService.postOnlineStatus("student", uid, "offline").then((value) {
+      await _userProfileService.postOnlineStatus("teacher", uid, "offline").then((value) {
         _userAuthService.userSignOut().then((value) {
           Navigator.pushReplacement(context, PageTransition(
               duration: const Duration(milliseconds: 700),
@@ -68,7 +68,7 @@ class StudentDrawerScreenVM extends ChangeNotifier
     try
     {
 
-      await _userProfileService.getProfileDocument(uid, "student").then((doc){
+      await _userProfileService.getProfileDocument(uid, "teacher").then((doc){
         setSignupModel=doc!;
         setFullNameValue=doc.fullName!;
         setOccupationValue=doc.occupation!;
@@ -103,7 +103,7 @@ class StudentDrawerScreenVM extends ChangeNotifier
       await _filePickerService.imagePicker().then((file) {
         if(file.existsSync()==true)
           {
-            _userProfileService.uploadProfileImage("student", uid, file).then((value){
+            _userProfileService.uploadProfileImage("teacher", uid, file).then((value){
               setImageURL=value;
             });
           }
@@ -118,7 +118,7 @@ class StudentDrawerScreenVM extends ChangeNotifier
   }
   Future saveEditedProfile(String name, String occupation)async
   {
-     await _userProfileService.updateNameAndOccupation("student", uid,
+     await _userProfileService.updateNameAndOccupation("teacher", uid,
          name, occupation).then((value){
            getUserData();
      });

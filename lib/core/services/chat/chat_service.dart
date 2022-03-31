@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:bot_toast/bot_toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -9,7 +8,6 @@ import 'package:logger/logger.dart';
 import 'package:notice_board/core/models/chat/chat_model.dart';
 import 'package:notice_board/core/models/chat/message_model.dart';
 import 'package:notice_board/core/models/user_authentication/user_signup_model.dart';
-
 import '../../models/idea/file_model.dart';
 
 class ChatService {

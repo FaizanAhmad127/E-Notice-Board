@@ -34,7 +34,7 @@ class FilePickerService
           }
         }
     catch(error){
-     _logger.e('error at pickimage/FilePickerImage.dart');
+     _logger.e('error at pickimage/FilePickerImage.dart $error');
    }
     return file;
 
@@ -61,7 +61,7 @@ class FilePickerService
 
        }
    catch(error){
-     _logger.e('error at multipleFilePicker/FilePickerImage.dart');
+     _logger.e('error at multipleFilePicker/FilePickerImage.dart $error');
    }
    return files;
  }
@@ -85,7 +85,7 @@ class FilePickerService
 
    }
    catch(error){
-     _logger.e('error at multipleFilePicker/FilePickerImage.dart');
+     _logger.e('error at multipleFilePicker/FilePickerImage.dart $error');
    }
    return file;
  }

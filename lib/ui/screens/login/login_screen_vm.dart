@@ -7,6 +7,7 @@ import 'package:notice_board/core/services/shared_pref_service.dart';
 import 'package:notice_board/core/services/user_authentication/user_auth_service.dart';
 import 'package:notice_board/core/services/validate_service.dart';
 import 'package:notice_board/ui/screens/coordinator/coordinator_root_screen/coordinator_root_screen/coordinator_root_screen.dart';
+import 'package:notice_board/ui/screens/teacher/teacher_root_screen/teacher_root_screen/teacher_root_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../student/student_root_screen/student_root_screen/student_root_screen.dart';
@@ -117,15 +118,15 @@ class LoginScreenVM extends ChangeNotifier{
      Widget? user;
      if(userType=="student")
        {
-         user=StudentRootScreen();
+         user=const StudentRootScreen();
        }
      else if(userType=="teacher")
        {
-         user=null;
+         user=const TeacherRootScreen();
        }
      else if(userType=="coordinator")
        {
-         user=CoordinatorRootScreen();
+         user=const CoordinatorRootScreen();
        }
      return user;
    }

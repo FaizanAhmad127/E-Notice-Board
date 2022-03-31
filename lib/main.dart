@@ -1,11 +1,8 @@
 import 'package:bot_toast/bot_toast.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
-import 'package:notice_board/core/models/notification/teacher_notification_model.dart';
 import 'package:notice_board/core/services/chat/chat_service.dart';
 import 'package:notice_board/core/services/file_management/file_download_open_service.dart';
 import 'package:notice_board/core/services/notification/signup_request_service.dart';
@@ -20,6 +17,7 @@ import 'package:notice_board/ui/screens/login/login_screen_vm.dart';
 import 'package:notice_board/ui/screens/splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:notice_board/ui/screens/student/student_root_screen/student_root_screen/student_root_screen.dart';
+import 'package:notice_board/ui/screens/teacher/teacher_root_screen/teacher_root_screen/teacher_root_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/constants/colors.dart';
@@ -59,7 +57,7 @@ void main() async{
 
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
-  final Future<FirebaseApp> _fbApp= Future.delayed(Duration(seconds: 5)).then((value) {
+  final Future<FirebaseApp> _fbApp= Future.delayed(const Duration(seconds: 5)).then((value) {
     return Firebase.initializeApp();
 
   });
@@ -73,7 +71,7 @@ class MyApp extends StatelessWidget {
     }
     else if(userType=="teacher")
     {
-      user=null;
+      user=const TeacherRootScreen();
     }
     else if(userType=="coordinator")
     {
