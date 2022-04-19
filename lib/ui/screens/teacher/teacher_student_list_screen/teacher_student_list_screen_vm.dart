@@ -4,51 +4,48 @@ import 'package:logger/logger.dart';
 import 'package:notice_board/core/models/user_authentication/user_signup_model.dart';
 import 'package:notice_board/core/services/user_documents/user_profile_service.dart';
 
-class CoordinatorTeacherListScreenVM extends ChangeNotifier
+class TeacherStudentListScreenVM extends ChangeNotifier
 {
   final TextEditingController _searchController=TextEditingController();
   final UserProfileService _userProfileService=GetIt.I.get<UserProfileService>();
-  List<UserSignupModel> _listOfTeachers=[];
+  List<UserSignupModel> _listOfStudents=[];
   List<UserSignupModel> _searchList=[];
   final Logger _logger=Logger();
-  bool isDispose=false;
 
 
 
-  CoordinatorTeacherListScreenVM()
+  TeacherStudentListScreenVM()
   {
-    getListOfTeachers();
+    getListOfStudents();
     _searchController.addListener(() {
       searchTeachers(_searchController.text);
     });
   }
 
 
-  Future getListOfTeachers()async
+  Future getListOfStudents()async
   {
     try{
-      await _userProfileService.getAllTeachers().then((listOfTeachers) {
-        if(isDispose==false) {
-          setListOfTeachers = listOfTeachers;
-          setSearchList = listOfTeachers;
-        }
+      await _userProfileService.getAllStudents().then((listOfStudents) {
+        setListOfStudents=listOfStudents;
+        setSearchList=listOfStudents;
       });
     }
     catch(error){
-      _logger.e("error at getListOfTeachers/coordinatorteacherlistvm.dart $error");
+      _logger.e("error at getListOfTeachers/TeacherStudentListScreenVM.dart $error");
     }
 
   }
 
   TextEditingController get searchController=>_searchController;
-  List<UserSignupModel> get listOfTeachers => _listOfTeachers;
+  List<UserSignupModel> get listOfStudents => _listOfStudents;
   List<UserSignupModel> get getSearchList => _searchList;
 
   void searchTeachers(String searchText)
   {
     setSearchList=searchText.isNotEmpty?
-    List<UserSignupModel>.from(listOfTeachers.where((element) => element.fullName!.toLowerCase().contains(searchText.toLowerCase())))
-        :listOfTeachers;
+    List<UserSignupModel>.from(listOfStudents.where((element) => element.fullName!.toLowerCase().contains(searchText.toLowerCase())))
+        :listOfStudents;
   }
   set setSearchList(List<UserSignupModel> ideas)
   {
@@ -56,16 +53,15 @@ class CoordinatorTeacherListScreenVM extends ChangeNotifier
     notifyListeners();
   }
 
-  set setListOfTeachers(List<UserSignupModel> list)
+  set setListOfStudents(List<UserSignupModel> list)
   {
-    _listOfTeachers=list;
+    _listOfStudents=list;
     notifyListeners();
   }
 
   @override
   void dispose() {
     super.dispose();
-    isDispose=true;
     _searchController.dispose();
   }
 }

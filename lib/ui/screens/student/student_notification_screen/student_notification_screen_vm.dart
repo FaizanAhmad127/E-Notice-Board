@@ -12,6 +12,7 @@ class StudentNotificationScreenVM extends ChangeNotifier{
   List<StudentIdeaStatusModel> _ideasList=[];
   final Logger _logger = Logger();
   late String uid;
+  bool isDispose=false;
 
   StudentNotificationScreenVM()
   {
@@ -25,12 +26,15 @@ class StudentNotificationScreenVM extends ChangeNotifier{
     try
     {
       firestore.collection("student").doc(uid).collection("ideaStatusNotification").
-      orderBy('timeStamp',descending: true).snapshots().listen((docsSnapshot) {
-        _ideasList=[];
-        for (var doc in docsSnapshot.docChanges) {
-          _ideasList.add(StudentIdeaStatusModel.fromJson(doc.doc));
-        }
-        setIdeasList=_ideasList;
+      orderBy('timeStamp',descending: false).snapshots().listen((docsSnapshot) {
+        if(isDispose==false)
+          {
+            for (var doc in docsSnapshot.docChanges) {
+              setIdeasList=StudentIdeaStatusModel.fromJson(doc.doc);
+            }
+          }
+
+
 
       });
     }
@@ -42,10 +46,16 @@ class StudentNotificationScreenVM extends ChangeNotifier{
 
   List<StudentIdeaStatusModel> get getIdeasList=>_ideasList;
 
-  set setIdeasList(List<StudentIdeaStatusModel> ideas)
+  set setIdeasList(StudentIdeaStatusModel idea)
   {
-    _ideasList=ideas;
+
+    _ideasList.insert(0, idea);
     notifyListeners();
   }
+ @override
+  void dispose() {
 
+    super.dispose();
+    isDispose=true;
+  }
 }

@@ -11,6 +11,8 @@ import 'package:notice_board/ui/screens/student/student_home_screen/student_home
 import 'package:notice_board/ui/screens/teacher/teacher_home_screen/teacher_home_screen_vm.dart';
 import 'package:provider/provider.dart';
 
+import '../../view_details_screen/view_details_screen.dart';
+
 class TeacherHomeScreen extends StatelessWidget {
   TeacherHomeScreen({Key? key}) : super(key: key);
  // final TextEditingController searchTextEditingController=TextEditingController();
@@ -66,13 +68,13 @@ class TeacherHomeScreen extends StatelessWidget {
               children: [
 
                 // Search box
-                custom_search_field(searchTextEditingController: vm.searchController,
+                CustomSearchField(searchTextEditingController: vm.searchController,
                   hintText: "Search by Title",),
                 SizedBox(
                   height: 16.h,
                 ),
                 vm.getSearchList.isEmpty?
-                const Center(child:Text("Nothing to show")):
+                const Center(child:Text("Your accepted ideas will show here")):
                 Padding(
                       padding: EdgeInsets.only(left: 4.w, right: 4.w),
                       child: SizedBox(
@@ -83,8 +85,9 @@ class TeacherHomeScreen extends StatelessWidget {
                                 IdeaModel idea=vm.getSearchList[index];
                                 return CustomPostCard(
                                     button: AcceptedRejectedButton(
-                                      color: buttonColor(idea.status),
-                                      text: buttonText(idea.status),
+                                      ideaId: vm.getIdeasList[index].ideaId,
+                                      color: kFinPenPressedColor,
+                                      text: "View Details",
                                     ),
                                   ideaModel: idea,
                                 );
@@ -104,36 +107,42 @@ class TeacherHomeScreen extends StatelessWidget {
 }
 
 class AcceptedRejectedButton extends StatelessWidget {
-   const AcceptedRejectedButton({
+  const AcceptedRejectedButton({
     Key? key,
-    required this.text,required this.color,
+    required this.text,required this.color,required this.ideaId
   }) : super(key: key);
   final String text;
   final Color color;
+  final String ideaId;
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 34.h,
-      width: 87.w,
-      child: Container(
+    return GestureDetector(
+      onTap: (){
+        NavigationService().navigatePush(context, ViewDetailsScreen(ideaId: ideaId));
+      },
+      child: SizedBox(
+          height: 35.h,
+          width: 110.w,
+          child: Container(
 
-        decoration: BoxDecoration(
-          color: color,
-          shape:BoxShape.rectangle,
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(7.r),topLeft: Radius.circular(7.r),
-          )
-        ),
-        child:  Padding(
-          padding: EdgeInsets.symmetric(vertical: 5.h,horizontal: 10.w),
-          child: FittedBox(
-              fit: BoxFit.fill,
-              child: Text(text,
-                style: kPoppinsMedium500.copyWith(
-                    fontSize: 15.sp,
-                    color: kWhiteColor
-                ),)),
-        ),
-      ));
+            decoration: BoxDecoration(
+                color: color,
+                shape:BoxShape.rectangle,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(7.r),topLeft: Radius.circular(7.r),
+                )
+            ),
+            child:  Padding(
+              padding: EdgeInsets.symmetric(vertical: 5.h,horizontal: 10.w),
+              child: FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Text(text,
+                    style: kPoppinsMedium500.copyWith(
+                        fontSize: 15.sp,
+                        color: kBlackColor
+                    ),)),
+            ),
+          )),
+    );
   }
 }

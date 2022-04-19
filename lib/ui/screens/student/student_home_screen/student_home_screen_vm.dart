@@ -61,7 +61,7 @@ class StudentHomeScreenVM extends ChangeNotifier{
   {
     IdeaModel ideaModel;
       try {
-        postStreamSubscription=_firebaseFirestore.collection("post")
+        postStreamSubscription=_firebaseFirestore.collection("post").orderBy('timeStamp',descending: true)
             .snapshots().listen((querySnap) {
               if(isDispose==false)
                 {

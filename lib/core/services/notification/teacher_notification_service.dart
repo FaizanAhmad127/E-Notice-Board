@@ -13,14 +13,31 @@ class TeacherNotificationService{
     try{
       await Future.forEach(teacherUid, (String uid)async {
         await _firebaseFirestore.collection("teacher").doc(uid)
-            .collection("notification").add(notificationModel.toJson());
+            .collection("notification").doc(notificationModel.timeStamp.toString()).
+        set(notificationModel.toJson(),SetOptions(merge: true));
       });
 
     }
     catch(error)
     {
-      _logger.e("error at setTeacherNotification services/TeacherNotificationService.dart");
+      _logger.e("error at setTeacherNotification/TeacherNotificationService.dart");
     }
     BotToast.closeAllLoading();
+  }
+
+  Future setIsRejectedStatus(String teacherUid,String timeStamp,String status)async
+  {
+    
+    try
+        {
+          await _firebaseFirestore.collection("teacher").doc(teacherUid).collection("notification")
+              .doc(timeStamp).set({
+            'status':status
+          },SetOptions(merge: true));
+        }
+    catch(error)
+    {
+      _logger.e("error at setIsRejectedStatus/TeacherNotificationService.dart");
+    }
   }
 }

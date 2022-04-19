@@ -6,11 +6,11 @@ import 'package:notice_board/core/models/user_authentication/user_signup_model.d
 import 'package:provider/provider.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../custom_widgets/custom_search_field/custom_search_field.dart';
-import 'coordinator_student_list_screen_vm.dart';
+import 'teacher_student_list_screen_vm.dart';
 
 
-class CoordinatorStudentListScreen extends StatelessWidget {
-  const CoordinatorStudentListScreen({Key? key}) : super(key: key);
+class TeacherStudentListScreen extends StatelessWidget {
+  const TeacherStudentListScreen({Key? key}) : super(key: key);
 
   Widget getItem(UserSignupModel teacher) {
     return SizedBox(
@@ -100,12 +100,12 @@ class CoordinatorStudentListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => CoordinatorStudentListScreenVM(),
+      create: (context) => TeacherStudentListScreenVM(),
       builder: (context, viewModel) {
         return Scaffold(
           backgroundColor: kWhiteColor,
           body: SingleChildScrollView(
-            child: Consumer<CoordinatorStudentListScreenVM>(
+            child: Consumer<TeacherStudentListScreenVM>(
               builder: (context, vm, child) {
                 return Column(
                   children: [

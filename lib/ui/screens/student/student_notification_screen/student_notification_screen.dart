@@ -100,7 +100,7 @@ class StudentNotificationScreen extends StatelessWidget {
                     alignment: Alignment.center,
                     child: FittedBox(
 
-                      child: Text(ideaStatusModel.status=="rejected"?"Rejected":"Accepted",
+                      child: Text(ideaStatusModel.status=='accepted'?'Accepted':'Rejected',
                         style: kPoppinsMedium500.copyWith(
                             fontSize: 14.sp,
                             color: ideaStatusModel.status=="accepted"?kAcceptedColor:kRejectedColor,

@@ -134,7 +134,7 @@ class StudentTeacherListScreen extends StatelessWidget {
                   children: [
 
                     // Search box
-                    custom_search_field(
+                    CustomSearchField(
                         searchTextEditingController: vm.searchController,
                       hintText: "Search by name",),
                     SizedBox(

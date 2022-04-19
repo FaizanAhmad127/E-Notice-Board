@@ -2,12 +2,10 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:notice_board/core/models/notification/signup_request_model.dart';
-import 'package:notice_board/core/models/user_authentication/user_signup_model.dart';
 import 'package:notice_board/core/services/navigation_service.dart';
 import 'package:notice_board/core/services/notification/signup_request_service.dart';
 import 'package:notice_board/core/services/user_documents/user_profile_service.dart';
 import 'package:notice_board/ui/screens/login/login_screen.dart';
-import 'package:notice_board/ui/screens/student/student_root_screen/student_root_screen/student_root_screen.dart';
 import '../../../core/services/user_authentication/user_auth_service.dart';
 import '../../../core/services/validate_service.dart';
 
@@ -17,8 +15,6 @@ class SignupScreenVM extends ChangeNotifier
 
   //GetIt is a package used to create singleton design pattern.
   final UserAuthService _userAuthService=GetIt.I.get<UserAuthService>();
-
-  final UserProfileService _userProfileService=GetIt.I.get<UserProfileService>();
 
   final SignupRequestService _requestService=GetIt.I.get<SignupRequestService>();
 
@@ -40,12 +36,6 @@ class SignupScreenVM extends ChangeNotifier
 
           else {
 
-            UserSignupModel userSignupModel = UserSignupModel(
-                email, universityId, fullName, uid,_groupValue==0?"student":"teacher");
-
-            _userProfileService.createProfileDocument(
-                userType: userType(), userSignupModel: userSignupModel).then((value){
-
              SignupRequestModel requestModel=SignupRequestModel(
                  fullName, userType(), dateTime, uid, universityId,email)  ;
 
@@ -58,8 +48,6 @@ class SignupScreenVM extends ChangeNotifier
 
              });
 
-
-            });
           }
         });
       }

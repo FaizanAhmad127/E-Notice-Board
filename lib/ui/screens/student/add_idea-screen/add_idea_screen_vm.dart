@@ -7,7 +7,7 @@ import 'package:logger/logger.dart';
 import 'package:notice_board/core/models/user_authentication/user_signup_model.dart';
 import 'package:notice_board/core/services/file_management/file_picker_service.dart';
 import 'package:notice_board/core/services/user_documents/student_idea_service.dart';
-import 'package:notice_board/core/services/user_documents/teacher_notification_service.dart';
+import 'package:notice_board/core/services/notification/teacher_notification_service.dart';
 import 'package:notice_board/core/services/user_documents/user_profile_service.dart';
 import 'package:notice_board/core/services/validate_service.dart';
 

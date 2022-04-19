@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:notice_board/core/constants/colors.dart';
 import 'package:notice_board/core/constants/text_styles.dart';
-class custom_search_field extends StatelessWidget {
-  const custom_search_field({
+class CustomSearchField extends StatelessWidget {
+  const CustomSearchField({
     Key? key,
     required this.searchTextEditingController,
     required this.hintText,

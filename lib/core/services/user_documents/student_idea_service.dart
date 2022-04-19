@@ -7,19 +7,19 @@ import 'package:logger/logger.dart';
 import 'package:notice_board/core/models/idea/file_model.dart';
 import 'package:notice_board/core/models/idea/idea_model.dart';
 import 'package:notice_board/core/models/notification/teacher_notification_model.dart';
-import 'package:notice_board/core/services/user_documents/teacher_notification_service.dart';
+import 'package:notice_board/core/services/notification/teacher_notification_service.dart';
 
 
 class StudentIdeaService {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   final Logger _logger = Logger();
   final FirebaseStorage _firebaseStorage=FirebaseStorage.instance;
-
   Future postIdea(String title, String desc, String ownerUID,List<String> studentsUid,
                  List<String> teachersUid, String ideaType, List<PlatformFile> filesList, int ideaId) async
   {
     BotToast.showLoading();
     try {
+      ///current student is also a team member so add him/her
       studentsUid.add(ownerUID);
 
       List<FileModel> fileModelList=[];
@@ -46,7 +46,7 @@ class StudentIdeaService {
          )).then((value) async{
 
            ///adding idea id to selected Students
-           //current student is also a team member so add him/her
+
            await addIdeaIdToStudent(ideaId.toString(), studentsUid)
                .then((value) async{
 
@@ -54,7 +54,7 @@ class StudentIdeaService {
              await TeacherNotificationService().setTeacherNotification(
                  teachersUid,
                  TeacherNotificationModel("permission", ideaId.toString(),
-                     title, ideaType)).then((value) {
+                     title, ideaType,ideaId)).then((value) {
 
                BotToast.showText(text: "Idea Submitted");
              });
@@ -70,7 +70,7 @@ class StudentIdeaService {
     }
     catch (error) {
       BotToast.showText(text: "Unable to submit, try again!");
-      _logger.e("error at postIdea services/StudentIdeaService.dart $error");
+      _logger.e("error at postIdea/StudentIdeaService.dart $error");
     }
     BotToast.closeAllLoading();
   }
@@ -97,7 +97,7 @@ class StudentIdeaService {
 
     catch (error) {
       _logger.e(
-          "error at addIdeaIdToStudent services/StudentIdeaService.dart $error");
+          "error at addIdeaIdToStudent/StudentIdeaService.dart $error");
     }
     BotToast.closeAllLoading();
   }
@@ -120,7 +120,7 @@ class StudentIdeaService {
     }
     catch (error) {
       _logger.e(
-          "error at addIdeaIdToTeacher services/StudentIdeaService.dart $error");
+          "error at addIdeaIdToTeacher /StudentIdeaService.dart $error");
     }
     BotToast.closeAllLoading();
   }
@@ -139,7 +139,7 @@ class StudentIdeaService {
     }
     catch (error) {
       _logger.e(
-          "error at getAllUserIdeas services/StudentIdeaService.dart $error");
+          "error at getAllUserIdeas /StudentIdeaService.dart $error");
     }
     return ideasList;
   }
@@ -153,9 +153,82 @@ class StudentIdeaService {
        }
        catch (error) {
          _logger.e(
-             "error at getAllUserIdeas getIdea/StudentIdeaService.dart $error");
+             "error at  getIdea/StudentIdeaService.dart $error");
        }
       return ideaModel;
+  }
+
+  Future acceptRejectIdea(String ideaId, String teacherUid, String status,List<String> studentsUid)async
+  {
+    BotToast.showLoading();
+    try {
+      await getIdea(ideaId).then((ideaModel) async {
+        int rejectedTimes = ideaModel!.rejectedTimes;
+        int noOfTeachers = ideaModel.noOfTeachers;
+        if (status == "rejected") {
+          await _firebaseFirestore.collection("post").doc(ideaId).set({
+            'rejectedTimes': rejectedTimes + 1,
+            'status': noOfTeachers <= (rejectedTimes + 1)
+                ? 'rejected'
+                : 'pending'
+          }, SetOptions(merge: true)).then((value) {
+            /// if all of the teachers rejected the idea then
+            /// allow student to post another idea. i.e visible the plus button
+           if(noOfTeachers <= (rejectedTimes + 1))
+             {
+               Future.forEach(studentsUid, (uid) async{
+                 await _firebaseFirestore.collection("student").doc(uid.toString()).set({
+                   'available':'yes',
+                 },SetOptions(merge: true));
+               });
+             }
+
+
+          });
+        }
+
+        else {
+          await _firebaseFirestore.collection("post").doc(ideaId).set({
+            'acceptedBy':teacherUid,
+            'status': 'accepted'
+          }, SetOptions(merge: true)).then((value) {
+
+            /// if one of the teacher accepted the idea then
+            /// allow student to post another idea. i.e visible the plus button
+
+            // Future.forEach(studentsUid, (uid) async{
+            //   await _firebaseFirestore.collection("student").doc(uid.toString()).set({
+            //     'available':'yes',
+            //   },SetOptions(merge: true));
+            // });
+
+          });
+        }
+      });
+    }
+    catch (error) {
+      _logger.e(
+          "error at acceptRejectIdea/StudentIdeaService.dart $error");
+    }
+    BotToast.closeAllLoading();
+  }
+
+  Future<List<IdeaModel>> getAllAcceptedIdeas()async{
+    List<IdeaModel> listOfIdeas=[];
+    try
+        {
+          await _firebaseFirestore.collection('post')
+              .where('acceptedBy',isNotEqualTo: '').get().then((querySnap) {
+                querySnap.docs.forEach((doc) {
+                  listOfIdeas.add(IdeaModel.fromJson(doc));
+                });
+          });
+        }
+        catch(error){
+          _logger.e(
+              "error at getAllAcceptedIdeas/StudentIdeaService.dart $error");
+        }
+        return listOfIdeas;
   }
 
 

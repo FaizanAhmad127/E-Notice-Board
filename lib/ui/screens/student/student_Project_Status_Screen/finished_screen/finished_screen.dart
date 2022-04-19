@@ -25,7 +25,7 @@ class FinishedScreen extends StatelessWidget {
             {
          return Column(
             children: [
-              Expanded(child: custom_search_field(
+              Expanded(child: CustomSearchField(
                 searchTextEditingController: vm.searchController,
                 hintText: "Search by Title",)),
               Expanded(

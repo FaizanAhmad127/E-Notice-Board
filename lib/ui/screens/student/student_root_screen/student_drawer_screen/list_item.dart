@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:notice_board/core/models/idea/idea_model.dart';
 import 'package:notice_board/core/services/date_time_service.dart';
+import 'package:notice_board/ui/screens/student/student_root_screen/student_drawer_screen/list_item_vm.dart';
 
 import '../../../../../core/constants/colors.dart';
 import '../../../../../core/constants/text_styles.dart';
+import '../../../../../core/models/user_authentication/user_signup_model.dart';
 class ListItem extends StatelessWidget {
   const ListItem(this._ideaModel,{Key? key}) : super(key: key);
   final IdeaModel _ideaModel;
@@ -101,10 +103,33 @@ class ListItem extends StatelessWidget {
                         ),
                         Expanded(
                           child: FittedBox(child:
-                          Text("Teacher ${_ideaModel.acceptedBy==""?"None":_ideaModel.acceptedBy}",
-                            style: kPoppinsMedium500.copyWith(
-                              fontSize: 10.sp,
-                            ),),),
+                              _ideaModel.acceptedBy==""?
+                              Text("Teacher: None",
+                                style: kPoppinsMedium500.copyWith(
+                                  fontSize: 10.sp,
+                                ),):
+                              FutureBuilder(
+                                future: ListItemVm().getTeacherDetails(_ideaModel.acceptedBy),
+                                builder: (context, AsyncSnapshot<UserSignupModel?> teacher)
+                                {
+                                  if(teacher.hasData)
+                                    {
+                                      return Text("Teacher: ${teacher.data?.fullName??""}",
+                                        style: kPoppinsMedium500.copyWith(
+                                          fontSize: 10.sp,
+                                        ),);
+                                    }
+                                  else
+                                    {
+                                      return Text("Teacher: Loading..",
+                                        style: kPoppinsMedium500.copyWith(
+                                          fontSize: 10.sp,
+                                        ),);
+                                    }
+                                },
+                              )
+
+                          ),
                         ),
 
 

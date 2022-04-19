@@ -4,7 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:notice_board/core/constants/colors.dart';
+import 'package:notice_board/core/services/navigation_service.dart';
 import 'package:notice_board/ui/screens/coordinator/coordinator_home_screen/coordinator_home_screen.dart';
+import 'package:notice_board/ui/screens/coordinator/coordinator_result_screen/coordinator_result_screen.dart';
 import 'package:notice_board/ui/screens/coordinator/coordinator_root_screen/coordinator_drawer_screen/coordinator_drawer_screen.dart';
 import 'package:notice_board/ui/screens/coordinator/coordinator_root_screen/coordinator_drawer_screen/coordinator_drawer_screen_vm.dart';
 import 'package:notice_board/ui/screens/coordinator/coordinator_student_list_screen/coordinator_student_list_screen.dart';
@@ -73,11 +75,16 @@ class _CoordinatorRootScreenState extends State<CoordinatorRootScreen> with
           appBar: AppBar(
             backgroundColor: kPrimaryColor,
 
-            // actions: [
-            //   const Icon(
-            //       Icons.message_rounded
-            //   ),SizedBox(width: 15.w,),
-            // ],
+            actions: [
+              GestureDetector(
+                onTap: (){
+                  NavigationService().navigatePush(context, CoordinatorResultScreen());
+                },
+                child: const Icon(
+                    FontAwesomeIcons.clipboardCheck
+                ),
+              ),SizedBox(width: 15.w,),
+            ],
             bottom: PreferredSize(
               preferredSize:  Size(1.sw, 20.0),
               child: TabBar(

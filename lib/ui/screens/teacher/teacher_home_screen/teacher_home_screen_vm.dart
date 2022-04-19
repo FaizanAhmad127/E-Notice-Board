@@ -43,6 +43,7 @@ class TeacherHomeScreenVM extends ChangeNotifier{
           if(listOfIdeas.isNotEmpty)
             {
               postStreamSubscription=_firebaseFirestore.collection("post")
+                  .orderBy('timeStamp',descending: true)
                   .snapshots().listen((querySnap) {
                 if(isDispose==false)
                 {

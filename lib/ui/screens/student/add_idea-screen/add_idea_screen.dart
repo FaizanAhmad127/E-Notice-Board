@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:notice_board/core/constants/colors.dart';
 import 'package:notice_board/ui/custom_widgets/login_register_button/login_register_button.dart';
 import 'package:notice_board/ui/screens/student/add_idea-screen/add_idea_screen_vm.dart';
-import 'package:notice_board/ui/screens/student/add_idea-screen/custom_multiselect_dropdown.dart';
+import 'package:notice_board/ui/custom_widgets/custom_multiselect_dropdown.dart';
 import 'package:notice_board/ui/screens/student/student_home_screen/student_home_screen.dart';
 import 'package:notice_board/ui/screens/student/student_root_screen/student_root_screen/student_root_screen.dart';
 import 'package:provider/provider.dart';
@@ -81,7 +81,6 @@ class AddIdeaScreen extends StatelessWidget {
                   ),
                   CustomMultiselectDropDown(
                         selectedList: (selectedlist) {
-                          print("student selected");
                           if (selectedlist.length == 3) {
                             BotToast.showText(
                                 text: "That's it, Only 3 team members");
@@ -93,15 +92,15 @@ class AddIdeaScreen extends StatelessWidget {
                         labelText: "Select Students"),
                   CustomMultiselectDropDown(
                         selectedList: (selectedlist) {
-                          print("teacher selected");
-                          if (selectedlist.length == 3) {
+
+                          if (selectedlist.length == 4) {
                             BotToast.showText(
-                                text: "That's it, Only 3 teachers");
+                                text: "That's it, Only 4 teachers");
                           }
                           vm.setSelectedTeachersList = selectedlist;
                         },
                         userModelList: vm.listOfTeachers,
-                        limit: 3,
+                        limit: 4,
                         labelText: "Select Teachers"),
                   SizedBox(
                       height: 15.h,

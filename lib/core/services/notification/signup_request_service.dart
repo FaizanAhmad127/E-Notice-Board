@@ -1,11 +1,15 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:notice_board/core/models/notification/signup_request_model.dart';
+import '../../models/user_authentication/user_signup_model.dart';
+import '../user_documents/user_profile_service.dart';
 
 class SignupRequestService {
 
   final FirebaseFirestore _firebaseFirestore=FirebaseFirestore.instance;
+  final UserProfileService _userProfileService=GetIt.I.get<UserProfileService>();
   final Logger _logger=Logger();
 
   Future createSignupRequestDocument(String email,SignupRequestModel requestModel)async
@@ -54,6 +58,23 @@ class SignupRequestService {
           'isApproved':isApproved
         },SetOptions(merge: true)).then((value) {
           BotToast.showText(text: "Request ${isApproved=='yes'?"Approved":"Rejected"}");
+        }).then((value) async{
+          if(isApproved=='yes')
+            {
+              await _firebaseFirestore.collection("approval").doc(email)
+                  .get().then((docSnap)async {
+                    ///getting details from Signup Request Model
+                ///and creating a relevant user document
+                    SignupRequestModel signupRequestModel=SignupRequestModel.fromJson(docSnap);
+                    await _userProfileService.createProfileDocument(
+                      uid: signupRequestModel.uid??"",
+                        userType: signupRequestModel.occupation??"",
+                        userSignupModel: UserSignupModel(
+                            signupRequestModel.email, signupRequestModel.universityId,
+                            signupRequestModel.fullName, signupRequestModel.uid,
+                            signupRequestModel.occupation));
+              });
+            }
         });
 
      }

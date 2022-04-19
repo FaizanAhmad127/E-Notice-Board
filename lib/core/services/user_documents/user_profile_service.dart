@@ -14,13 +14,14 @@ class UserProfileService{
   final Logger _logger=Logger();
 
 
-  Future createProfileDocument({required String userType,required UserSignupModel userSignupModel})async
+  Future createProfileDocument({required String userType,required String uid,required UserSignupModel userSignupModel})async
   {
     BotToast.showLoading();
+
     try
     {
       await _firebaseFirestore.collection(userType).
-      doc(_firebaseAuth.currentUser!.uid).
+      doc(uid).
       set(userSignupModel.toJson(),SetOptions(
         merge: true,
       ));
@@ -166,14 +167,14 @@ class UserProfileService{
   Future<List<UserSignupModel>> getAvailableTeachers(String uid)async
   {
     BotToast.showLoading();
-    List<UserSignupModel> listOfStudents=[];
+    List<UserSignupModel> listOfTeachers=[];
     try{
       await _firebaseFirestore.collection("teacher").
       where('available',isEqualTo: "yes").get().then((docsSnap) {
         for (var doc in docsSnap.docChanges) {
           if(doc.doc.id!=uid)
           {
-            listOfStudents.add(UserSignupModel.fromJson(doc.doc));
+            listOfTeachers.add(UserSignupModel.fromJson(doc.doc));
           }
         }});
     }
@@ -182,7 +183,7 @@ class UserProfileService{
       _logger.e("error at getAvailableTeachers/UserProfileService.dart $error");
     }
     BotToast.closeAllLoading();
-    return listOfStudents;
+    return listOfTeachers;
   }
 
 }

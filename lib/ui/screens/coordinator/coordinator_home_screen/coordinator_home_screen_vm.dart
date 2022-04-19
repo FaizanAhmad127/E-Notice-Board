@@ -36,6 +36,7 @@ class CoordinatorHomeScreenVM extends ChangeNotifier{
     IdeaModel ideaModel;
     try {
       postStreamSubscription=_firebaseFirestore.collection("post")
+          .orderBy('timeStamp',descending: true)
           .snapshots().listen((querySnap) {
         if(isDispose==false)
         {

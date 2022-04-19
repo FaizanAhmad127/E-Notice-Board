@@ -6,10 +6,12 @@ import 'package:get_it/get_it.dart';
 import 'package:notice_board/core/services/chat/chat_service.dart';
 import 'package:notice_board/core/services/file_management/file_download_open_service.dart';
 import 'package:notice_board/core/services/notification/signup_request_service.dart';
+import 'package:notice_board/core/services/notification/student_idea_status_service.dart';
 import 'package:notice_board/core/services/shared_pref_service.dart';
 import 'package:notice_board/core/services/user_authentication/user_auth_service.dart';
 import 'package:notice_board/core/services/user_documents/student_idea_service.dart';
-import 'package:notice_board/core/services/user_documents/teacher_notification_service.dart';
+import 'package:notice_board/core/services/notification/teacher_notification_service.dart';
+import 'package:notice_board/core/services/user_documents/student_result_service.dart';
 import 'package:notice_board/core/services/user_documents/user_profile_service.dart';
 import 'package:notice_board/ui/screens/coordinator/coordinator_root_screen/coordinator_root_screen/coordinator_root_screen.dart';
 import 'package:notice_board/ui/screens/login/login_screen.dart';
@@ -31,10 +33,12 @@ Future setupSingletons()  async{
   locator.registerLazySingleton<UserAuthService>(() => UserAuthService());
   locator.registerLazySingleton<UserProfileService>(() => UserProfileService());
   locator.registerLazySingleton(() => StudentIdeaService());
+  locator.registerLazySingleton(() => StudentIdeaStatusService());
   locator.registerLazySingleton(() => TeacherNotificationService());
   locator.registerLazySingleton(() => SignupRequestService());
   locator.registerLazySingleton(() => FileDownloadOpenService());
   locator.registerLazySingleton(() => ChatService());
+  locator.registerLazySingleton(() => StudentResultService());
  locator.registerSingletonAsync<SharedPref>(() async {
     final pref = await SharedPreferences.getInstance();
     return SharedPref(pref: pref);

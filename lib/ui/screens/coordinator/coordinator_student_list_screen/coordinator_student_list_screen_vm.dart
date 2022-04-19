@@ -11,6 +11,7 @@ class CoordinatorStudentListScreenVM extends ChangeNotifier
   List<UserSignupModel> _listOfStudents=[];
   List<UserSignupModel> _searchList=[];
   final Logger _logger=Logger();
+  bool isDispose=false;
 
 
 
@@ -27,8 +28,12 @@ class CoordinatorStudentListScreenVM extends ChangeNotifier
   {
     try{
       await _userProfileService.getAllStudents().then((listOfStudents) {
-        setListOfStudents=listOfStudents;
-        setSearchList=listOfStudents;
+        if(isDispose==false)
+          {
+            setListOfStudents=listOfStudents;
+            setSearchList=listOfStudents;
+          }
+
       });
     }
     catch(error){
@@ -62,6 +67,7 @@ class CoordinatorStudentListScreenVM extends ChangeNotifier
   @override
   void dispose() {
     super.dispose();
+    isDispose=true;
     _searchController.dispose();
   }
 }

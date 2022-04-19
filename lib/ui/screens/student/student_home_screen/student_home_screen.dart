@@ -82,7 +82,7 @@ class StudentHomeScreen extends StatelessWidget {
               children: [
 
                 // Search box
-                custom_search_field(searchTextEditingController: vm.searchController,
+                CustomSearchField(searchTextEditingController: vm.searchController,
                   hintText: "Search by Title",),
                 SizedBox(
                   height: 16.h,

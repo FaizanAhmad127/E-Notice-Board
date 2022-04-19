@@ -80,23 +80,16 @@ class Validate{
       }
     else
       {
-         if(studentLength==0)
-           {
-             BotToast.showText(text: "Please select at least 1 team member",duration: Duration(seconds: 3));
-             isValid=false;
-           }
-         else
-           {
-              if(teacherLength==0)
-                {
-                  BotToast.showText(text: "Please select at least 1 teacher",duration: Duration(seconds: 3));
-                  isValid=false;
-                }
-              else
-                {
-                  isValid=true;
-                }
-           }
+        if(teacherLength==0)
+        {
+          BotToast.showText(text: "Please select at least 1 teacher",duration: Duration(seconds: 3));
+          isValid=false;
+        }
+        else
+          {
+            isValid=true;
+          }
+
       }
 
     return isValid;
