@@ -1,24 +1,24 @@
 class MarksModel
 {
-  String _obe2='Pending';
-  String _obe3='Pending';
-  String _obe4='Pending';
-  String _fyp1Viva='Pending';
-  String _fyp2Viva='Pending';
+  Map<String,double> _obe2={};
+  Map<String,double> _obe3={};
+  Map<String,double> _obe4={};
+  double _fyp1Viva=0;
+  double _fyp2Viva=0;
   int _timeStamp=0;
 
   MarksModel();
 
 
-  String get obe2 => _obe2;
+  Map<String,double>  get obe2 => _obe2;
 
-  String get obe3 => _obe3;
+  Map<String,double>  get obe3 => _obe3;
 
-  String get obe4 => _obe4;
+  Map<String,double>  get obe4 => _obe4;
 
-  String get fyp1Viva => _fyp1Viva;
+  double get fyp1Viva => _fyp1Viva;
 
-  String get fyp2Viva => _fyp2Viva;
+  double get fyp2Viva => _fyp2Viva;
 
   int get timeStamp => _timeStamp;
 

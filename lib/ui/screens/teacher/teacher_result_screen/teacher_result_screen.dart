@@ -7,6 +7,7 @@ import 'package:notice_board/core/services/navigation_service.dart';
 import 'package:notice_board/ui/custom_widgets/custom_multiselect_dropdown.dart';
 import 'package:notice_board/ui/screens/marks_screen/marks_screen.dart';
 import 'package:notice_board/ui/screens/student/student_home_screen/student_home_screen.dart';
+import 'package:notice_board/ui/screens/teacher/teacher_result_screen/teacher_marks_screen.dart';
 import 'package:notice_board/ui/screens/teacher/teacher_result_screen/teacher_result_screen_VM.dart';
 import 'package:provider/provider.dart';
 
@@ -65,6 +66,10 @@ class TeacherResultScreen extends StatelessWidget {
                             height: 10.h,
 
                           ),
+                          vm.groups.length==0?
+                              Center(
+                                child: Text(''' You didn't accepted any idea yet and isn't a part of committee'''),
+                              ):
                           SizedBox(
                             height: 410.h,
                             child: ListView.builder(
@@ -100,7 +105,12 @@ class TeacherResultScreen extends StatelessWidget {
                                               ),
                                             ),
                                           ),
-                                          AcceptedRejectedButton(text: 'Give Marks', color: Colors.blueAccent)
+                                          GestureDetector(
+                                              onTap: (){
+                                                NavigationService().navigatePush(context, TeacherMarksScreen());
+                                              },
+                                              child: AcceptedRejectedButton(text: 'Give Marks', color: Colors.blueAccent)
+                                          )
                                         ],
                                       )),
                                       Expanded(child: Align(
@@ -120,7 +130,6 @@ class TeacherResultScreen extends StatelessWidget {
                                         itemCount: vm.groups[index].length,
                                           itemBuilder: (context,indx)
                                       {
-                                        //vm.groups[index][indx].fullName
                                         return Padding(
                                           padding: EdgeInsets.only(right: 10.w),
                                           child: Container(
@@ -135,16 +144,6 @@ class TeacherResultScreen extends StatelessWidget {
                                         );
                                       })),
 
-                                      // Expanded(child: Align(
-                                      //   alignment: Alignment.topLeft,
-                                      //   child: FittedBox(
-                                      //     fit: BoxFit.scaleDown,
-                                      //     child: Text('Student: ${index+1}',
-                                      //       style: kPoppinsMedium500.copyWith(
-                                      //           fontSize: 15.sp
-                                      //       ),),
-                                      //   ),
-                                      // ))
                                     ],
                                   ),
                                 ),
@@ -153,25 +152,7 @@ class TeacherResultScreen extends StatelessWidget {
                           ),
                         ],
                       )),
-                      Expanded(
-                        flex: 1,
-                        child: Row(
-                          children: [
-                            Expanded(
 
-                              child: LoginRegisterButton(onPressed: (){
-                                Navigator.pop(context);
-                              }, buttonText: "Back"),
-                            ),
-                            SizedBox(width: 20.w,),
-                            Expanded(
-                              child: LoginRegisterButton(onPressed: ()async{
-
-                              }, buttonText: "SUBMIT"),
-                            ),
-                          ],
-                        ),
-                      )
                     ],
                   ),
                 ),
