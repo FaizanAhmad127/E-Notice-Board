@@ -38,7 +38,7 @@ class TeacherResultScreen extends StatelessWidget {
 
                     children: [
                       Expanded(
-                          flex:10,
+
                           child: ListView(
                         children: [
                           GestureDetector(
@@ -71,7 +71,7 @@ class TeacherResultScreen extends StatelessWidget {
                                 child: Text(''' You didn't accepted any idea yet and isn't a part of committee'''),
                               ):
                           SizedBox(
-                            height: 410.h,
+                            height: 0.8.sh,
                             child: ListView.builder(
                                 itemCount: vm.groups.length,
                                 itemBuilder: (context,index){
@@ -107,9 +107,13 @@ class TeacherResultScreen extends StatelessWidget {
                                           ),
                                           GestureDetector(
                                               onTap: (){
-                                                NavigationService().navigatePush(context, TeacherMarksScreen());
+                                                NavigationService().navigatePush(
+                                                    context,
+                                                    TeacherMarksScreen(group: vm.groups[index],));
                                               },
-                                              child: AcceptedRejectedButton(text: 'Give Marks', color: Colors.blueAccent)
+                                              child: SizedBox(
+                                                  height: 0.04.sh,
+                                                  child: AcceptedRejectedButton(text: 'Give Marks', color: Colors.blueAccent))
                                           )
                                         ],
                                       )),
@@ -133,13 +137,13 @@ class TeacherResultScreen extends StatelessWidget {
                                         return Padding(
                                           padding: EdgeInsets.only(right: 10.w),
                                           child: Container(
-                                            height: 60.h,
+
                                             decoration: BoxDecoration(
                                               color: kFinPenPressedColor,
                                               borderRadius: BorderRadius.circular(5.r)
                                             ),
-                                            padding: EdgeInsets.all(8),
-                                            child: Text('${vm.groups[index][indx].fullName}'),
+                                            padding: EdgeInsets.all(10),
+                                            child: Center(child: Text('${vm.groups[index][indx].fullName}')),
                                           ),
                                         );
                                       })),

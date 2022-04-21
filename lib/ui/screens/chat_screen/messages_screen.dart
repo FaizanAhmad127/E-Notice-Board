@@ -96,8 +96,8 @@ class MessagesScreen extends StatelessWidget {
                           child: ClipOval(
                             child: Container(
                               color: Colors.grey,
-                              height: 50.h,
-                              width: 50.h,
+                              height: 0.06.sh,
+                              width: 0.06.sh,
                             ),
                           ),
                         ):

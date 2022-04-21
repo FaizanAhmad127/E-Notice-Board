@@ -1,4 +1,6 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ChatModel {
 
   String? _chatId;
@@ -6,7 +8,7 @@ class ChatModel {
   String _isUser1Read="yes";
   String _isUser2Read="yes";
   String? _recentText="";
-  int? _recentTextTime=0;
+  int? _recentTextTime=Timestamp.now().millisecondsSinceEpoch;
   String? _user1Uid;
   String? _user2Uid;
   String? _user1Occupation;

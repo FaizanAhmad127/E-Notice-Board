@@ -27,9 +27,9 @@ class TeacherResultScreenVM extends ChangeNotifier{
       if(ResultModel.fromJson(resultDoc).teachersList.contains(uid))
         {
           await _studentIdeaService.getAllAcceptedIdeas().then((listOfIdeas) {
-            listOfIdeas.forEach((idea) {
+            listOfIdeas.forEach((idea) async{
               List<UserSignupModel> userList=[];
-                Future.forEach(idea.students, (studentUID) async{
+                await Future.forEach(idea.students, (studentUID) async{
                   await _userProfileService.
                   getProfileDocument(
                       studentUID.toString(),
@@ -44,13 +44,13 @@ class TeacherResultScreenVM extends ChangeNotifier{
         }
       else
         {
-          await _studentIdeaService.getAllAcceptedIdeas().then((listOfIdeas) {
-            listOfIdeas.forEach((idea) {
+          await _studentIdeaService.getAllAcceptedIdeas().then((listOfIdeas) async{
+            listOfIdeas.forEach((idea) async{
               List<UserSignupModel> userList=[];
               if(idea.acceptedBy==uid)
               {
 
-                Future.forEach(idea.students, (studentUID) async{
+                await Future.forEach(idea.students, (studentUID) async{
                   await _userProfileService.
                   getProfileDocument(
                       studentUID.toString(),
