@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:notice_board/core/constants/colors.dart';
 import 'package:notice_board/core/services/navigation_service.dart';
 import 'package:notice_board/ui/screens/chat_screen/chat_screen.dart';
+import 'package:notice_board/ui/screens/marks_screen/marks_screen.dart';
 import 'package:notice_board/ui/screens/student/student_Project_Status_Screen/student_project_status_screen.dart';
 import 'package:notice_board/ui/screens/student/student_home_screen/student_home_screen.dart';
 import 'package:notice_board/ui/screens/student/student_notification_screen/student_notification_screen.dart';
@@ -43,6 +45,11 @@ SingleTickerProviderStateMixin, WidgetsBindingObserver{
     controller=TabController(length: 4, vsync: this);
   }
   @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance!.addObserver(this);
+  }
+  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if(state==AppLifecycleState.resumed)
@@ -69,6 +76,14 @@ SingleTickerProviderStateMixin, WidgetsBindingObserver{
             backgroundColor: kPrimaryColor,
 
             actions: [
+              GestureDetector(
+                onTap: (){
+                  NavigationService().navigatePush(context, MarksScreen());
+                },
+                child: const Icon(
+                    FontAwesomeIcons.clipboardCheck
+                ),
+              ),SizedBox(width: 25.w,),
               GestureDetector(
                 onTap: (){
                   NavigationService().navigatePush(context, ChatScreen("student",_firebaseAuth.currentUser!.uid));

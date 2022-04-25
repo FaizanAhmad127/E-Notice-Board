@@ -69,7 +69,7 @@ class LoginScreenVM extends ChangeNotifier{
     else
       {
         _sharedPref.storeBool("session", false);
-        _sharedPref.storeString('userType', "");
+        _sharedPref.storeString('userType', userType);
       }
   }
 

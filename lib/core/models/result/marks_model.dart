@@ -1,14 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class MarksModel
 {
   Map<String,double> _obe2={};
   Map<String,double> _obe3={};
   Map<String,double> _obe4={};
-  double _fyp1Viva=0;
-  double _fyp2Viva=0;
-  int _timeStamp=0;
+  double _fyp1Viva=0.0;
+  double _fyp2Viva=0.0;
+  String _uid='';
+  int _timeStamp=Timestamp.now().millisecondsSinceEpoch;
 
-  MarksModel();
+  MarksModel(this._uid);
 
+  String get uid=>_uid;
 
   Map<String,double>  get obe2 => _obe2;
 
@@ -24,11 +28,27 @@ class MarksModel
 
   MarksModel.fromJson(dynamic json)
   {
-    _obe2=json['obe2'];
-    _obe3=json['obe3'];
-    _obe4=json['obe4'];
-    _fyp1Viva=json['fyp1Viva'];
-    _fyp2Viva=json['fyp2Viva'];
+    _uid=json['uid'];
+    _obe2=Map<String,double>.from(json['obe2']);
+    _obe3=Map<String,double>.from(json['obe3']);
+    _obe4=Map<String,double>.from(json['obe4']);
+    if(json['fyp1Viva'] is int)
+      {
+        _fyp1Viva=json['fyp1Viva'].toDouble();
+      }
+    else
+      {
+        _fyp1Viva=json['fyp1Viva'];
+      }
+    if(json['fyp2Viva'] is int)
+    {
+      _fyp1Viva=json['fyp2Viva'].toDouble();
+    }
+    else
+    {
+      _fyp1Viva=json['fyp2Viva'];
+    }
+
     _timeStamp=json['timeStamp'];
 
   }
@@ -43,6 +63,7 @@ class MarksModel
     map['fyp1Viva']=_fyp1Viva;
     map['fyp2Viva']=_fyp2Viva;
     map['timeStamp']=_timeStamp;
+    map['uid']=_uid;
 
 
     return map;

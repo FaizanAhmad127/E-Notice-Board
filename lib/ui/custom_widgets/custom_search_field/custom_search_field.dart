@@ -47,10 +47,13 @@ class CustomSearchField extends StatelessWidget {
                   child: Center(
                     child: TextField(
                       controller: searchTextEditingController,
+
                       style: kPoppinsLight300.copyWith(
                           fontSize: 16.sp,
-                          letterSpacing: 1
-
+                          letterSpacing: 1,
+                        decoration: TextDecoration.none,
+                        decorationStyle: TextDecorationStyle.dotted,
+                        decorationColor: kWhiteColor
                       ),
                       keyboardType: TextInputType.text,
                       decoration: InputDecoration(

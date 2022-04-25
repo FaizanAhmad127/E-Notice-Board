@@ -26,6 +26,15 @@ class MarksScreen extends StatelessWidget {
               ),
               child: ListView(
                 children: [
+                  Row(
+                    children: [
+                      GestureDetector(
+                          onTap: (){
+                            Navigator.pop(context);
+                          },
+                          child: const Icon(Icons.arrow_back,size: 30,))
+                    ],
+                  ),
                   CustomSearchField(
                       searchTextEditingController: vm.searchTFController,
                       hintText: 'Search By Name'),

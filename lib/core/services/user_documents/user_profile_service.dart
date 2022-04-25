@@ -87,6 +87,7 @@ class UserProfileService{
 
   Future postOnlineStatus(String userType,String uid,String status)async
   {
+    print('$userType is $status now');
     try{
       await _firebaseFirestore.collection(userType).doc(uid).
       set({
@@ -109,7 +110,7 @@ class UserProfileService{
       await _firebaseStorage.ref().child("$userType/$uid/profilePicture").putFile(file)
           .then((snapshot)async{
             downloadURL=await snapshot.ref.getDownloadURL();
-            print("download url is $downloadURL");
+            //print("download url is $downloadURL");
          _firebaseFirestore.collection(userType).doc(uid).
          set({
            'profilePicture':await snapshot.ref.getDownloadURL(),

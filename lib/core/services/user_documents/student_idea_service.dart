@@ -7,6 +7,7 @@ import 'package:logger/logger.dart';
 import 'package:notice_board/core/models/idea/file_model.dart';
 import 'package:notice_board/core/models/idea/idea_model.dart';
 import 'package:notice_board/core/models/notification/teacher_notification_model.dart';
+import 'package:notice_board/core/models/result/marks_model.dart';
 import 'package:notice_board/core/services/notification/teacher_notification_service.dart';
 
 
@@ -191,7 +192,18 @@ class StudentIdeaService {
           await _firebaseFirestore.collection("post").doc(ideaId).set({
             'acceptedBy':teacherUid,
             'status': 'accepted'
-          }, SetOptions(merge: true)).then((value) {
+          }, SetOptions(merge: true)).then((value) async{
+
+            /// Create empty result of each student
+            await Future.forEach(studentsUid, (sUid)async {
+              await _firebaseFirestore
+                  .collection('result')
+                  .doc('2021-2022')
+                  .collection('marks')
+                  .doc(sUid.toString()).set(MarksModel(sUid.toString()).toJson());
+            });
+
+
 
             /// if one of the teacher accepted the idea then
             /// allow student to post another idea. i.e visible the plus button

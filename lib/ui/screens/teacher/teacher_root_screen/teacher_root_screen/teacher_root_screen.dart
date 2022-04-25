@@ -43,6 +43,11 @@ SingleTickerProviderStateMixin, WidgetsBindingObserver{
     setUserOnlineStatus("online");
     controller=TabController(length: 4, vsync: this);
   }
+   @override
+   void dispose() {
+     super.dispose();
+     WidgetsBinding.instance!.addObserver(this);
+   }
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);

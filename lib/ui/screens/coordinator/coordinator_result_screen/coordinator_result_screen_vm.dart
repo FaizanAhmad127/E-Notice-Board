@@ -26,7 +26,9 @@ class CoordinatorResultScreenVm extends ChangeNotifier
   CoordinatorResultScreenVm()
   {
     uid=_firebaseAuth.currentUser!.uid;
-    getCommitteeTeachers();
+    getCommitteeTeachers().then((value) async{
+      await getTeachers();
+    });
 
 
   }
@@ -40,6 +42,7 @@ class CoordinatorResultScreenVm extends ChangeNotifier
 
          if(isDispose==false)
            {
+
              ResultModel resultModel=ResultModel.fromJson(docSnap);
              Future.forEach(resultModel.teachersList, (teacherUid) async{
                await _userProfileService.getProfileDocument(teacherUid.toString(), 'teacher')
@@ -48,8 +51,6 @@ class CoordinatorResultScreenVm extends ChangeNotifier
                  setListOfCommitteeTeachers=userPModel;
 
                });
-             }).then((value) async{
-               await getTeachers();
              });
            }
 

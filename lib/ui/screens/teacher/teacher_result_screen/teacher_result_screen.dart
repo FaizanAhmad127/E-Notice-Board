@@ -100,7 +100,8 @@ class TeacherResultScreen extends StatelessWidget {
                                                 fit: BoxFit.scaleDown,
                                                 child: Text('Group: ${index+1}',
                                                   style: kPoppinsMedium500.copyWith(
-                                                      fontSize: 15.sp
+                                                      fontSize: 15.sp,
+                                                    color: kFinPenPressedColor,
                                                   ),),
                                               ),
                                             ),
@@ -109,12 +110,37 @@ class TeacherResultScreen extends StatelessWidget {
                                               onTap: (){
                                                 NavigationService().navigatePush(
                                                     context,
-                                                    TeacherMarksScreen(group: vm.groups[index],));
+                                                    TeacherMarksScreen(group: vm.groups[index],idea: vm.ideaList[index],));
                                               },
                                               child: SizedBox(
                                                   height: 0.04.sh,
                                                   child: AcceptedRejectedButton(text: 'Give Marks', color: Colors.blueAccent))
                                           )
+                                        ],
+                                      )),
+                                      Expanded(child: Row(
+                                        children:  [
+                                           Expanded(child: Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: FittedBox(
+                                              fit: BoxFit.scaleDown,
+                                              child: Text('Idea Title:  ',style: kPoppinsRegular400.copyWith(
+                                                color: kFinPenPressedColor,
+                                              ),),
+                                            ),
+                                          )),
+                                          Expanded(
+                                            flex:4,
+                                              child: Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: FittedBox(
+                                              fit: BoxFit.scaleDown,
+                                              child: Text('${vm.ideaList[index].ideaTitle}',
+                                              style: kPoppinsLight300.copyWith(
+                                                color: kFinPenPressedColor,
+                                              ),),
+                                            ),
+                                          )),
                                         ],
                                       )),
                                       Expanded(child: Align(
@@ -123,7 +149,8 @@ class TeacherResultScreen extends StatelessWidget {
                                           fit: BoxFit.scaleDown,
                                           child: Text('Students:',
                                             style: kPoppinsMedium500.copyWith(
-                                                fontSize: 12.sp
+                                                fontSize: 12.sp,
+                                              color: kFinPenPressedColor,
                                             ),),
                                         ),
                                       )),
