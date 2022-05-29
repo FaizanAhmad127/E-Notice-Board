@@ -1,5 +1,7 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:notice_board/core/constants/colors.dart';
 import 'package:notice_board/core/constants/text_styles.dart';
 import 'package:notice_board/core/models/idea/idea_model.dart';
@@ -82,8 +84,65 @@ class StudentHomeScreen extends StatelessWidget {
               children: [
 
                 // Search box
-                CustomSearchField(searchTextEditingController: vm.searchController,
-                  hintText: "Search by Title",),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: FittedBox(
+                        child: CustomSearchField(searchTextEditingController: vm.searchController,
+                          hintText: "Search by Title",),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 18.h,right: 3.w),
+                        child: FittedBox(
+                          child: Container(
+                            height: 0.064.sh,
+                            decoration: BoxDecoration(
+
+                              borderRadius: BorderRadius.circular(5.r),
+                              border: Border.all(
+                                color: kPrimaryColor,
+                              )
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 5.w,right: 5.w),
+                              child: DropdownButton<String>(
+                                alignment: Alignment.center,
+                                 underline: SizedBox(),
+                                // hint: Text('Filter',
+                                // style: kPoppinsSemiBold600.copyWith(
+                                //   color: Colors.blueAccent,
+                                //   fontSize: 13.sp
+                                // ),),
+                                icon: SizedBox(),
+                                items: List.generate(vm.items.length, (index) =>
+                                DropdownMenuItem(
+                                    value: vm.items[index],
+
+                                    child: FittedBox(child: Text(vm.items[index],
+                                    style: kPoppinsMedium500.copyWith(
+                                      fontSize: 13.sp
+                                    ),)))
+                                ),
+                                value: vm.selectedItem,
+
+                                onChanged: (String? value)
+                                {
+                                  vm.setSelectedItem=value??'Project';
+                                  vm.searchIdeas(vm.searchController.text);
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+
                 SizedBox(
                   height: 16.h,
                 ),

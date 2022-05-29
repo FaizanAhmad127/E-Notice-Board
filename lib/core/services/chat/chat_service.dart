@@ -15,9 +15,12 @@ class ChatService {
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final Logger _logger = Logger();
 
-  Future setChatDocument(int timeStamp,String user1Uid,String user2Uid,
+  Future setChatDocument(String user1Uid,String user2Uid,
       String user1Occupation,String user2Occupation) async {
-
+    BotToast.showLoading();
+    int timeStamp = Timestamp
+        .now()
+        .millisecondsSinceEpoch;
      String chatId=timeStamp.toString();
     try
     {
@@ -51,6 +54,7 @@ class ChatService {
     catch (error) {
     _logger.e("error at setChatDocument/ ChatService.dart $error");
     }
+    BotToast.closeAllLoading();
   }
   Future setMessageDocument(String chatId,String text, String sentBy, int timeStamp, PlatformFile? platformFile)async
   {

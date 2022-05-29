@@ -116,7 +116,6 @@ class StudentResultService {
 
   Future setStudentMarks(
       Map<String, Map<String, dynamic>> _marksListMap,String teacherUid) async {
-    BotToast.showLoading();
 
     try {
       _marksListMap.forEach((key, marksMap) async {
@@ -183,7 +182,69 @@ class StudentResultService {
         print("error at getStudentResult / StudentResultService $error");
       }
     }
-    BotToast.closeAllLoading();
+  }
+
+  Future finalizeResult()async
+  {
+    ResultModel? resultModel;
+    try
+    {
+      resultModel=ResultModel.fromJson(await _firebaseFirestore
+          .collection('result')
+          .doc('2021-2022')
+          .get());
+    }
+    catch(error)
+    {
+      _logger.e('result model is pushed to firebase yet, ignore it because no body is in committee yet');
+    }
+    if(resultModel!=null)
+      {
+        await _firebaseFirestore
+            .collection('result')
+            .doc('2021-2022')
+            .set({
+          'isResultFinalized':'yes'
+        },SetOptions(merge: true)).then((value)
+        async{
+          List<String> studentsUid=[];
+          await _firebaseFirestore
+              .collection('result')
+              .doc('2021-2022').collection('marks').get().then((querySnap) 
+          {
+                
+                querySnap.docs.forEach((docSnap) 
+                {
+                  studentsUid.add(docSnap['uid']);
+                });
+
+          }).then((value) async{
+            if(studentsUid.isNotEmpty)
+              {
+                BotToast.showLoading();
+                studentsUid.forEach((sUid) async{
+                  await _firebaseFirestore.collection('post').
+                  where('ideaOwner',isEqualTo: sUid).get().then((value) {
+                    value.docs.forEach((post) async{
+                      await _firebaseFirestore.collection('post').doc(post['ideaId'])
+                          .set({
+                        'status':'finished'
+
+                      },SetOptions(merge: true));
+                      //print();
+                    });
+                  });
+                });
+                BotToast.closeAllLoading();
+              }
+          });
+        });
+      }
+    else
+      {
+        BotToast.showText(text: 'ERROR! None of the students have given marks');
+      }
+
   }
 
   String getExamKeyword(String exam) {

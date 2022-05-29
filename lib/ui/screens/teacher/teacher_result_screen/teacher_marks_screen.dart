@@ -29,181 +29,192 @@ class TeacherMarksScreen extends StatelessWidget {
                 backgroundColor: Colors.white,
                 body: Stack(
                   children: [
-                    NestedScrollView(
-                        headerSliverBuilder: (BuildContext context, bool i) {
-                          return [
-                            SliverAppBar(
-                              pinned: true,
-                              backgroundColor: Colors.white60,
-                              leading: GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Icon(Icons.arrow_back,
-                                    size: 30, color: Colors.black),
-                              ),
-                            ),
-                            SliverToBoxAdapter(
-                              child: SizedBox(
-                                height: 0.1.sh,
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 0.08.sw),
-                                  child: Column(
-                                    children: [
-                                      Expanded(
-                                          child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          'Your Status',
-                                          style: kPoppinsBold700.copyWith(
-                                              fontSize: 15.sp),
-                                        ),
-                                      )),
-                                      Expanded(
-                                          child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          'Supervisor: ${vm.isSupervisor == true ? 'YES' : 'NO'}',
-                                          style: kPoppinsMedium500.copyWith(
-                                              fontSize: 13.sp),
-                                        ),
-                                      )),
-                                      Expanded(
-                                          child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          'Committee Member: ${vm.isCommitteeMember == true ? 'YES' : 'NO'}',
-                                          style: kPoppinsMedium500.copyWith(
-                                              fontSize: 13.sp),
-                                        ),
-                                      )),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            ///DropDown Button
-                            SliverToBoxAdapter(
-                              child: Padding(
-                                padding: EdgeInsets.all(0.04.sh),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      'Select Exam',
-                                      style: kPoppinsSemiBold600.copyWith(
-                                          fontSize: 18.sp),
-                                    ),
-                                    SizedBox(
-                                      width: 0.04.sw,
-                                    ),
-                                    DropdownButton<String>(
-                                        value: vm.selectedDropDownListItem,
-                                        items: vm.dropDownListItems
-                                            .map((String value) {
-                                          return DropdownMenuItem(
-                                            value: value,
-                                            child: Text(value),
-                                          );
-                                        }).toList(),
-                                        onChanged: (value) {
-                                          vm.setSelectedDropDownListItem =
-                                              value.toString();
-                                        })
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ];
-                        },
-                        body: Padding(
-                          padding: EdgeInsets.all(0.04.sh),
-                          child: ListView.builder(
-                              itemCount: vm.group.length,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  color: Colors.white54,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Expanded(
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: FittedBox(
-                                                fit: BoxFit.scaleDown,
-                                                child: Text(
-                                                  '${vm.group[index].fullName?.toUpperCase()}',
-                                                  style: kPoppinsMedium500
-                                                      .copyWith(
-                                                          fontSize: 17.sp),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Align(
-                                              alignment: Alignment.centerRight,
-                                              child: FittedBox(
-                                                fit: BoxFit.scaleDown,
-                                                child: Text(
-                                                  'University ID: ${vm.group[index].universityId}',
-                                                  style: kPoppinsExtraLight200
-                                                      .copyWith(
-                                                          fontSize: 12.sp),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      vm.selectedDropDownListItem ==
-                                                  'FYP-1 VIVA' ||
-                                              vm.selectedDropDownListItem ==
-                                                  'FYP-2 VIVA'
-                                          ? Padding(
-                                              padding: EdgeInsets.only(
-                                                top: 0.03.sh,
-                                                bottom: 0.03.sh,
-                                              ),
-                                              child: MarksTF(
-                                                group: group,
-                                                vm: vm,
-                                                onChanged: (tfValue) {
-                                                  if (tfValue == null) {
-                                                    vm.marks[index] = 101;
-                                                  } else {
-                                                    print("index is $index");
-                                                    vm.marks[index] = tfValue;
-                                                    vm.setMarksListMap(
-                                                        vm.selectedDropDownListItem,
-                                                        tfValue,
-                                                        group[index].uid ?? '');
-                                                  }
-                                                },
-                                              ),
-                                            )
-                                          : RadioButton(
-                                              vm: vm,
-                                              user: group[index],
-                                              callback: (value) {
-                                                vm.setMarksListMap(
-                                                    vm.selectedDropDownListItem,
-                                                    value,
-                                                    group[index].uid ?? '');
-                                              },
-                                            )
-                                    ],
-                                  ),
-                                );
-                              }),
-                        )),
                     Positioned(
-                      bottom: 0.05.sw,
+                      bottom: 0.06.sh,
+                      top: 0.001.sh,
+                      left: 0.04.sw,
+                      right: 0.04.sw,
+                      child: NestedScrollView(
+                          headerSliverBuilder: (BuildContext context, bool i) {
+                            return [
+                              SliverAppBar(
+                                pinned: true,
+                                backgroundColor: Colors.white60,
+                                leading: GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Icon(Icons.arrow_back,
+                                      size: 30, color: Colors.black),
+                                ),
+                              ),
+                              SliverToBoxAdapter(
+                                child: SizedBox(
+                                  height: 0.1.sh,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 0.08.sw),
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                            child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            'Your Status',
+                                            style: kPoppinsBold700.copyWith(
+                                                fontSize: 15.sp),
+                                          ),
+                                        )),
+                                        Expanded(
+                                            child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            'Supervisor: ${vm.isSupervisor == true ? 'YES' : 'NO'}',
+                                            style: kPoppinsMedium500.copyWith(
+                                                fontSize: 13.sp),
+                                          ),
+                                        )),
+                                        Expanded(
+                                            child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            'Committee Member: ${vm.isCommitteeMember == true ? 'YES' : 'NO'}',
+                                            style: kPoppinsMedium500.copyWith(
+                                                fontSize: 13.sp),
+                                          ),
+                                        )),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              ///DropDown Button
+                              SliverToBoxAdapter(
+                                child: Padding(
+                                  padding: EdgeInsets.all(0.04.sh),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        'Select Exam',
+                                        style: kPoppinsSemiBold600.copyWith(
+                                            fontSize: 18.sp),
+                                      ),
+                                      SizedBox(
+                                        width: 0.04.sw,
+                                      ),
+                                      DropdownButton<String>(
+                                          value: vm.selectedDropDownListItem,
+                                          items: vm.dropDownListItems
+                                              .map((String value) {
+                                            return DropdownMenuItem(
+                                              value: value,
+                                              child: Text(value),
+                                            );
+                                          }).toList(),
+                                          onChanged: (value) {
+                                            vm.setSelectedDropDownListItem =
+                                                value.toString();
+                                          })
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ];
+                          },
+                          body: Padding(
+                            padding: EdgeInsets.only(
+                              top: 0.03.sh,
+                              bottom: 0.03.sh,
+                              left: 0.03.sw,
+                              right:0.03.sw
+                            ),
+                            child: ListView.builder(
+                                itemCount: vm.group.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    color: Colors.white54,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: FittedBox(
+                                                  fit: BoxFit.scaleDown,
+                                                  child: Text(
+                                                    '${vm.group[index].fullName?.toUpperCase()}',
+                                                    style: kPoppinsMedium500
+                                                        .copyWith(
+                                                            fontSize: 17.sp),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Align(
+                                                alignment: Alignment.centerRight,
+                                                child: FittedBox(
+                                                  fit: BoxFit.scaleDown,
+                                                  child: Text(
+                                                    'University ID: ${vm.group[index].universityId}',
+                                                    style: kPoppinsExtraLight200
+                                                        .copyWith(
+                                                            fontSize: 12.sp),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        vm.selectedDropDownListItem ==
+                                                    'FYP-1 VIVA' ||
+                                                vm.selectedDropDownListItem ==
+                                                    'FYP-2 VIVA'
+                                            ? Padding(
+                                                padding: EdgeInsets.only(
+                                                  top: 0.03.sh,
+                                                  bottom: 0.03.sh,
+                                                ),
+                                                child: MarksTF(
+                                                  group: group,
+                                                  vm: vm,
+                                                  onChanged: (tfValue) {
+                                                    if (tfValue == null) {
+                                                      vm.marks[index] = 101;
+                                                    } else {
+                                                      print("index is $index");
+                                                      vm.marks[index] = tfValue;
+                                                      vm.setMarksListMap(
+                                                          vm.selectedDropDownListItem,
+                                                          tfValue,
+                                                          group[index].uid ?? '');
+                                                    }
+                                                  },
+                                                ),
+                                              )
+                                            : RadioButton(
+                                                vm: vm,
+                                                user: group[index],
+                                                callback: (value) {
+                                                  vm.setMarksListMap(
+                                                      vm.selectedDropDownListItem,
+                                                      value,
+                                                      group[index].uid ?? '');
+                                                },
+                                              )
+                                      ],
+                                    ),
+                                  );
+                                }),
+                          )),
+                    ),
+                    Positioned(
+                      bottom: 0.01.sh,
                       child: UnconstrainedBox(
                         child: Padding(
                           padding: EdgeInsets.only(
@@ -219,8 +230,11 @@ class TeacherMarksScreen extends StatelessWidget {
                                     .any((value) => value > 50 || value < 0)) {
                                   BotToast.showText(text: 'FYP-1 range 0-50');
                                 } else {
-                                  await vm.submitMarks();
-                                  vm.marks.removeRange(2, vm.marks.length);
+                                  await vm.submitMarks().then((value) {
+                                    vm.marks.removeRange(2, vm.marks.length);
+
+                                  });
+
                                 }
                               } else if (vm.selectedDropDownListItem ==
                                   'FYP-2 VIVA') {
@@ -228,13 +242,18 @@ class TeacherMarksScreen extends StatelessWidget {
                                     .any((value) => value > 100 || value < 0)) {
                                   BotToast.showText(text: 'FYP2 range 0-100');
                                 } else {
-                                  await vm.submitMarks();
-                                  vm.marks.removeRange(2, vm.marks.length);
+                                  await vm.submitMarks().then((value) {
+                                    vm.marks.removeRange(2, vm.marks.length);
+
+                                  });
                                 }
                               } else {
-                                await vm.submitMarks();
-                                vm.marks.removeRange(2, vm.marks.length);
+                                await vm.submitMarks().then((value) {
+                                  vm.marks.removeRange(2, vm.marks.length);
+
+                                });
                               }
+
                             },
                             child: Container(
                               decoration: BoxDecoration(

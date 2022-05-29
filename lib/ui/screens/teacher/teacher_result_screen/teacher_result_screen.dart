@@ -169,8 +169,15 @@ class TeacherResultScreen extends StatelessWidget {
                                               color: kFinPenPressedColor,
                                               borderRadius: BorderRadius.circular(5.r)
                                             ),
-                                            padding: EdgeInsets.all(10),
-                                            child: Center(child: Text('${vm.groups[index][indx].fullName}')),
+                                            padding: EdgeInsets.only(
+                                              left: 0.03.sw,
+                                              right: 0.03.sw,
+                                            ),
+                                            child: Center(child: Text(
+                                              '${vm.groups[index][indx].fullName}',
+                                            style: kPoppinsMedium500.copyWith(
+                                              fontSize: 13
+                                            ),)),
                                           ),
                                         );
                                       })),

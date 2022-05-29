@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:notice_board/core/constants/colors.dart';
+import 'package:notice_board/core/constants/text_styles.dart';
 import 'package:notice_board/core/services/navigation_service.dart';
 import 'package:notice_board/ui/screens/chat_screen/chat_screen.dart';
 import 'package:notice_board/ui/screens/marks_screen/marks_screen.dart';
@@ -42,7 +43,7 @@ SingleTickerProviderStateMixin, WidgetsBindingObserver{
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
     setUserOnlineStatus("online");
-    controller=TabController(length: 4, vsync: this);
+    controller=TabController(length: 3, vsync: this);
   }
   @override
   void dispose() {
@@ -98,19 +99,21 @@ SingleTickerProviderStateMixin, WidgetsBindingObserver{
               child: TabBar(
                 controller: controller,
                 indicatorColor: kBlackColor,
-                tabs: const [
-                  Icon(
-                      Icons.home_rounded
-                  ),
-                  Icon(
+                tabs:  [
+                  Text('L',
+                  style: kPoppinsMedium500.copyWith(
+                    fontSize: 23.sp,
+                    color: kWhiteColor
+                  ),),
+                  const Icon(
                       Icons.notifications
                   ),
-                  Icon(
+                  const Icon(
                       Icons.business_center
                   ),
-                  Icon(
-                      Icons.people_alt
-                  ),
+                  // const Icon(
+                  //     Icons.people_alt
+                  // ),
 
                 ],
               ),
@@ -123,7 +126,7 @@ SingleTickerProviderStateMixin, WidgetsBindingObserver{
               StudentHomeScreen(),
               StudentNotificationScreen(),
               StudentProjectStatusScreen(),
-              StudentTeacherListScreen(),
+              //StudentTeacherListScreen(),
 
             ],
           ),

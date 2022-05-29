@@ -42,11 +42,11 @@ class MarksModel
       }
     if(json['fyp2Viva'] is int)
     {
-      _fyp1Viva=json['fyp2Viva'].toDouble();
+      _fyp2Viva=json['fyp2Viva'].toDouble();
     }
     else
     {
-      _fyp1Viva=json['fyp2Viva'];
+      _fyp2Viva=json['fyp2Viva'];
     }
 
     _timeStamp=json['timeStamp'];

@@ -1,6 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:notice_board/core/services/chat/chat_service.dart';
@@ -53,20 +54,24 @@ Future setupSingletons()  async{
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  await setupSingletons();
-  runApp( MyApp());
-
-
+  await setupSingletons().then((value) {
+    runApp( MyApp());
+  }).onError((error, stackTrace) async{
+    await DefaultCacheManager().emptyCache();
+  });
 }
 
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
-  final Future<FirebaseApp> _fbApp= Future.delayed(const Duration(seconds: 5)).then((value) {
-    return Firebase.initializeApp();
+  final Future<FirebaseApp> _fbApp= Future.delayed(const Duration(seconds: 2)).then((value) async{
+    return await Firebase.initializeApp().onError((error, stackTrace) async{
+      await DefaultCacheManager().emptyCache();
+      return Firebase.initializeApp();
+    });
 
   });
 
-  Widget? getUserType(String userType)
+  Widget? getUserType(String? userType)
   {
     Widget? user;
     if(userType=="student")
@@ -81,7 +86,7 @@ class MyApp extends StatelessWidget {
     {
       user=const CoordinatorRootScreen();
     }
-    else if(userType=="")
+    else if(userType=="" || userType==null)
       {
         user=LoginScreen();
       }
@@ -113,8 +118,15 @@ class MyApp extends StatelessWidget {
               {
                 if(snapshot.hasData)
                 {
-                 return getUserType(Provider.of<LoginScreenVM>(context).isUserLoggedIn())??const SizedBox();
+                 return getUserType(Provider.of<LoginScreenVM>(context).isUserLoggedIn())?? LoginScreen();
                 }
+                else if(snapshot.hasError)
+                  {
+                    BotToast.showText(text: 'Error in loading firebase');
+                    print("Error in loading firebase");
+                    DefaultCacheManager().emptyCache();
+                    return  LoginScreen();
+                  }
                 else
                 {
                 return const SplashScreen();

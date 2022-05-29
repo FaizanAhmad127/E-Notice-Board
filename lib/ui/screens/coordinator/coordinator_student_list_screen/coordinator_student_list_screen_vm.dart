@@ -31,7 +31,7 @@ class CoordinatorStudentListScreenVM extends ChangeNotifier
         if(isDispose==false)
           {
             setListOfStudents=listOfStudents;
-            setSearchList=listOfStudents;
+            //setSearchList=listOfStudents;
           }
 
       });
@@ -50,7 +50,7 @@ class CoordinatorStudentListScreenVM extends ChangeNotifier
   {
     setSearchList=searchText.isNotEmpty?
     List<UserSignupModel>.from(listOfStudents.where((element) => element.fullName!.toLowerCase().contains(searchText.toLowerCase())))
-        :listOfStudents;
+        :[];
   }
   set setSearchList(List<UserSignupModel> ideas)
   {

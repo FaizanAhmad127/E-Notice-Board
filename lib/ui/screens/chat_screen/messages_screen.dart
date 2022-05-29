@@ -8,7 +8,6 @@ import 'package:notice_board/core/models/chat/message_model.dart';
 import 'package:notice_board/core/services/file_management/file_download_open_service.dart';
 import 'package:notice_board/ui/screens/chat_screen/messages_screen_vm.dart';
 import 'package:provider/provider.dart';
-
 import '../../../core/constants/colors.dart';
 import '../../../core/models/chat/chat_model.dart';
 

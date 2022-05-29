@@ -28,6 +28,7 @@ class StudentDrawerScreenVM extends ChangeNotifier
    String _imageUrl=noImageUrl;
    String _fullNameValue="";
   String _occupationValue="";
+  bool isDispose=false;
 
 
 
@@ -134,37 +135,61 @@ class StudentDrawerScreenVM extends ChangeNotifier
   set setFullNameValue(String name)
   {
     _fullNameValue=name;
-    notifyListeners();
+    if(isDispose==false)
+    {
+      notifyListeners();
+    }
   }
   set setOccupationValue(String occupation)
   {
     _occupationValue=occupation;
-    notifyListeners();
+    if(isDispose==false)
+    {
+      notifyListeners();
+    }
   }
 
   set setImageURL(String s)
   {
     _imageUrl=s;
-    notifyListeners();
+    if(isDispose==false)
+    {
+      notifyListeners();
+    }
   }
 
   set setSignupModel(UserSignupModel user)
   {
     _signupModel=user;
-    notifyListeners();
+    if(isDispose==false)
+    {
+      notifyListeners();
+    }
   }
 
   set setListOfIdeas(List<IdeaModel> ideasList)
   {
     _listOfIdeas=ideasList;
-    notifyListeners();
+    if(isDispose==false)
+    {
+      notifyListeners();
+    }
   }
 
   set setIsEditButtonClicked(bool a)
   {
     _isEditButtonClicked=a;
-    notifyListeners();
-  }
+    if(isDispose==false)
+      {
+        notifyListeners();
+      }
 
+  }
+  @override
+  void dispose() {
+
+    super.dispose();
+    isDispose=true;
+  }
 
 }

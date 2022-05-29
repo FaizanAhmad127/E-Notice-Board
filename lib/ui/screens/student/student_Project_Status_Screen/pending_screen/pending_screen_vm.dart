@@ -12,6 +12,7 @@ class PendingScreenVM extends ChangeNotifier
   List<IdeaModel> _searchList=[];
   final TextEditingController _searchController=TextEditingController();
   bool isFirstTime=true;
+  bool isDispose=false;
 
 
   PendingScreenVM()
@@ -68,16 +69,25 @@ class PendingScreenVM extends ChangeNotifier
   set setIdeasList(List<IdeaModel> ideas)
   {
     _ideasList=ideas;
-    notifyListeners();
+    if(isDispose==false)
+    {
+      notifyListeners();
+    }
   }
   set setSearchList(List<IdeaModel> ideas)
   {
     _searchList=ideas;
-    notifyListeners();
+    if(isDispose==false)
+      {
+        notifyListeners();
+      }
+
   }
   @override
   void dispose() {
     super.dispose();
     _searchController.dispose();
+    isDispose=true;
+
   }
 }

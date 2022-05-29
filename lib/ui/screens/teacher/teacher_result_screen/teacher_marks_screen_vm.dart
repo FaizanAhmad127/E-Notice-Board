@@ -12,10 +12,10 @@ class TeacherMarksScreenVM extends ChangeNotifier{
 
   final FirebaseAuth _firebaseAuth=FirebaseAuth.instance;
   final StudentResultService _resultService=GetIt.I.get<StudentResultService>();
-  bool isCommitteeMember=false;
+  bool _isCommitteeMember=false;
   String uid="";
   bool isDispose=false;
-  bool isSupervisor=false;
+  bool _isSupervisor=false;
   List<String> _dropDownListItems=[];
   String _selectedDropDownListItem="";
   List<UserSignupModel> group=[];
@@ -52,7 +52,7 @@ class TeacherMarksScreenVM extends ChangeNotifier{
   }
   void checkIfThisTeacherIsSupervisor()
   {
-     isSupervisor=idea.teachers.contains(uid);
+     setIsSupervisor=idea.teachers.contains(uid);
   }
 
   void resetMarksListMap(String exam)
@@ -83,38 +83,44 @@ class TeacherMarksScreenVM extends ChangeNotifier{
       catch(error)
       {
         print('result model is null becuase there is no result document or any field is missing getResultDocument/ teacher_marks_screen_vm $error');
-        isCommitteeMember=false;
+        setIsCommitteeMember=false;
       }
+
       if(resultModel!=null)
         {
-          isCommitteeMember=resultModel.teachersList.contains(uid);
+          setIsCommitteeMember=resultModel.teachersList.contains(uid);
         }
 
+       if(isDispose==false)
+       {
+         if(isCommitteeMember==true && isSupervisor==true)
+         {
+           setdropDownListItems=['OBE2','OBE3','OBE4','FYP-1 VIVA','FYP-2 VIVA'];
+           setSelectedDropDownListItem='OBE2';
+           resetMarksListMap('OBE2');
+         }
+         else if(isCommitteeMember==true && isSupervisor==false)
+         {
+           setdropDownListItems=['OBE2','OBE3','OBE4',];
+           setSelectedDropDownListItem='OBE2';
+           resetMarksListMap('OBE2');
+         }
+         else
+         {
+           setdropDownListItems=['FYP-1 VIVA','FYP-2 VIVA'];
+           setSelectedDropDownListItem='FYP-1 VIVA';
+           resetMarksListMap('FYP-1 VIVA');
+         }
+       }
 
-      if(isCommitteeMember==true && isSupervisor==true)
-        {
-          setdropDownListItems=['OBE2','OBE3','OBE4','FYP-1 VIVA','FYP-2 VIVA'];
-          setSelectedDropDownListItem='OBE2';
-          resetMarksListMap('OBE2');
-        }
-      else if(isCommitteeMember==true && isSupervisor==false)
-        {
-          setdropDownListItems=['OBE2','OBE3','OBE4',];
-          setSelectedDropDownListItem='OBE2';
-          resetMarksListMap('OBE2');
-        }
-      else
-        {
-          setdropDownListItems=['FYP-1 VIVA','FYP-2 VIVA'];
-          setSelectedDropDownListItem='FYP-1 VIVA';
-          resetMarksListMap('FYP-1 VIVA');
-        }
 
 
     });
   }
 
   String get selectedDropDownListItem=>_selectedDropDownListItem;
+  bool get isCommitteeMember=>_isCommitteeMember;
+  bool get isSupervisor=>_isSupervisor;
   List<String> get dropDownListItems=>_dropDownListItems;
   Map<String,Map<String,dynamic>> get  marksListMap =>_marksListMap;
 
@@ -141,6 +147,16 @@ class TeacherMarksScreenVM extends ChangeNotifier{
     resetMarksListMap(_selectedDropDownListItem);
   }
 
+   set setIsSupervisor(bool a)
+   {
+     _isSupervisor=a;
+     notifyListeners();
+   }
+   set setIsCommitteeMember(bool a)
+   {
+     _isCommitteeMember=a;
+     notifyListeners();
+   }
 
   @override
   void dispose() {

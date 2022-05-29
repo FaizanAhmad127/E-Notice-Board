@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -28,82 +29,133 @@ class MarksScreenVM extends ChangeNotifier{
 
 
   MarksScreenVM(){
+    BotToast.showLoading();
     uid=_firebaseAuth.currentUser!.uid;
     userType=_sharedPref.retrieveString('userType')??"";
+    if(userType!='student' && userType!='teacher')
+      {
+        userType='coordinator';
+      }
     getCurrentUser().then((value) {
       getListOfMarks().then((value) {
-        mergeStudentWithMarks();
         getResultDocument();
+        mergeStudentWithMarks();
+
+
       });
     });
     _searchTFController.addListener(() {
       search();
     });
-
+    BotToast.closeAllLoading();
   }
 
+  Future finalizeResult()async
+  {
+    await _resultService.finalizeResult();
+  }
   void search()
   {
-    if(_searchTFController.text.isEmpty)
-      {
-        searchedStudentMarksMap=studentMarksMap;
+    try {
+      searchedStudentMarksMap = {};
+      if (_searchTFController.text.isEmpty) {
+        searchedStudentMarksMap = studentMarksMap;
       }
-    else
-      {
+      else {
         studentMarksMap.forEach((key, value) {
-          if(key.contains(_searchTFController.text))
-            {
-              searchedStudentMarksMap.addAll({
-                key:value
-              });
-            }
+          if (key.toLowerCase().contains(
+              _searchTFController.text.toLowerCase())) {
+            searchedStudentMarksMap.addAll({
+              key: value
+            });
+          }
         });
-
       }
-    print(searchedStudentMarksMap.entries);
-    notifyListeners();
+
+      notifyListeners();
+    }
+    catch(error)
+    {
+      _logger.e('error at search / marksscreenvm $error');
+    }
   }
 
   void mergeStudentWithMarks(){
-    for(int index=0;index<listOfStudents.length;index++)
-      {
+    try {
+      for (int index = 0; index < listOfStudents.length; index++) {
         studentMarksMap.addAll(
-          {
-            listOfStudents[index].fullName??"":listOfAllMarks[index]
-          }
+            {
+              listOfStudents[index].fullName ?? "": listOfAllMarks[index]
+
+            }
         );
       }
-    searchedStudentMarksMap=studentMarksMap;
+      searchedStudentMarksMap = studentMarksMap;
+      notifyListeners();
+    }
+    catch(error)
+    {
+      _logger.e('error at mergeStudentWithMarks/ marksscreenvm  $error');
+    }
+
   }
 
   Future getCurrentUser()async{
-    print('uid is $uid and userType is $userType');
-    await _userProfileService.getProfileDocument(uid,  userType).then((userModel) {
-      thisUser=userModel;
-    });
+    try {
+      await _userProfileService.getProfileDocument(uid, userType).then((
+          userModel) {
+        thisUser = userModel;
+      });
+    }
+    catch(error)
+    {
+      _logger.e('error at getCurrentUser / marksscreenvm $error');
+    }
   }
   Future getListOfMarks()async
   {
-    await _resultService.getAllStudentMarks().then((listMarks)async {
-      listOfAllMarks=listMarks;
-      await Future.forEach(listMarks, (MarksModel marksModel) async{
-        await _userProfileService.getProfileDocument(marksModel.uid, 'student').then((user) {
-          listOfStudents.add(user!);
+    try {
+      await _resultService.getAllStudentMarks().then((listMarks) async {
+        listOfAllMarks = listMarks;
+        await Future.forEach(listMarks, (MarksModel marksModel) async {
+          await _userProfileService.getProfileDocument(
+              marksModel.uid, 'student').then((user) {
+                if(userType=='student')
+                  {
+                    if(thisUser?.fullName==user?.fullName)
+                    {
+                      listOfStudents.add(user!);
+                    }
+                  }
+                else
+                  {
+                    listOfStudents.add(user!);
+                  }
+
+
+          });
         });
       });
-    });
+    }
+    catch(error)
+    {
+      _logger.e('error at getListOfMarks / marksscreenvm $error');
+    }
+
   }
-  void getResultDocument(){
+  Future getResultDocument()async{
      _resultService.getResultDocument().onData((docSnap) {
       try
           {
             resultModel=ResultModel.fromJson(docSnap);
+            notifyListeners();
           }
           catch(error)
        {
          _logger.e('the result document is empty for now  getResultDocument/ marksscreenvm$error');
        }
     });
+
   }
 
   TextEditingController get searchTFController=>_searchTFController;

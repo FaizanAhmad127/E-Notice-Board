@@ -85,10 +85,15 @@ class TeacherNotificationScreenVM extends ChangeNotifier{
                     uid, ideaStatusModel.timeStamp.toString(), status)
                      .then((value) {
                       /// instantiate the chat option between the teacher and all team members
-                      Future.forEach(studentsUid, (stdUid) => {
-                        _chatService.setChatDocument(timeStamp, thisTeacher?.uid??"",
-                            stdUid.toString(), "teacher", "student")
-                      });
+                   if(status=='accepted')
+                     {
+                       Future.forEach(studentsUid, (stdUid) async{
+                         await _chatService.setChatDocument(thisTeacher?.uid??"",
+                             stdUid.toString(), "teacher", "student");
+                       }
+                       );
+                     }
+
                  });
               });
             });
