@@ -181,13 +181,14 @@ class TeacherMarksScreen extends StatelessWidget {
                                                   bottom: 0.03.sh,
                                                 ),
                                                 child: MarksTF(
+                                                  fyp1or2: vm.selectedDropDownListItem,
                                                   group: group,
                                                   vm: vm,
                                                   onChanged: (tfValue) {
                                                     if (tfValue == null) {
                                                       vm.marks[index] = 101;
                                                     } else {
-                                                      print("index is $index");
+                                                      //print("index is $index");
                                                       vm.marks[index] = tfValue;
                                                       vm.setMarksListMap(
                                                           vm.selectedDropDownListItem,
@@ -293,12 +294,14 @@ class MarksTF extends StatelessWidget {
       {Key? key,
       required this.group,
       required this.vm,
+        required this.fyp1or2,
       required this.onChanged})
       : super(key: key);
 
   final List<UserSignupModel> group;
   final TeacherMarksScreenVM vm;
   Function(double?) onChanged;
+  String fyp1or2;
 
   @override
   Widget build(BuildContext context) {
@@ -334,8 +337,17 @@ class MarksTF extends StatelessWidget {
                     ))),
           ),
         ),
-        Spacer(),
-        Spacer(),
+        SizedBox(
+          width: 15.w,
+        ),
+        Expanded(
+          child: Text(
+            'Out of ${fyp1or2=='FYP-1 VIVA'?50:100}',
+            style: kPoppinsSemiBold600.copyWith(fontSize: 13.sp,
+            color: kTfFillColor),
+          ),
+        ),
+
       ],
     );
   }
