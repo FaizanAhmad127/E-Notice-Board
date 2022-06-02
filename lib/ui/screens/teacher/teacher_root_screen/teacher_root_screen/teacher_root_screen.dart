@@ -46,7 +46,7 @@ SingleTickerProviderStateMixin, WidgetsBindingObserver{
    @override
    void dispose() {
      super.dispose();
-     WidgetsBinding.instance!.addObserver(this);
+     WidgetsBinding.instance!.removeObserver(this);
    }
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {

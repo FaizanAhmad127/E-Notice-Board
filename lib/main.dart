@@ -5,6 +5,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:notice_board/core/services/chat/chat_service.dart';
+import 'package:notice_board/core/services/committee/committee_service.dart';
 import 'package:notice_board/core/services/file_management/file_download_open_service.dart';
 import 'package:notice_board/core/services/notification/signup_request_service.dart';
 import 'package:notice_board/core/services/notification/student_idea_status_service.dart';
@@ -40,6 +41,7 @@ Future setupSingletons()  async{
   locator.registerLazySingleton(() => FileDownloadOpenService());
   locator.registerLazySingleton(() => ChatService());
   locator.registerLazySingleton(() => StudentResultService());
+  locator.registerLazySingleton(() => CommitteeService());
  locator.registerSingletonAsync<SharedPref>(() async {
     final pref = await SharedPreferences.getInstance();
     return SharedPref(pref: pref);

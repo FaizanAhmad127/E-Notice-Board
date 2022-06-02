@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:notice_board/core/constants/colors.dart';
 import 'package:notice_board/core/services/navigation_service.dart';
+import 'package:notice_board/ui/screens/coordinator/coordinator_committee_screen/coordinator_committee_screen.dart';
 import 'package:notice_board/ui/screens/coordinator/coordinator_home_screen/coordinator_home_screen.dart';
 import 'package:notice_board/ui/screens/coordinator/coordinator_result_screen/coordinator_result_screen.dart';
 import 'package:notice_board/ui/screens/coordinator/coordinator_root_screen/coordinator_drawer_screen/coordinator_drawer_screen.dart';
@@ -52,7 +53,7 @@ class _CoordinatorRootScreenState extends State<CoordinatorRootScreen> with
   @override
   void dispose() {
     super.dispose();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
   }
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -83,7 +84,7 @@ class _CoordinatorRootScreenState extends State<CoordinatorRootScreen> with
             actions: [
               GestureDetector(
                 onTap: (){
-                  NavigationService().navigatePush(context, CoordinatorResultScreen());
+                  NavigationService().navigatePush(context, CoordinatorCommitteeScreen());
                 },
                 child: const Icon(
                     FontAwesomeIcons.clipboardCheck
