@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:notice_board/core/constants/colors.dart';
 import 'package:notice_board/core/constants/text_styles.dart';
+import 'package:notice_board/core/models/idea/idea_model.dart';
 import 'package:notice_board/core/services/navigation_service.dart';
 import 'package:notice_board/ui/custom_widgets/custom_multiselect_dropdown.dart';
 import 'package:notice_board/ui/screens/coordinator/coordinator_result_screen/coordinator_result_screen_vm.dart';
@@ -68,31 +69,38 @@ class CoordinatorResultScreen extends StatelessWidget {
                         labelText: "Select Teachers"),
 
 
-                    ///select student dropdown
+                    ///select group dropdown
                     SizedBox(
                       height: 20.h,
                     ),
                     Row(children: [
                       FittedBox(
-                        child: Text('Select Students For Committee',
+                        child: Text('Select Groups For Committee',
                           style: kPoppinsLight300.copyWith(
                               color: kDateColor,
                               fontSize: 15.sp
                           ),),
                       )
                     ],),
-                    CustomMultiselectDropDown(
-                        selectedList: (selectedlist) {
+                    GroupDropDown(
+                      vm: vm,
+                    selectedList: (List<String> selectedIdeaList){
+                        vm.setSelectedIdeaList=selectedIdeaList;
+                    },
+                    ),
 
-                          if (selectedlist.length == 10) {
-                            BotToast.showText(
-                                text: "That's it, Only 10 students");
-                          }
-                          vm.setSelectedStudentsList = selectedlist;
-                        },
-                        userModelList: vm.listOfStudents,
-                        limit: 10,
-                        labelText: "Select Students"),
+                    // CustomMultiselectDropDown(
+                    //     selectedList: (selectedlist) {
+                    //
+                    //       if (selectedlist.length == 10) {
+                    //         BotToast.showText(
+                    //             text: "That's it, Only 10 students");
+                    //       }
+                    //       vm.setSelectedStudentsList = selectedlist;
+                    //     },
+                    //     userModelList: vm.listOfStudents,
+                    //     limit: 10,
+                    //     labelText: "Select Students"),
 
 
                     // SizedBox(
@@ -220,9 +228,12 @@ class CoordinatorResultScreen extends StatelessWidget {
                       SizedBox(width: 20.w,),
                       Expanded(
                         child: LoginRegisterButton(onPressed: ()async{
-                         await vm.setCommitteeTeacherStudent().then((value) {
-                           NavigationService().navigatePushReplacement(context, CoordinatorCommitteeScreen());
+                         await vm.setCommitteeTeacherIdea().then((value) {
+                           if(value)
+                             {
+                               NavigationService().navigatePushReplacement(context, CoordinatorCommitteeScreen());
 
+                             }
                          });
                         }, buttonText: "SUBMIT"),
                       ),
@@ -238,3 +249,110 @@ class CoordinatorResultScreen extends StatelessWidget {
     },);
   }
 }
+
+class GroupDropDown extends StatefulWidget {
+   GroupDropDown({Key? key,
+    required this.vm,
+   required this.selectedList}) : super(key: key);
+  CoordinatorResultScreenVm vm;
+  Function(List<String>) selectedList;
+
+  @override
+  State<GroupDropDown> createState() => _GroupDropDownState();
+}
+
+class _GroupDropDownState extends State<GroupDropDown> {
+
+  late CoordinatorResultScreenVm vm;
+  List<String> listOfSelectedIdeaId=[];
+
+
+  @override
+  void initState() {
+    super.initState();
+    vm=widget.vm;
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 10.0),
+      decoration:
+      BoxDecoration(border: Border.all(color: Colors.grey.shade200)),
+      child: ExpansionTile(
+        iconColor: Colors.grey,
+        title:
+        Text('Select Groups',
+            style: kPoppinsRegular400.copyWith(
+              color: Colors.grey,
+              fontWeight: FontWeight.w400,
+              fontSize: 15.0,
+            )),
+        children: [
+          ListView.builder(
+              shrinkWrap: true,
+              itemCount: vm.listOfIdeas.length,
+              itemBuilder: (context,topIndex){
+                return Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.grey.shade100,
+                      )
+                  ),
+                  child: Padding(
+                    padding:
+                    EdgeInsets.only(left: 10.w, right:  10.w,bottom: 10.w),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          height: 24.0,
+                          width: 24.0,
+                          child: Checkbox(
+                            value: listOfSelectedIdeaId.isEmpty?false:listOfSelectedIdeaId.contains(vm.listOfIdeas[topIndex].ideaId),
+                            onChanged: (val) {
+                              setState(() {
+                                if(listOfSelectedIdeaId.contains(vm.listOfIdeas[topIndex].ideaId))
+                                  {
+                                    listOfSelectedIdeaId.remove(vm.listOfIdeas[topIndex].ideaId);
+                                  }
+                                else
+                                  {
+                                    listOfSelectedIdeaId.add(vm.listOfIdeas[topIndex].ideaId);
+                                  }
+                               widget.selectedList(listOfSelectedIdeaId);
+
+                              });
+                            },
+                            activeColor: Colors.blue,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 15.w,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: List.generate(
+                              vm.listOfGroups[topIndex].length, (index) {
+                            return Text(  vm.listOfGroups[topIndex][index]?.fullName??"",
+                                style: kPoppinsRegular400.copyWith(
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 17.0,
+                                ));
+                          })
+                          ,
+                        )
+
+                      ],
+                    ),
+                  ),
+                );
+              })
+        ],
+      ),
+    );
+  }
+
+}
+

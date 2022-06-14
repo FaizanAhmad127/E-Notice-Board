@@ -103,7 +103,7 @@ class CoordinatorCommitteeScreen extends StatelessWidget {
                                                       Expanded(
                                                         child: CommitteeScrollView(
                                                           userType: 'teacher',
-                                                          listOfCommitteeMembers: vm.listOfCommittees[index].teacherList??[],
+                                                          listOfCommitteeMembers: vm.listOfCommittees[index].teacherList,
 
                                                         ),
                                                       )
@@ -122,7 +122,7 @@ class CoordinatorCommitteeScreen extends StatelessWidget {
                                                       Expanded(
                                                         child: CommitteeScrollView(
                                                           userType: 'student',
-                                                          listOfCommitteeMembers: vm.listOfCommittees[index].studentList??[],
+                                                          listOfCommitteeMembers: vm.listOfCommittees[index].ideaList,
 
                                                         ),
                                                       )

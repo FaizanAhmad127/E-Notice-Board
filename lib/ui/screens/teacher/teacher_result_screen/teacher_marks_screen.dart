@@ -15,7 +15,7 @@ class TeacherMarksScreen extends StatelessWidget {
   TeacherMarksScreen({required this.group, required this.idea, Key? key})
       : super(key: key);
   List<UserSignupModel> group = [];
-  IdeaModel idea;
+  IdeaModel? idea;
 
   @override
   Widget build(BuildContext context) {

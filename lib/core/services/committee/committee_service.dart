@@ -7,7 +7,7 @@ class CommitteeService {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   final Logger _logger = Logger();
 
-  Future setCommitteeDocument(List<String> teacherList,List<String> studentlist)async
+  Future setCommitteeDocument(List<String> teacherList,List<String> ideaList)async
   {
     String docId = Timestamp
         .now()
@@ -16,7 +16,7 @@ class CommitteeService {
       await _firebaseFirestore.collection('committee').doc(docId).set(
         {
           'teacherList':teacherList,
-          'studentList':studentlist
+          'ideaList':ideaList
         },
         SetOptions(merge: true)
       ).then((value) async{
@@ -58,15 +58,15 @@ class CommitteeService {
     return null;
   }
 
-  Future<bool> isStudentAlreadyInCommittee(String studentUid) async {
+  Future<bool> isIdeaAlreadyInCommittee(String ideaId) async {
     bool isAlreadyAMember = false;
     try {
       await _firebaseFirestore.collection('committee').get().then((querySnap) {
         for (var docSnap in querySnap.docs) {
-          for (var uid in CommitteeModel
+          for (var id in CommitteeModel
               .fromJson(docSnap)
-              .studentList!) {
-            if (studentUid == uid) {
+              .ideaList) {
+            if (ideaId == id) {
               isAlreadyAMember = true;
               break;
             }
@@ -89,7 +89,7 @@ class CommitteeService {
         for (var docSnap in querySnap.docs) {
           for (var uid in CommitteeModel
               .fromJson(docSnap)
-              .studentList!) {
+              .teacherList) {
             if (teacherUid == uid) {
               isAlreadyAMember = true;
               break;
@@ -111,7 +111,7 @@ class CommitteeService {
       await _firebaseFirestore.collection('committee').get().then((querySnap) {
         for (var docSnap in querySnap.docs) {
          CommitteeModel committeeModel= CommitteeModel.fromJson(docSnap);
-         committeeModel.teacherList!.forEach((element) {
+         committeeModel.teacherList.forEach((element) {
            listOfTeachers.add(element);
          });
 
@@ -123,14 +123,14 @@ class CommitteeService {
     return listOfTeachers;
   }
 
-  Future<List<String>> getListOfAllStudentsInCommittee() async {
-    List<String> listOfStudents=[];
+  Future<List<String>> getListOfAllIdeasInCommittee() async {
+    List<String> listOfIdeas=[];
     try {
       await _firebaseFirestore.collection('committee').get().then((querySnap) {
         for (var docSnap in querySnap.docs) {
           CommitteeModel committeeModel= CommitteeModel.fromJson(docSnap);
-          committeeModel.studentList!.forEach((element) {
-            listOfStudents.add(element);
+          committeeModel.ideaList.forEach((element) {
+            listOfIdeas.add(element);
           });
 
         }
@@ -138,7 +138,7 @@ class CommitteeService {
     } catch (error) {
       _logger.e('error at getListOfAllStudentsInCommittee/ CommitteeService $error');
     }
-    return listOfStudents;
+    return listOfIdeas;
   }
 
   ///this method is used to result section, to show only students who are committee
@@ -150,7 +150,7 @@ class CommitteeService {
       await _firebaseFirestore.collection('committee').get().then((querySnap) {
         for (var docSnap in querySnap.docs) {
           CommitteeModel? committeeModel=CommitteeModel.fromJson(docSnap);
-          if(committeeModel.teacherList!.contains(teacherUid))
+          if(committeeModel.teacherList.contains(teacherUid))
             {
               cm=committeeModel;
               break;

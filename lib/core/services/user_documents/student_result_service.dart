@@ -76,33 +76,11 @@ class StudentResultService {
   }
 
   Future setResultDocument(
-      String coordinatorUid, int timeStamp, List<String> teacherList1) async {
-    List<String> teachersList2 = [];
-    ResultModel? resltModel;
+      String coordinatorUid, int timeStamp) async {
+
     try {
-
-      try
-      {
-        resltModel=ResultModel.fromJson(await _firebaseFirestore
-            .collection('result')
-            .doc('2021-2022')
-            .get());
-        teachersList2 = resltModel.teachersList;
-        teacherList1.forEach((element) {
-          if (teachersList2.contains(element) == false) {
-            teachersList2.add(element);
-          }
-        });
-      }
-      catch(error)
-    {
-      print('Result Document is empty or any field is missing $error');
-    }
-
-
-
       ResultModel resultModel =
-          ResultModel(coordinatorUid, timeStamp, teachersList2);
+          ResultModel(coordinatorUid, timeStamp);
       await _firebaseFirestore
           .collection('result')
           .doc('2021-2022')

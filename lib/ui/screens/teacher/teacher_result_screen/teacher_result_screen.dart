@@ -1,17 +1,13 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:notice_board/core/constants/colors.dart';
 import 'package:notice_board/core/constants/text_styles.dart';
 import 'package:notice_board/core/services/navigation_service.dart';
-import 'package:notice_board/ui/custom_widgets/custom_multiselect_dropdown.dart';
 import 'package:notice_board/ui/screens/marks_screen/marks_screen.dart';
 import 'package:notice_board/ui/screens/student/student_home_screen/student_home_screen.dart';
 import 'package:notice_board/ui/screens/teacher/teacher_result_screen/teacher_marks_screen.dart';
 import 'package:notice_board/ui/screens/teacher/teacher_result_screen/teacher_result_screen_VM.dart';
 import 'package:provider/provider.dart';
-
-import '../../../custom_widgets/login_register_button/login_register_button.dart';
 
 class TeacherResultScreen extends StatelessWidget {
   const TeacherResultScreen({Key? key}) : super(key: key);
@@ -135,7 +131,7 @@ class TeacherResultScreen extends StatelessWidget {
                                             alignment: Alignment.centerLeft,
                                             child: FittedBox(
                                               fit: BoxFit.scaleDown,
-                                              child: Text('${vm.ideaList[index].ideaTitle}',
+                                              child: Text('${vm.ideaList[index]!.ideaTitle}',
                                               style: kPoppinsLight300.copyWith(
                                                 color: kFinPenPressedColor,
                                               ),),

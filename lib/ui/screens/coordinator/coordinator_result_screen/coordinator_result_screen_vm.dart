@@ -4,8 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'package:notice_board/core/models/idea/idea_model.dart';
 import 'package:notice_board/core/models/result/result_model.dart';
 import 'package:notice_board/core/services/committee/committee_service.dart';
+import 'package:notice_board/core/services/user_documents/student_idea_service.dart';
 import 'package:notice_board/core/services/user_documents/student_result_service.dart';
 import '../../../../core/models/user_authentication/user_signup_model.dart';
 import '../../../../core/services/user_documents/user_profile_service.dart';
@@ -14,15 +16,20 @@ class CoordinatorResultScreenVm extends ChangeNotifier
 {
 
   final FirebaseAuth _firebaseAuth=FirebaseAuth.instance;
-  List<UserSignupModel> _listOfStudents=[];
+ // List<UserSignupModel> _listOfStudents=[];
+  List<List<UserSignupModel?>> listOfGroups=[];
+  List<IdeaModel> _listOfIdeas=[];
   List<UserSignupModel> _listOfTeachers=[];
   List<UserSignupModel> _listOfCommitteeTeachers=[];
-  List<UserSignupModel> _listOfCommitteeStudents=[];
+  //List<UserSignupModel> _listOfCommitteeStudents=[];
+  List<UserSignupModel> _listOfCommitteeIdeas=[];
   List<String> _selectedTeachersList=[];
-  List<String> _selectedStudentsList=[];
+  //List<String> _selectedStudentsList=[];
+  List<String> _selectedIdeasList=[];
   final CommitteeService _committeeService=GetIt.I.get<CommitteeService>();
   //final StudentResultService _resultService=GetIt.I.get<StudentResultService>();
   final UserProfileService _userProfileService=GetIt.I.get<UserProfileService>();
+  final StudentIdeaService _studentIdeaService=GetIt.I.get<StudentIdeaService>();
   final Logger _logger=Logger();
   String uid="";
   bool isDispose=false;
@@ -33,8 +40,13 @@ class CoordinatorResultScreenVm extends ChangeNotifier
 
         //getCommitteeTeachers().
        // then((value) async{
+          BotToast.showLoading();
           getTeachers().then((value)async{
-            getStudents();
+            await getGroups().then((value) async{
+             await getStudentsGroup().then((value) {
+                BotToast.closeAllLoading();
+              });
+            });
           });
 
         //});
@@ -74,10 +86,10 @@ class CoordinatorResultScreenVm extends ChangeNotifier
   //   }
   //
   // }
-  Future setCommitteeTeacherStudent()async
+  Future<bool> setCommitteeTeacherIdea()async
   {
 
-    if(selectedTeachersList.isNotEmpty && selectedStudentList.isNotEmpty)
+    if(selectedTeachersList.isNotEmpty && selectedIdeasList.isNotEmpty)
       {
         //only five teacher per committee
         if((listOfCommitteeTeachers.length+selectedTeachersList.length)<=5) {
@@ -86,16 +98,18 @@ class CoordinatorResultScreenVm extends ChangeNotifier
           if(listOfCommitteeTeachers.where((element) =>
               selectedTeachersList.contains(element.uid)).isEmpty)
           {
-            ///check if student is already in a list or not
-            if(listOfCommitteeStudents.where((element) =>
-                selectedStudentList.contains(element.uid)).isEmpty)
+            ///check if ideas is already in a list or not
+            if(listOfCommitteeIdeas.where((element) =>
+                selectedIdeasList.contains(element.uid)).isEmpty)
               {
                 await _committeeService.
-                setCommitteeDocument(selectedTeachersList, selectedStudentList);
+                setCommitteeDocument(selectedTeachersList, selectedIdeasList);
+                return true;
               }
             else
               {
-                BotToast.showText(text: 'Student is already in a list');
+                BotToast.showText(text: 'Group is already in a list');
+                return false;
               }
 
 
@@ -108,6 +122,7 @@ class CoordinatorResultScreenVm extends ChangeNotifier
           else
             {
               BotToast.showText(text: 'Teacher is already in a list');
+              return false;
 
             }
 
@@ -115,11 +130,13 @@ class CoordinatorResultScreenVm extends ChangeNotifier
         else
           {
             BotToast.showText(text: 'Only 5 teacher per committee is allowed');
+            return false;
           }
       }
     else
       {
         BotToast.showText(text: 'Please select at least one item from drop down');
+        return false;
       }
   }
   Future getTeachers()async
@@ -155,27 +172,27 @@ class CoordinatorResultScreenVm extends ChangeNotifier
     }
 
   }
-  Future getStudents()async
+  Future getGroups()async
   {
-    _listOfStudents=[];
+    _listOfIdeas=[];
     try
     {
-      await _committeeService.getListOfAllStudentsInCommittee().
-      then((listOfStudentsAlreadyInCommittee) async{
+      await _committeeService.getListOfAllIdeasInCommittee().
+      then((listOfIdeasAlreadyInCommittee) async{
 
-        await _userProfileService.getAllStudents().then((students) {
-          // this array will store common students which are already
-          //in a committee, and remove it so it wont' add to dropdown
-          List<UserSignupModel> nonCommitteeStudentList=[];
-          students.forEach((element) {
-            if(listOfStudentsAlreadyInCommittee.contains(element.uid)==false)
-            {
-              ///dont add students to dropdown if they are already part of other committee
-              nonCommitteeStudentList.add(element);
-            }
+        await _studentIdeaService.getAllAcceptedIdeas().then((ideas) {
+          List<IdeaModel> nonCommitteeIdeaList=[];
+
+          ideas.forEach((element) {
+            if(listOfIdeasAlreadyInCommittee.contains(element.ideaId)==false)
+              {
+                nonCommitteeIdeaList.add(element);
+              }
           });
-          setListOfStudents=nonCommitteeStudentList;
+
+          setListOfIdeas=nonCommitteeIdeaList;
         });
+
 
       });
     }
@@ -186,15 +203,70 @@ class CoordinatorResultScreenVm extends ChangeNotifier
 
   }
 
+  Future getStudentsGroup()async{
+    try
+    {
+      await Future.forEach(_listOfIdeas, (IdeaModel ideaModel) async{
+        List<UserSignupModel?> group=[];
+       await Future.forEach(ideaModel.students, (String studentUid) async{
+
+           await _userProfileService.getProfileDocument(studentUid, 'student').then((userModel){
+             group.add(userModel);
+
+           });
+        });
+       listOfGroups.add(group);
+      });
+    }
+    catch(error)
+    {
+      _logger.e('error at getStudentsGroup/ coordinatorResultScreenVm $error');
+    }
+  }
+
+
+  // Future getStudents()async
+  // {
+  //   _listOfStudents=[];
+  //   try
+  //   {
+  //     await _committeeService.getListOfAllStudentsInCommittee().
+  //     then((listOfStudentsAlreadyInCommittee) async{
+  //
+  //       await _userProfileService.getAllStudents().then((students) {
+  //         // this array will store common students which are already
+  //         //in a committee, and remove it so it wont' add to dropdown
+  //         List<UserSignupModel> nonCommitteeStudentList=[];
+  //         students.forEach((element) {
+  //           if(listOfStudentsAlreadyInCommittee.contains(element.uid)==false)
+  //           {
+  //             ///dont add students to dropdown if they are already part of other committee
+  //             nonCommitteeStudentList.add(element);
+  //           }
+  //         });
+  //         setListOfStudents=nonCommitteeStudentList;
+  //       });
+  //
+  //     });
+  //   }
+  //   catch(error)
+  //   {
+  //     _logger.e('error at getTeachers/ coordinatorResultScreenVm $error');
+  //   }
+  //
+  // }
+
   List<String> get selectedTeachersList=>_selectedTeachersList;
   List<UserSignupModel> get listOfTeachers=>_listOfTeachers;
 
-  List<String> get selectedStudentList=>_selectedStudentsList;
-  List<UserSignupModel> get listOfStudents=>_listOfStudents;
+  // List<String> get selectedStudentList=>_selectedStudentsList;
+  // List<UserSignupModel> get listOfStudents=>_listOfStudents;
+  List<String> get selectedIdeasList=>_selectedIdeasList;
+  List<IdeaModel> get listOfIdeas=>_listOfIdeas;
 
   List<UserSignupModel> get listOfCommitteeTeachers=>_listOfCommitteeTeachers;
-  List<UserSignupModel> get listOfCommitteeStudents=>_listOfCommitteeStudents;
-
+  // List<UserSignupModel> get listOfCommitteeStudents=>_listOfCommitteeStudents;
+  List<UserSignupModel> get listOfCommitteeIdeas=>_listOfCommitteeIdeas;
 
   set setListOfTeachers(List<UserSignupModel> teachers)
   {
@@ -209,29 +281,49 @@ class CoordinatorResultScreenVm extends ChangeNotifier
 
     notifyListeners();
   }
-  set setListOfStudents(List<UserSignupModel> students)
+  set setListOfIdeas(List<IdeaModel> ideas)
   {
 
-    students.forEach((userModel) {
-      if((_listOfCommitteeStudents.where((element) => element.uid==userModel.uid)).isEmpty)
+    ideas.forEach((ideaModel) {
+      if((_listOfCommitteeIdeas.where((element) => element.uid==ideaModel.ideaId)).isEmpty)
       {
-        _listOfStudents.add(userModel);
+        _listOfIdeas.add(ideaModel);
       }
     });
 
 
     notifyListeners();
   }
+  // set setListOfStudents(List<UserSignupModel> students)
+  // {
+  //
+  //   students.forEach((userModel) {
+  //     if((_listOfCommitteeStudents.where((element) => element.uid==userModel.uid)).isEmpty)
+  //     {
+  //       _listOfStudents.add(userModel);
+  //     }
+  //   });
+  //
+  //
+  //   notifyListeners();
+  // }
   set setSelectedTeachersList(List<String> teachers)
   {
     _selectedTeachersList=teachers;
     notifyListeners();
   }
-  set setSelectedStudentsList(List<String> students)
+  // set setSelectedStudentsList(List<String> students)
+  // {
+  //   _selectedStudentsList=students;
+  //   notifyListeners();
+  // }
+
+  set setSelectedIdeaList(List<String> ideas)
   {
-    _selectedStudentsList=students;
+    _selectedIdeasList=ideas;
     notifyListeners();
   }
+
   // set setListOfCommitteeTeachers(UserSignupModel? teacher)
   // {
   //   if((listOfCommitteeTeachers.where((element) => element.uid==teacher!.uid)).isEmpty)
