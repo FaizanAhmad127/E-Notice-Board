@@ -38,7 +38,7 @@ class MarksScreen extends StatelessWidget {
         //obe2 has 10% in all Fyp1 marks which is 100
         result=(result/16)*10;
       }
-    return result;
+    return double.parse(result.toStringAsFixed(1));
 
   }
   double getObe3(MarksModel marksModel, int index)
@@ -55,7 +55,7 @@ class MarksScreen extends StatelessWidget {
       //obe2 has 10% in all Fyp1 marks which is 100
       result=(result/16)*30;
     }
-    return result;
+    return double.parse(result.toStringAsFixed(1));
   }
   double getObe4(MarksModel marksModel, int index)
   {
@@ -72,7 +72,7 @@ class MarksScreen extends StatelessWidget {
       result=(result/16)*20;
     }
 
-    return result;
+    return double.parse(result.toStringAsFixed(1));
   }
 
   @override
