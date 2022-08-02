@@ -15,4 +15,5 @@ class NavigationService{
         duration: const Duration(milliseconds: 700),
         type: PageTransitionType.leftToRightWithFade, child: widget));
   }
+
 }

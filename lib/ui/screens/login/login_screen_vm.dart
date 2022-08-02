@@ -35,6 +35,18 @@ class LoginScreenVM extends ChangeNotifier{
       BotToast.showText(text: "$error");
     }
   }
+
+  Future forgetPassword(String email)async{
+
+    if(Validate().verifyEmail(email)==true)
+      {
+        await _userAuthService.forgotPassword(email).then((value) {
+
+        });
+      }
+
+
+  }
   String isUserLoggedIn()
   {
     String userType="";

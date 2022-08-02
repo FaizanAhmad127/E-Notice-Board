@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:notice_board/core/constants/colors.dart';
@@ -166,11 +167,25 @@ class LoginScreen extends StatelessWidget {
                                       alignment: Alignment.centerRight,
                                       child: FittedBox(
 
-                                        child: Text("Forgot Password",
-                                          style: kPoppinsLight300.copyWith(
-                                            fontSize: 10.sp,
-                                            color: kPrimaryColor,
-                                          ),),
+                                        child: GestureDetector(
+                                          onTap: ()async{
+                                            if(emailTextEditingController.text.isEmpty)
+                                              {
+                                                BotToast.showText(text: 'Please write your email in the text field');
+                                              }
+                                            else
+                                              {
+                                                Provider.of<LoginScreenVM>(context,listen:false).
+                                                forgetPassword(emailTextEditingController.text);
+
+                                              }
+                                          },
+                                          child: Text("Forgot Password",
+                                            style: kPoppinsLight300.copyWith(
+                                              fontSize: 10.sp,
+                                              color: kPrimaryColor,
+                                            ),),
+                                        ),
                                       ),
                                     ),
                                   ),

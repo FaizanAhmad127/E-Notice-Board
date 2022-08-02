@@ -57,7 +57,15 @@ class UserProfileService{
     {
      await _firebaseFirestore.collection("teacher").get().then((docsSnap) {
         for (var doc in docsSnap.docChanges) {
-          teachersList.add(UserSignupModel.fromJson(doc.doc));
+          try
+          {
+            teachersList.add(UserSignupModel.fromJson(doc.doc));
+          }
+          catch(error)
+       {
+         _logger.e("error at getAllTeachers/UserProfileService.dart $error");
+       }
+
         }});
 
     }
@@ -74,7 +82,15 @@ class UserProfileService{
     {
       await _firebaseFirestore.collection("student").get().then((docsSnap) {
         for (var doc in docsSnap.docChanges) {
-          studentList.add(UserSignupModel.fromJson(doc.doc));
+          try
+          {
+            studentList.add(UserSignupModel.fromJson(doc.doc));
+          }
+          catch(error)
+        {
+          _logger.e("error at getAllStudents/UserProfileService.dart $error");
+        }
+
         }});
 
     }
@@ -87,7 +103,7 @@ class UserProfileService{
 
   Future postOnlineStatus(String userType,String uid,String status)async
   {
-    print('$userType is $status now');
+    //print('$userType is $status now');
     try{
       await _firebaseFirestore.collection(userType).doc(uid).
       set({

@@ -70,6 +70,24 @@ class UserAuthService {
 
   }
 
+  Future forgotPassword(String email)async{
+
+    try
+    {
+      await _firebaseAuth.sendPasswordResetEmail(email: email).then((value) {
+        BotToast.showText(text: 'Password reset email is sent, Please check your email',
+            duration: Duration(seconds: 3));
+      });
+    }
+    catch(error)
+    {
+      BotToast.showText(text: 'Error! $error',duration: Duration(seconds: 3));
+    }
+
+
+
+  }
+
 
 
 

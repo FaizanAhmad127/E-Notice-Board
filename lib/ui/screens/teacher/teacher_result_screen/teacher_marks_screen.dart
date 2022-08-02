@@ -15,7 +15,7 @@ class TeacherMarksScreen extends StatelessWidget {
   TeacherMarksScreen({required this.group, required this.idea, Key? key})
       : super(key: key);
   List<UserSignupModel> group = [];
-  IdeaModel idea;
+  IdeaModel? idea;
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +91,10 @@ class TeacherMarksScreen extends StatelessWidget {
                               ///DropDown Button
                               SliverToBoxAdapter(
                                 child: Padding(
-                                  padding: EdgeInsets.all(0.04.sh),
+                                  padding: EdgeInsets.only(
+                                    top: 0.04.sh,
+                                    left: 0.03.sw
+                                  ),
                                   child: Row(
                                     children: [
                                       Text(
@@ -123,7 +126,7 @@ class TeacherMarksScreen extends StatelessWidget {
                           },
                           body: Padding(
                             padding: EdgeInsets.only(
-                              top: 0.03.sh,
+
                               bottom: 0.03.sh,
                               left: 0.03.sw,
                               right:0.03.sw
@@ -132,6 +135,7 @@ class TeacherMarksScreen extends StatelessWidget {
                                 itemCount: vm.group.length,
                                 itemBuilder: (context, index) {
                                   return Container(
+                                    padding: EdgeInsets.only(top: 0.02.sh, ),
                                     color: Colors.white54,
                                     child: Column(
                                       crossAxisAlignment:
@@ -181,13 +185,14 @@ class TeacherMarksScreen extends StatelessWidget {
                                                   bottom: 0.03.sh,
                                                 ),
                                                 child: MarksTF(
+                                                  fyp1or2: vm.selectedDropDownListItem,
                                                   group: group,
                                                   vm: vm,
                                                   onChanged: (tfValue) {
                                                     if (tfValue == null) {
                                                       vm.marks[index] = 101;
                                                     } else {
-                                                      print("index is $index");
+                                                      //print("index is $index");
                                                       vm.marks[index] = tfValue;
                                                       vm.setMarksListMap(
                                                           vm.selectedDropDownListItem,
@@ -196,17 +201,27 @@ class TeacherMarksScreen extends StatelessWidget {
                                                     }
                                                   },
                                                 ),
-                                              )
-                                            : RadioButton(
-                                                vm: vm,
-                                                user: group[index],
-                                                callback: (value) {
-                                                  vm.setMarksListMap(
-                                                      vm.selectedDropDownListItem,
-                                                      value,
-                                                      group[index].uid ?? '');
-                                                },
-                                              )
+                                              ):getMarkingUI(
+                                          selectedItem: vm.selectedDropDownListItem,
+                                          callback: (intValue)
+                                          {
+                                            vm.setMarksListMap(
+                                                          vm.selectedDropDownListItem,
+                                                intValue.toDouble(),
+                                                          group[index].uid ?? '');
+                                          },
+
+                                        )
+                                            // : RadioButton(
+                                            //     vm: vm,
+                                            //     user: group[index],
+                                            //     callback: (value) {
+                                            //       vm.setMarksListMap(
+                                            //           vm.selectedDropDownListItem,
+                                            //           value,
+                                            //           group[index].uid ?? '');
+                                            //     },
+                                            //   )
                                       ],
                                     ),
                                   );
@@ -231,7 +246,8 @@ class TeacherMarksScreen extends StatelessWidget {
                                   BotToast.showText(text: 'FYP-1 range 0-50');
                                 } else {
                                   await vm.submitMarks().then((value) {
-                                    vm.marks.removeRange(2, vm.marks.length);
+
+                                    vm.getNoOfStudents();
 
                                   });
 
@@ -243,13 +259,13 @@ class TeacherMarksScreen extends StatelessWidget {
                                   BotToast.showText(text: 'FYP2 range 0-100');
                                 } else {
                                   await vm.submitMarks().then((value) {
-                                    vm.marks.removeRange(2, vm.marks.length);
+                                    vm.getNoOfStudents();
 
                                   });
                                 }
                               } else {
                                 await vm.submitMarks().then((value) {
-                                  vm.marks.removeRange(2, vm.marks.length);
+                                  vm.getNoOfStudents();
 
                                 });
                               }
@@ -293,12 +309,14 @@ class MarksTF extends StatelessWidget {
       {Key? key,
       required this.group,
       required this.vm,
+        required this.fyp1or2,
       required this.onChanged})
       : super(key: key);
 
   final List<UserSignupModel> group;
   final TeacherMarksScreenVM vm;
   Function(double?) onChanged;
+  String fyp1or2;
 
   @override
   Widget build(BuildContext context) {
@@ -334,119 +352,242 @@ class MarksTF extends StatelessWidget {
                     ))),
           ),
         ),
-        Spacer(),
-        Spacer(),
+        SizedBox(
+          width: 15.w,
+        ),
+        Expanded(
+          child: Text(
+            'Out of ${fyp1or2=='FYP-1 VIVA'?50:100}',
+            style: kPoppinsSemiBold600.copyWith(fontSize: 13.sp,
+            color: kTfFillColor),
+          ),
+        ),
+
       ],
     );
   }
 }
 
-class RadioButton extends StatelessWidget {
-  RadioButton({
-    required this.vm,
-    required this.user,
-    required this.callback,
-    Key? key,
-  }) : super(key: key);
-  Function(double) callback;
-  UserSignupModel user;
-  TeacherMarksScreenVM vm;
+
+class getMarkingUI extends StatefulWidget {
+   getMarkingUI({Key? key,required this.selectedItem,required this.callback}) : super(key: key);
+
+  String selectedItem;
+  Function(int) callback;
+
+  @override
+  State<getMarkingUI> createState() => _getMarkingUIState();
+}
+
+class _getMarkingUIState extends State<getMarkingUI> {
+
+  List<String> OBE2=['Problem identification and objectives','Methodology','Work plan','Presentation'];
+  List<String> OBE3=['CONTENT','Adherence','Presentation','Viva'];
+  List<String> OBE4=['CONTENT','Adherence to work plan','Coherence with group','Viva'];
+
+  late List<int> OBEMarks;
+
+
+
+  List<Widget> getColumn()
+  {
+   List<String> items=[];
+   if(widget.selectedItem=='OBE2')
+     {
+       items=OBE2;
+     }
+   else if(widget.selectedItem=='OBE3')
+   {
+     items=OBE3;
+   }
+   else if(widget.selectedItem=='OBE4')
+   {
+     items=OBE4;
+   }
+    return List.generate(items.length, (index1) {
+      return Padding(
+          padding: EdgeInsets.only(top: 10.h),
+          child: Container(
+            margin: EdgeInsets.only(top: 10.0),
+            decoration:
+            BoxDecoration(border: Border.all(color: Colors.grey.shade200)),
+            child: ExpansionTile(
+              iconColor: Colors.grey,
+              title:
+              Text(items[index1],
+                  style: kPoppinsRegular400.copyWith(
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15.0,
+                  )),
+              children: [
+                RadioButton(
+                    currentValue:OBEMarks[index1],
+                    callback: (intValue)
+                {
+                  int totalMarks=0;
+                  OBEMarks[index1]=intValue;
+                  OBEMarks.forEach((element) { totalMarks=totalMarks+element;});
+                  widget.callback(totalMarks);
+                     setState(() {
+
+                     });
+                })
+              ],
+            ),
+          ),
+        );
+    });
+  }
+  @override
+  void initState() {
+    super.initState();
+    OBEMarks=[0,0,0,0];
+  }
 
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> marksMap = vm.marksListMap.entries
-        .where((element) => element.key == user.uid)
-        .first
-        .value;
+    return Column(
+      children: getColumn(),
+
+    );
+  }
+}
+
+
+class RadioButton extends StatefulWidget {
+   RadioButton({Key? key,
+
+    required this.callback,
+     required this.currentValue,
+  }) : super(key: key);
+  Function(int) callback;
+  int currentValue;
+  @override
+  State<RadioButton> createState() => _RadioButtonState();
+}
+
+class _RadioButtonState extends State<RadioButton> {
+
+
+  late int groupValue;
+
+  @override
+  void initState() {
+    super.initState();
+    groupValue=widget.currentValue;
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
 
     return Column(
       children: [
         Row(
           children: [
             Radio(
-              value: 0.0,
-              groupValue: marksMap['marks'] as double,
-              onChanged: (double? value) {
-                callback(value ?? 0.0);
+              value: 0,
+              groupValue: groupValue,
+              onChanged: (int? value) {
+                setState(() {
+                  groupValue=0;
+                });
+                widget.callback(value ?? 0);
               },
             ),
             Text('UnAcceptable'),
-            Spacer(),
-            Text(
-              '0 Marks',
-              style: kPoppinsExtraLight200.copyWith(color: kDateColor),
-            )
+            // Spacer(),
+            // Text(
+            //   '0 Marks',
+            //   style: kPoppinsExtraLight200.copyWith(color: kDateColor),
+            // )
           ],
         ),
         Row(
           children: [
             Radio(
-              value: 4.0,
-              groupValue: marksMap['marks'] as double,
-              onChanged: (double? value) {
-                callback(value ?? 0.0);
+              value: 1,
+              groupValue: groupValue,
+              onChanged: (int? value) {
+                setState(() {
+                  groupValue=1;
+                });
+                widget.callback(value ?? 0);
               },
             ),
             Text('Just Acceptable'),
-            Spacer(),
-            Text(
-              '4 Marks',
-              style: kPoppinsExtraLight200.copyWith(color: kDateColor),
-            )
+            //Spacer(),
+            // Text(
+            //   '4 Marks',
+            //   style: kPoppinsExtraLight200.copyWith(color: kDateColor),
+            // )
           ],
         ),
         Row(
           children: [
             Radio(
-              value: 8.0,
-              groupValue: marksMap['marks'] as double,
-              onChanged: (double? value) {
-                callback(value ?? 0.0);
+              value: 2,
+              groupValue: groupValue,
+              onChanged: (int? value) {
+                setState(() {
+                  groupValue=2;
+                });
+                widget.callback(value ?? 0);
               },
             ),
             Text('Basic'),
-            Spacer(),
-            Text(
-              '8 Marks',
-              style: kPoppinsExtraLight200.copyWith(color: kDateColor),
-            )
+            // Spacer(),
+            // Text(
+            //   '8 Marks',
+            //   style: kPoppinsExtraLight200.copyWith(color: kDateColor),
+            // )
           ],
         ),
         Row(
           children: [
             Radio(
-              value: 12.0,
-              groupValue: marksMap['marks'] as double,
-              onChanged: (double? value) {
-                callback(value ?? 0.0);
+              value: 3,
+              groupValue: groupValue,
+              onChanged: (int? value) {
+                setState(() {
+                  groupValue=3;
+                });
+                widget.callback(value ?? 0);
               },
             ),
             Text('Good'),
-            Spacer(),
-            Text(
-              '12 Marks',
-              style: kPoppinsExtraLight200.copyWith(color: kDateColor),
-            )
+            // Spacer(),
+            // Text(
+            //   '12 Marks',
+            //   style: kPoppinsExtraLight200.copyWith(color: kDateColor),
+            // )
           ],
         ),
         Row(
           children: [
             Radio(
-              value: 16.0,
-              groupValue: marksMap['marks'] as double,
-              onChanged: (double? value) {
-                callback(value ?? 0.0);
+              value: 4,
+              groupValue: groupValue,
+              onChanged: (int? value) {
+                setState(() {
+                  groupValue=4;
+                });
+                widget.callback(value ?? 0);
               },
             ),
             Text('Excellent'),
-            Spacer(),
-            Text(
-              '16 Marks',
-              style: kPoppinsExtraLight200.copyWith(color: kDateColor),
-            )
+            // Spacer(),
+            // Text(
+            //   '16 Marks',
+            //   style: kPoppinsExtraLight200.copyWith(color: kDateColor),
+            // )
           ],
         ),
       ],
     );
   }
+
+
 }
+

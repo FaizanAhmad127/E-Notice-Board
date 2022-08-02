@@ -2,16 +2,19 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:notice_board/core/models/committee/committee_model.dart';
 import 'package:notice_board/core/models/result/result_model.dart';
 import 'package:notice_board/core/services/user_documents/student_result_service.dart';
 
 import '../../../../core/models/idea/idea_model.dart';
 import '../../../../core/models/user_authentication/user_signup_model.dart';
+import '../../../../core/services/committee/committee_service.dart';
 
 class TeacherMarksScreenVM extends ChangeNotifier{
 
   final FirebaseAuth _firebaseAuth=FirebaseAuth.instance;
   final StudentResultService _resultService=GetIt.I.get<StudentResultService>();
+  final CommitteeService _committeeService=GetIt.I.get<CommitteeService>();
   bool _isCommitteeMember=false;
   String uid="";
   bool isDispose=false;
@@ -20,7 +23,7 @@ class TeacherMarksScreenVM extends ChangeNotifier{
   String _selectedDropDownListItem="";
   List<UserSignupModel> group=[];
   List<double> marks=[];
-  IdeaModel idea;
+  IdeaModel? idea;
   Map<String,Map<String,dynamic>> _marksListMap={};
 
   TeacherMarksScreenVM({required this.group,required this.idea})
@@ -36,10 +39,8 @@ class TeacherMarksScreenVM extends ChangeNotifier{
          'marks':0.0,
       }});
     });
-    print(_marksListMap.entries);
-
-
-    getResultDocument();
+    getCommitteeDocument();
+    //getResultDocument();
   }
   void getNoOfStudents()
   {
@@ -52,8 +53,9 @@ class TeacherMarksScreenVM extends ChangeNotifier{
   }
   void checkIfThisTeacherIsSupervisor()
   {
-     setIsSupervisor=idea.teachers.contains(uid);
+     setIsSupervisor=idea!.teachers.contains(uid);
   }
+
 
   void resetMarksListMap(String exam)
   {
@@ -71,52 +73,98 @@ class TeacherMarksScreenVM extends ChangeNotifier{
      BotToast.closeAllLoading();
 
   }
-  Future getResultDocument()async
+
+  Future getCommitteeDocument()async
   {
-     _resultService.getResultDocument().onData((resultDocSnap) {
-       ResultModel? resultModel;
+    CommitteeModel? committeeModel;
 
-      try
+    try
+    {
+      await _committeeService.getTeacherCommittee(uid).then((committeeModel) {
+        setIsCommitteeMember=committeeModel!.ideaList.contains(idea!.ideaId);
+      });
+
+    }
+    catch(error)
+    {
+      print('committee model is null because there is no committee'
+          ' document or any field is missing getCommitteeDocument/ teacher_marks_screen_vm $error');
+      setIsCommitteeMember=false;
+    }
+    if(committeeModel!=null)
       {
-        resultModel=ResultModel.fromJson(resultDocSnap);
+        setIsCommitteeMember=true;
       }
-      catch(error)
+    if(isDispose==false)
+    {
+      if(isCommitteeMember==true && isSupervisor==true)
       {
-        print('result model is null becuase there is no result document or any field is missing getResultDocument/ teacher_marks_screen_vm $error');
-        setIsCommitteeMember=false;
+        setdropDownListItems=['OBE2','OBE3','OBE4','FYP-1 VIVA','FYP-2 VIVA'];
+        setSelectedDropDownListItem='OBE2';
+        resetMarksListMap('OBE2');
       }
+      else if(isCommitteeMember==true && isSupervisor==false)
+      {
+        setdropDownListItems=['OBE2','OBE3','OBE4',];
+        setSelectedDropDownListItem='OBE2';
+        resetMarksListMap('OBE2');
+      }
+      else
+      {
+        setdropDownListItems=['FYP-1 VIVA','FYP-2 VIVA'];
+        setSelectedDropDownListItem='FYP-1 VIVA';
+        resetMarksListMap('FYP-1 VIVA');
+      }
+    }
 
-      if(resultModel!=null)
-        {
-          setIsCommitteeMember=resultModel.teachersList.contains(uid);
-        }
-
-       if(isDispose==false)
-       {
-         if(isCommitteeMember==true && isSupervisor==true)
-         {
-           setdropDownListItems=['OBE2','OBE3','OBE4','FYP-1 VIVA','FYP-2 VIVA'];
-           setSelectedDropDownListItem='OBE2';
-           resetMarksListMap('OBE2');
-         }
-         else if(isCommitteeMember==true && isSupervisor==false)
-         {
-           setdropDownListItems=['OBE2','OBE3','OBE4',];
-           setSelectedDropDownListItem='OBE2';
-           resetMarksListMap('OBE2');
-         }
-         else
-         {
-           setdropDownListItems=['FYP-1 VIVA','FYP-2 VIVA'];
-           setSelectedDropDownListItem='FYP-1 VIVA';
-           resetMarksListMap('FYP-1 VIVA');
-         }
-       }
-
-
-
-    });
   }
+
+  // Future getResultDocument()async
+  // {
+  //    _resultService.getResultDocument().onData((resultDocSnap) {
+  //      ResultModel? resultModel;
+  //
+  //     try
+  //     {
+  //       resultModel=ResultModel.fromJson(resultDocSnap);
+  //     }
+  //     catch(error)
+  //     {
+  //       print('result model is null becuase there is no result document or any field is missing getResultDocument/ teacher_marks_screen_vm $error');
+  //       setIsCommitteeMember=false;
+  //     }
+  //
+  //     if(resultModel!=null)
+  //       {
+  //         setIsCommitteeMember=resultModel.teachersList.contains(uid);
+  //       }
+  //
+  //      if(isDispose==false)
+  //      {
+  //        if(isCommitteeMember==true && isSupervisor==true)
+  //        {
+  //          setdropDownListItems=['OBE2','OBE3','OBE4','FYP-1 VIVA','FYP-2 VIVA'];
+  //          setSelectedDropDownListItem='OBE2';
+  //          resetMarksListMap('OBE2');
+  //        }
+  //        else if(isCommitteeMember==true && isSupervisor==false)
+  //        {
+  //          setdropDownListItems=['OBE2','OBE3','OBE4',];
+  //          setSelectedDropDownListItem='OBE2';
+  //          resetMarksListMap('OBE2');
+  //        }
+  //        else
+  //        {
+  //          setdropDownListItems=['FYP-1 VIVA','FYP-2 VIVA'];
+  //          setSelectedDropDownListItem='FYP-1 VIVA';
+  //          resetMarksListMap('FYP-1 VIVA');
+  //        }
+  //      }
+  //
+  //
+  //
+  //   });
+  // }
 
   String get selectedDropDownListItem=>_selectedDropDownListItem;
   bool get isCommitteeMember=>_isCommitteeMember;
