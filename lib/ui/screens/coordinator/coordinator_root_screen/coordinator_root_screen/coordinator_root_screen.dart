@@ -92,21 +92,41 @@ class _CoordinatorRootScreenState extends State<CoordinatorRootScreen> with
               ),SizedBox(width: 15.w,),
             ],
             bottom: PreferredSize(
-              preferredSize:  Size(1.sw, 20.0),
+              preferredSize:  Size(1.sw, 25.0),
               child: TabBar(
                 controller: controller,
                 indicatorColor: kBlackColor,
-                tabs:  const [
-                  Icon(
-                      Icons.home_rounded
+                tabs:   [
+                  Column(
+                    children: [
+                      Icon(
+                          Icons.home_rounded
+                      ),
+                      Text('Home')
+                    ],
                   ),
-                  Icon(
-                      Icons.people_alt
+                  Column(
+                    children: const [
+                      Icon(
+                          Icons.people_alt
+                      ),
+                      Text('Teachers')
+                    ],
                   ),
-                  FaIcon(FontAwesomeIcons.graduationCap),
-                  Icon(
-                      Icons.notifications
+                  Column(
+                    children: const [
+                      FaIcon(FontAwesomeIcons.graduationCap),
+                      Text('Students')
+                    ],
                   ),
+                  Column(
+                    children: const [
+                      Icon(
+                          Icons.notifications,
+                      ),
+                      FittedBox(child: Text('Notifications')),
+                    ],
+                  )
 
                 ],
               ),

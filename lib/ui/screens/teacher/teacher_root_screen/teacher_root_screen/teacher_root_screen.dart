@@ -85,23 +85,47 @@ SingleTickerProviderStateMixin, WidgetsBindingObserver{
               ),SizedBox(width: 15.w,),
             ],
             bottom: PreferredSize(
-              preferredSize:  Size(1.sw, 20.0),
+              preferredSize:  Size(1.sw, 25.0),
               child: TabBar(
                 controller: controller,
                 indicatorColor: kBlackColor,
-                tabs:  const [
-                  Icon(
-                      Icons.home_rounded
+                tabs:   [
+                  Column(
+                    children: [
+                      Icon(
+                          Icons.home_rounded
+                      ),
+                      FittedBox(child: Text('Home')
+                      )
+                    ],
                   ),
-                  Icon(
-                      Icons.notifications
+                  Column(
+                    children: [
+                      Icon(
+                          Icons.notifications
+                      ),
+                      FittedBox(child: Text('Notifications')),
+                    ],
                   ),
-                  Icon(
-                    FontAwesomeIcons.clipboardList
+
+                  Column(
+                    children: [
+                      Icon(
+                          FontAwesomeIcons.clipboardList
+                      ),
+                      FittedBox(child: Text('Result')),
+                    ],
                   ),
-                  Icon(
-                      Icons.people_alt
+
+                  Column(
+                    children: [
+                      Icon(
+                          Icons.people_alt
+                      ),
+                      FittedBox(child: Text('Students')),
+                    ],
                   ),
+
 
                 ],
               ),

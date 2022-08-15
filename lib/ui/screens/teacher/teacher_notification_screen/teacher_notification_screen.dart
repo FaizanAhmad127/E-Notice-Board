@@ -1,5 +1,7 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:notice_board/core/constants/colors.dart';
 import 'package:notice_board/core/constants/text_styles.dart';
 import 'package:notice_board/core/models/notification/student_idea_status_model.dart';
@@ -210,22 +212,127 @@ class TeacherNotificationScreen extends StatelessWidget {
       {
         return Consumer<TeacherNotificationScreenVM>(
             builder: (context,vm,child){
-          return Scaffold(
-            backgroundColor: kWhiteColor,
-            body: SizedBox(
-              height: 1.sh,
-              width: 1.sw,
-              child: Padding(
-                padding: EdgeInsets.only(top: 5.h,bottom: 5.h,right: 5.w,left: 5.w),
-                child: vm.getIdeasList.isEmpty?
-                const Center(child: Text("Nothing to show yet"),)
-                :ListView.builder(
-                    itemCount: vm.getIdeasList.length,
-                    itemBuilder: (context,index)
-                    {
-                      return notificationCard(vm.getIdeasList[index],context,vm);
-                    }),
+          return DefaultTabController(
+            length: 2,
+            child: Scaffold(
+              backgroundColor: kWhiteColor,
+              appBar: AppBar(
+                toolbarHeight: 0,
+                backgroundColor: kPrimaryColor,
+                bottom: TabBar(
+                  indicatorColor: kAcceptedColor,
+                  labelStyle: kPoppinsMedium500.copyWith(
+                    fontSize: 15
+                  ),
+                    unselectedLabelStyle: kPoppinsRegular400.copyWith(
+                      fontSize: 13
+                    ),
+                    tabs: [
+                  Text('General'),
+                  Text('Events'),
+                ]),
               ),
+              body: TabBarView(children: [
+                SizedBox(
+                  height: 1.sh,
+                  width: 1.sw,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 5.h,bottom: 5.h,right: 5.w,left: 5.w),
+                    child: vm.getIdeasList.isEmpty?
+                    const Center(child: Text("Nothing to show yet"),)
+                        :ListView.builder(
+                        itemCount: vm.getIdeasList.length,
+                        itemBuilder: (context,index)
+                        {
+                          return notificationCard(vm.getIdeasList[index],context,vm);
+                        }),
+                  ),
+                ),
+                ///
+                /// View Events
+                ///
+                Padding(padding: EdgeInsets.all(15),
+                  child: vm.getListOfEvents.isEmpty?
+                  Center(
+                    child: Text('List of events will appear here'),
+                  ):
+                  ListView.builder(
+                      itemCount: vm.getListOfEvents.length,
+                      itemBuilder: (context,index)
+                      {
+                        return Container(
+                          margin: EdgeInsets.only(
+                              bottom: 0.02.sh
+                          ),
+                          padding: EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                  color: kPrimaryColor
+                              )
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      vm.getListOfEvents[index].title??'',
+                                      style: kPoppinsSemiBold600.copyWith(
+                                          fontSize: 18
+                                      ),),
+                                  ),
+
+                                ],
+                              ),
+                              SizedBox(height: 10,),
+                              Row(
+                                children: [
+                                  Text('Date: ',
+                                    style: kPoppinsMedium500.copyWith(
+                                        fontSize: 14
+                                    ),),
+                                  Text(DateTimeService().getDate(vm.getListOfEvents[index].dateTime??'')),
+                                  SizedBox(width: 40,),
+                                  Text('Time: ',
+                                    style:kPoppinsMedium500.copyWith(
+                                        fontSize: 14
+                                    ),),
+                                  Text(DateTimeService().getTime(vm.getListOfEvents[index].dateTime??'')),
+
+                                ],
+                              ),
+                              const SizedBox(height: 6,),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Venue:    ',
+                                    style: kPoppinsMedium500.copyWith(
+                                        fontSize: 14
+                                    ),),
+                                  Expanded(
+                                      child: Text(vm.getListOfEvents[index].location??'')),
+
+
+                                ],
+                              ),
+                              const SizedBox(height: 6,),
+                              Text('Details of an event: ',
+                                style: kPoppinsMedium500.copyWith(
+                                    fontSize: 14
+                                ),),
+                              Text(vm.getListOfEvents[index].description??'',
+                                textAlign: TextAlign.justify,
+                                style: kPoppinsRegular400.copyWith(
+
+                                ),),
+                            ],
+                          ),
+                        );
+                      }),)
+              ])
             ),
           );
         });

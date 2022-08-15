@@ -6,6 +6,8 @@ import 'package:notice_board/core/models/idea/idea_model.dart';
 import 'package:notice_board/core/services/navigation_service.dart';
 import 'package:notice_board/ui/custom_widgets/custom_post_card/custom_post_card.dart';
 import 'package:notice_board/ui/custom_widgets/custom_search_field/custom_search_field.dart';
+import 'package:notice_board/ui/custom_widgets/login_register_button/login_register_button.dart';
+import 'package:notice_board/ui/screens/coordinator/coordinator_event_screen/coordinator_event_screen.dart';
 import 'package:notice_board/ui/screens/coordinator/coordinator_home_screen/coordinator_home_screen_vm.dart';
 import 'package:notice_board/ui/screens/view_details_screen/view_details_screen.dart';
 import 'package:provider/provider.dart';
@@ -56,6 +58,37 @@ class CoordinatorHomeScreen extends StatelessWidget {
       {
         return Scaffold(
           backgroundColor: kWhiteColor,
+          floatingActionButton: SizedBox(
+            width: 0.22.sw,
+            child: TextButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(kPrimaryColor),
+                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)
+                ))
+              ),
+              onPressed: ()
+              {
+                NavigationService().navigatePush(context, CoordinatorEventScreen());
+              }, child: Row(
+              children: [
+                Expanded(child: Icon(Icons.add,color: kWhiteColor,)),
+                Spacer(),
+                Expanded(
+                  flex: 3,
+                  child: FittedBox(
+                    child: Text('Event',style: kPoppinsRegular400.copyWith(
+                      color: kWhiteColor,
+                      fontSize: 15
+                    ),),
+                  ),
+                ),
+                SizedBox(width: 2,)
+              ],
+            ),
+
+            ),
+          ),
           body: SingleChildScrollView(
             child: Consumer<CoordinatorHomeScreenVM>(
               builder: (context,vm,child)

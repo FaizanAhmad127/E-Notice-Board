@@ -73,5 +73,16 @@ class DateTimeService {
 
    }
 
+   String getDate(String dt)
+   {
+      DateTime dateTime=DateTime.parse(dt);
 
+      return dateTime.day.toString()+'/'+dateTime.month.toString()+'/'+dateTime.year.toString();
+   }
+   String getTime(String dt)
+   {
+      DateTime dateTime=DateTime.parse(dt);
+
+      return dateTime.hour.toString()+':'+dateTime.minute.toString();
+   }
 }

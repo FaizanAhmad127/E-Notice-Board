@@ -95,4 +95,23 @@ class Validate{
     return isValid;
 
   }
+
+  bool validateEvent(String title, String address, String description, String dateTime)
+  {
+    if(title.isEmpty || address.isEmpty || description.isEmpty)
+      {
+        BotToast.showText(text: 'One of the text field is empty');
+        return false;
+      }
+    else if(dateTime.isEmpty)
+      {
+        BotToast.showText(text: 'Please pick date and time');
+        return false;
+      }
+    else
+      {
+        return true;
+      }
+  }
+
 }
