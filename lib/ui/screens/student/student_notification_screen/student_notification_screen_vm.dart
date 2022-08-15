@@ -5,6 +5,9 @@ import 'package:logger/logger.dart';
 import 'package:notice_board/core/models/notification/student_idea_status_model.dart';
 import 'package:notice_board/core/services/notification/student_idea_status_service.dart';
 
+import '../../../../core/models/event/event_model.dart';
+import '../../../../core/services/event/event_service.dart';
+
 class StudentNotificationScreenVM extends ChangeNotifier{
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -13,14 +16,40 @@ class StudentNotificationScreenVM extends ChangeNotifier{
   final Logger _logger = Logger();
   late String uid;
   bool isDispose=false;
+  List<EventModel> _listOfEvents=[];
+  EventService eventService=EventService();
 
   StudentNotificationScreenVM()
   {
     uid=firebaseAuth.currentUser!.uid;
     getIdeaStatusNotification();
+    getAllEvents();
 
   }
 
+
+  void getAllEvents()
+  {
+    try
+    {
+      eventService.getListOfEvents().onData((data) {
+        data.docs.forEach((element) {
+          EventModel model=EventModel.fromJson(element.data());
+          if(getListOfEvents.where((element) => element.id==model.id).isEmpty)
+          {
+            setListOfEvents=model;
+          }
+
+        });
+      });
+    }
+    catch(error)
+    {
+      print('error at getAllEvents /CoordinatorEventScreenVm $error');
+    }
+
+
+  }
   void getIdeaStatusNotification()
   {
     try
@@ -45,11 +74,17 @@ class StudentNotificationScreenVM extends ChangeNotifier{
   }
 
   List<StudentIdeaStatusModel> get getIdeasList=>_ideasList;
+  List<EventModel> get getListOfEvents=>_listOfEvents;
 
   set setIdeasList(StudentIdeaStatusModel idea)
   {
 
     _ideasList.insert(0, idea);
+    notifyListeners();
+  }
+  set setListOfEvents(EventModel eventModel)
+  {
+    _listOfEvents.add(eventModel);
     notifyListeners();
   }
  @override

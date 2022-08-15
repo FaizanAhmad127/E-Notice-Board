@@ -95,21 +95,43 @@ SingleTickerProviderStateMixin, WidgetsBindingObserver{
               ),SizedBox(width: 15.w,),
             ],
             bottom: PreferredSize(
-              preferredSize:  Size(1.sw, 20.0),
+              preferredSize:  Size(1.sw, 25.0),
               child: TabBar(
                 controller: controller,
                 indicatorColor: kBlackColor,
                 tabs:  [
-                  Text('L',
-                  style: kPoppinsMedium500.copyWith(
-                    fontSize: 23.sp,
-                    color: kWhiteColor
-                  ),),
-                  const Icon(
-                      Icons.notifications
+                  Column(
+                    children: [
+                      Text('L',
+                        style: kPoppinsMedium500.copyWith(
+                            fontSize: 23.sp,
+                            color: kWhiteColor
+                        ),),
+                      FittedBox(
+                        child: Text('Home'),
+                      )
+                    ],
                   ),
-                  const Icon(
-                      Icons.business_center
+                  Column(
+                    children: const [
+                      Icon(
+                          Icons.notifications
+                      ),
+                      FittedBox(
+                        child: Text('Notifications'),
+                      )
+                    ],
+                  ),
+
+                  Column(
+                    children: const [
+                      Icon(
+                          Icons.business_center
+                      ),
+                      FittedBox(
+                        child: Text('Projects'),
+                      )
+                    ],
                   ),
                   // const Icon(
                   //     Icons.people_alt
