@@ -11,15 +11,14 @@ class CustomUserTF extends StatelessWidget {
       this.textInputType = TextInputType.text,
       required this.hintText,
       required this.textEditingController,
-      required this.icon,
-      required this.validator,})
+      required this.icon, this.inputFormatters=const []})
       : super(key: key);
   final String hintText;
   final TextEditingController textEditingController;
   final Icon icon;
   final TextInputType textInputType;
+  final List<TextInputFormatter> inputFormatters;
 
-  final String?  Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +49,7 @@ class CustomUserTF extends StatelessWidget {
                 width: 206.w,
                 child: TextField(
                   controller: textEditingController,
+                  inputFormatters: inputFormatters,
                   style: kPoppinsLight300.copyWith(
                       fontSize: 14.sp, letterSpacing: 1),
                   keyboardType: textInputType,

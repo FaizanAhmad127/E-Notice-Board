@@ -219,12 +219,15 @@ class CoordinatorDrawerScreen extends StatelessWidget {
                                                     child: Row(
                                                       children: [
                                                         Expanded(
-                                                            child: FittedBox(
-                                                              fit:BoxFit.scaleDown,
-                                                              child: Text(
-                                                                "Occupation : ",
-                                                                style: kPoppinsMedium500.copyWith(
-                                                                    fontSize: 24.sp
+                                                            child: Align(
+                                                              alignment: Alignment.centerLeft,
+                                                              child: FittedBox(
+                                                                fit:BoxFit.scaleDown,
+                                                                child: Text(
+                                                                  "Your role : ",
+                                                                  style: kPoppinsMedium500.copyWith(
+                                                                      fontSize: 22.sp
+                                                                  ),
                                                                 ),
                                                               ),
                                                             )),
@@ -259,32 +262,32 @@ class CoordinatorDrawerScreen extends StatelessWidget {
                                                 child: Row(
                                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                                   children: [
-                                                    Align(
-                                                      alignment: Alignment.center,
-                                                      child: Container(
-                                                        height: 50.h,
-                                                        width: 100.w,
-                                                        child: TextButton(
-                                                          onPressed: () async{
-                                                            vm.setIsEditButtonClicked=false;
-                                                            await vm.getUserData();
-                                                          },
-                                                          style: ButtonStyle(
-                                                            backgroundColor:
-                                                            MaterialStateProperty.all(
-                                                                kPrimaryColor),
-                                                          ),
-                                                          child: FittedBox(
-                                                            child: Text(
-                                                              "Back",
-                                                              style:
-                                                              kPoppinsMedium500.copyWith(
-                                                                  color: kWhiteColor),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
+                                                    // Align(
+                                                    //   alignment: Alignment.center,
+                                                    //   child: Container(
+                                                    //     height: 50.h,
+                                                    //     width: 100.w,
+                                                    //     child: TextButton(
+                                                    //       onPressed: () async{
+                                                    //         vm.setIsEditButtonClicked=false;
+                                                    //         await vm.getUserData();
+                                                    //       },
+                                                    //       style: ButtonStyle(
+                                                    //         backgroundColor:
+                                                    //         MaterialStateProperty.all(
+                                                    //             kPrimaryColor),
+                                                    //       ),
+                                                    //       child: FittedBox(
+                                                    //         child: Text(
+                                                    //           "Back",
+                                                    //           style:
+                                                    //           kPoppinsMedium500.copyWith(
+                                                    //               color: kWhiteColor),
+                                                    //         ),
+                                                    //       ),
+                                                    //     ),
+                                                    //   ),
+                                                    // ),
                                                     Align(
                                                       alignment: Alignment.center,
                                                       child: Container(
@@ -295,7 +298,7 @@ class CoordinatorDrawerScreen extends StatelessWidget {
                                                             // vm.setIsEditButtonClicked=false;
                                                             // await vm.getUserData();
                                                             // NavigationService().navigatePush(context, ChangePasswordScreen());
-                                                            Navigator.pushReplacement(context, PageTransition(
+                                                            Navigator.push(context, PageTransition(
                                                                 duration: Duration(milliseconds: 500),
                                                                 type: PageTransitionType.leftToRightWithFade, child: ChangePasswordScreen(
                                                             )));

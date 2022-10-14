@@ -12,49 +12,42 @@ import '../../../../../core/models/idea/idea_model.dart';
 import 'coordinator_pending_screen_vm.dart';
 
 class CoordinatorPendingScreen extends StatelessWidget {
-   CoordinatorPendingScreen({Key? key}) : super(key: key);
+   const CoordinatorPendingScreen({Key? key,required this.vm}) : super(key: key);
+   final CoordinatorPendingScreenVM vm;
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(create: (context)=>CoordinatorPendingScreenVM(),
-    builder: (context,viewModel)
-      {
-        return Scaffold(
-          backgroundColor: kWhiteColor,
-          body:  Consumer<CoordinatorPendingScreenVM>(
-            builder: (context,vm,child)
-            {
-              return Column(
-            children: [
-              Expanded(child: CustomSearchField(
-                searchTextEditingController: vm.searchController,
-                hintText: "Search by Title",)),
-              Expanded(
-                  flex: 8,
-                  child:  vm.getSearchList.isEmpty?
-                      Center(child:Text("Nothing to show")):
-                      Padding(
-                          padding: EdgeInsets.only(top: 22.h),
-                          child: ListView.builder(
-                              itemCount: vm.getSearchList.length,
-                              itemBuilder: (context,index){
-                                IdeaModel idea=vm.getSearchList[index];
-                                return CustomPostCard(
-                                    button: AcceptedRejectedButton(
-                                      ideaId: vm.getIdeasList[index].ideaId,
-                                      color: kFinPenPressedColor,
-                                      text: "View Details",
-                                    ),
-                                    ideaModel: idea);
+    return Scaffold(
+        backgroundColor: kWhiteColor,
+        body:  Column(
+          children: [
+            Expanded(child: CustomSearchField(
+              searchTextEditingController: vm.searchController,
+              hintText: "Search by Title",)),
+            Expanded(
+              flex: 8,
+              child:  vm.getSearchList.isEmpty?
+              const Center(child:Text("Nothing to show")):
+              Padding(
+                  padding: EdgeInsets.only(top: 22.h),
+                  child: ListView.builder(
+                      itemCount: vm.getSearchList.length,
+                      itemBuilder: (context,index){
+                        IdeaModel idea=vm.getSearchList[index];
+                        return CustomPostCard(
+                            button: AcceptedRejectedButton(
+                              ideaId: vm.getIdeasList[index].ideaId,
+                              color: kFinPenPressedColor,
+                              text: "View Details",
 
-                              })
-                      )
-                   ,),
-            ],
-          );
-            },
-          )
-        );
-      },);
+                            ),
+                            ideaModel: idea);
+
+                      })
+              )
+              ,),
+          ],
+        )
+    );
   }
 }

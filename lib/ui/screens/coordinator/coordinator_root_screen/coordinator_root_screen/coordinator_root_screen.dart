@@ -47,14 +47,14 @@ class _CoordinatorRootScreenState extends State<CoordinatorRootScreen> with
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     setUserOnlineStatus("online");
     controller=TabController(length: 4, vsync: this);
   }
   @override
   void dispose() {
     super.dispose();
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
   }
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {

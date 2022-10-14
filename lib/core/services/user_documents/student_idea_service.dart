@@ -110,11 +110,11 @@ class StudentIdeaService {
     try {
       //first fetch the existing list of ideas
       await _firebaseFirestore.collection("teacher").doc(uid).get().
-      then((docSnap) {
+      then((docSnap) async{
         //now append the list with new idea id
         List<String> ideaList = List<String>.from(docSnap.get('ideaList'));
         ideaList.add(ideaId);
-        _firebaseFirestore.collection("teacher").doc(uid).set({
+        await _firebaseFirestore.collection("teacher").doc(uid).set({
           'ideaList': ideaList
         }, SetOptions(merge: true));
       });
@@ -122,6 +122,27 @@ class StudentIdeaService {
     catch (error) {
       _logger.e(
           "error at addIdeaIdToTeacher /StudentIdeaService.dart $error");
+    }
+    BotToast.closeAllLoading();
+  }
+  Future removeIdeaIdFromTeacher(String ideaId, String uid) async
+  {
+    BotToast.showLoading();
+    try {
+      //first fetch the existing list of ideas
+      await _firebaseFirestore.collection("teacher").doc(uid).get().
+      then((docSnap) async{
+        //now append the list with new idea id
+        List<String> ideaList = List<String>.from(docSnap.get('ideaList'));
+        ideaList.remove(ideaId);
+        await _firebaseFirestore.collection("teacher").doc(uid).set({
+          'ideaList': ideaList
+        }, SetOptions(merge: true));
+      });
+    }
+    catch (error) {
+      _logger.e(
+          "error at removeIdeaIdFromTeacher /StudentIdeaService.dart $error");
     }
     BotToast.closeAllLoading();
   }
@@ -243,5 +264,25 @@ class StudentIdeaService {
         return listOfIdeas;
   }
 
+  Future editIdeaTitle(String title,String ideaId)async{
+    await _firebaseFirestore.collection("post").doc(ideaId).update({
+      "ideaTitle":title,
+    });
+  }
+  Future changeSupervisor(String ideaId, String supervisorUid)async
+  {
+    try
+    {
+      await _firebaseFirestore.collection("post").doc(ideaId).update({
+        "acceptedBy":supervisorUid,
+      });
+    }
+    catch(error){
+      _logger.e(
+          "error at changeSupervisor/StudentIdeaService.dart $error");
+    }
 
+  }
 }
+
+

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:notice_board/core/constants/strings.dart';
 import 'package:notice_board/core/constants/text_styles.dart';
 import 'package:notice_board/core/models/user_authentication/user_signup_model.dart';
 import 'package:notice_board/core/services/navigation_service.dart';
@@ -40,8 +41,9 @@ class CoordinatorStudentListScreen extends StatelessWidget {
                           child: Stack(
                             children: [
                               student.profilePicture==""? ClipOval(
-                                child: Container(
-                                  color: Colors.grey,
+                                child: CachedNetworkImage(
+                                  imageUrl: dummyPersonimage,
+                                  fit: BoxFit.fill,
                                   height: 50.h,
                                   width: 50.h,
                                 ),
@@ -127,7 +129,6 @@ class CoordinatorStudentListScreen extends StatelessWidget {
               builder: (context, vm, child) {
                 return Column(
                   children: [
-
                     // Search box
                     CustomSearchField(
                         searchTextEditingController: vm.searchController,

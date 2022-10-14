@@ -6,6 +6,7 @@ import 'package:notice_board/core/constants/text_styles.dart';
 import 'package:notice_board/ui/screens/profile_screen/student_profile_screen_vm.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/constants/strings.dart';
 import '../../../core/models/idea/idea_model.dart';
 import '../../../core/models/user_authentication/user_signup_model.dart';
 import '../../custom_widgets/custom_post_card/custom_post_card.dart';
@@ -15,7 +16,7 @@ class StudentProfileScreen extends StatelessWidget {
   StudentProfileScreen({Key? key,required this.userSignupModel}) : super(key: key);
 
   UserSignupModel userSignupModel;
-  String dummyImageUrl="https://uxwing.com/wp-content/themes/uxwing/download/12-peoples-avatars/user-profile.png";
+  String dummyImageUrl=dummyPersonimage;
   ImageProvider buildImage(String? imageUrl){
     if(imageUrl!=null && imageUrl.isNotEmpty)
       {
@@ -41,6 +42,16 @@ class StudentProfileScreen extends StatelessWidget {
           {
             return Scaffold(
               backgroundColor: kWhiteColor,
+              appBar:  AppBar(
+                backgroundColor: kWhiteColor,
+                elevation: 0,
+                leading: GestureDetector(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child:  Icon(Icons.arrow_back,size: 30,color: kBlackColor,)),
+                actions: [Center(child: Text('Delete',style: kPoppinsMedium500.copyWith(color: kRejectedColor),)),SizedBox(width: 10.w,)],
+              ),
               body: Padding(
                 padding: EdgeInsets.only(
                   left: 0.05.sw,
@@ -50,15 +61,7 @@ class StudentProfileScreen extends StatelessWidget {
                 ),
                 child: ListView(
                   children: [
-                    Row(
-                      children: [
-                        GestureDetector(
-                            onTap: (){
-                              Navigator.pop(context);
-                            },
-                            child: const Icon(Icons.arrow_back,size: 30,))
-                      ],
-                    ),
+
                     Center(
                       child: Container(
                         height: 0.2.sh,

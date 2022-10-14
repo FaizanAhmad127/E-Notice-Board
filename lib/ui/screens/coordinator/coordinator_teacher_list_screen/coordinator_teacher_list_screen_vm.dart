@@ -30,7 +30,7 @@ class CoordinatorTeacherListScreenVM extends ChangeNotifier
       await _userProfileService.getAllTeachers().then((listOfTeachers) {
         if(isDispose==false) {
           setListOfTeachers = listOfTeachers;
-         // setSearchList = listOfTeachers;
+          setSearchList = listOfTeachers;
         }
       });
     }
@@ -48,7 +48,7 @@ class CoordinatorTeacherListScreenVM extends ChangeNotifier
   {
     setSearchList=searchText.isNotEmpty?
     List<UserSignupModel>.from(listOfTeachers.where((element) => element.fullName!.toLowerCase().contains(searchText.toLowerCase())))
-        :[];//listOfTeachers
+        :listOfTeachers;
   }
   set setSearchList(List<UserSignupModel> ideas)
   {

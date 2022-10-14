@@ -92,7 +92,8 @@ class CoordinatorHomeScreen extends StatelessWidget {
           body: SingleChildScrollView(
             child: Consumer<CoordinatorHomeScreenVM>(
               builder: (context,vm,child)
-              { return Column(
+              {
+                return Column(
                 children: [
 
                   // Search box
@@ -142,11 +143,13 @@ class AcceptedRejectedButton extends StatelessWidget {
   final String text;
   final Color color;
   final String ideaId;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        NavigationService().navigatePush(context, ViewDetailsScreen(ideaId: ideaId));
+      onTap: ()async{
+        await NavigationService().navigatePush(context, ViewDetailsScreen(ideaId: ideaId,currentUser:'coordinator'));
+
       },
       child: SizedBox(
           height: 35.h,

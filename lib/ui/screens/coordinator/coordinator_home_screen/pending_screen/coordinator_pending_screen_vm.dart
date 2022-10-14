@@ -40,11 +40,12 @@ class CoordinatorPendingScreenVM extends ChangeNotifier
 
         }
         setIdeasList = _ideasList;
-            if(isFirstTime==true) // to load the listview with all ideas
-                {
-              setSearchList=_ideasList;
-              isFirstTime=false;
-            }
+            setSearchList=_ideasList;
+            // if(isFirstTime==true) // to load the listview with all ideas
+            //     {
+            //   setSearchList=_ideasList;
+            //   isFirstTime=false;
+            // }
       });
     }
     catch(error)

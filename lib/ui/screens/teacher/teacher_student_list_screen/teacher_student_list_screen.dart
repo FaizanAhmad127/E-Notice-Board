@@ -5,6 +5,7 @@ import 'package:notice_board/core/constants/text_styles.dart';
 import 'package:notice_board/core/models/user_authentication/user_signup_model.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/constants/colors.dart';
+import '../../../../core/constants/strings.dart';
 import '../../../../core/services/navigation_service.dart';
 import '../../../custom_widgets/custom_search_field/custom_search_field.dart';
 import '../../profile_screen/student_profile_screen.dart';
@@ -39,8 +40,9 @@ class TeacherStudentListScreen extends StatelessWidget {
                             children: [
                               student.profilePicture == ""
                                   ? ClipOval(
-                                      child: Container(
-                                        color: Colors.grey,
+                                      child: CachedNetworkImage(
+                                        imageUrl: dummyPersonimage,
+                                        fit: BoxFit.fill,
                                         height: 50.h,
                                         width: 50.h,
                                       ),

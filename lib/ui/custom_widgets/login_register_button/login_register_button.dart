@@ -7,10 +7,10 @@ import 'package:notice_board/core/constants/text_styles.dart';
 class LoginRegisterButton extends StatelessWidget {
   const LoginRegisterButton({
     Key? key,
-    required this.onPressed,
+     this.onPressed,
     required this.buttonText,
   }) : super(key: key);
-  final void Function() onPressed;
+  final void Function()? onPressed;
   final String buttonText;
   @override
   Widget build(BuildContext context) {

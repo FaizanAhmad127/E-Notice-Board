@@ -19,7 +19,7 @@ class CoordinatorStudentListScreenVM extends ChangeNotifier
   {
     getListOfStudents();
     _searchController.addListener(() {
-      searchTeachers(_searchController.text);
+      searchStudents(_searchController.text);
     });
   }
 
@@ -31,7 +31,7 @@ class CoordinatorStudentListScreenVM extends ChangeNotifier
         if(isDispose==false)
           {
             setListOfStudents=listOfStudents;
-            //setSearchList=listOfStudents;
+            setSearchList=listOfStudents;
           }
 
       });
@@ -46,15 +46,15 @@ class CoordinatorStudentListScreenVM extends ChangeNotifier
   List<UserSignupModel> get listOfStudents => _listOfStudents;
   List<UserSignupModel> get getSearchList => _searchList;
 
-  void searchTeachers(String searchText)
+  void searchStudents(String searchText)
   {
     setSearchList=searchText.isNotEmpty?
     List<UserSignupModel>.from(listOfStudents.where((element) => element.fullName!.toLowerCase().contains(searchText.toLowerCase())))
-        :[];
+        :listOfStudents;
   }
-  set setSearchList(List<UserSignupModel> ideas)
+  set setSearchList(List<UserSignupModel> userList)
   {
-    _searchList=ideas;
+    _searchList=userList;
     notifyListeners();
   }
 

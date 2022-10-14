@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:notice_board/core/constants/colors.dart';
 import 'package:notice_board/core/constants/text_styles.dart';
@@ -100,29 +101,17 @@ final formKey =GlobalKey<FormState>();
                           )),
                         Expanded(
                           child: CustomUserTF(
-                            textInputType: TextInputType.number,
+                            textInputType: const TextInputType.numberWithOptions(),
                             textEditingController: uniIdTextEditingController,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                            ], // Only numbers can be entered
                             hintText: "Enter University ID",
                             icon: Icon(
                               Icons.account_circle,
                               color: kWhiteColor,
                             ),
-                             validator: (value) {
-                              if(value!.isEmpty){
-                                return 'Invalid id';
-                              }
-                              else if(value.length>7)
-                                {
-                                  return 'Enter 6 digits only';
-                                }
-                              else if(value.contains(' '))
-                                {
-                                  return 'Remove spaces';
-                                }
-                              //else if(value.cont)
 
-                              return null;
-                            },
                           ),
                         ),
                         const Expanded(
@@ -131,17 +120,15 @@ final formKey =GlobalKey<FormState>();
                           child: CustomUserTF(
                             textInputType: TextInputType.text,
                             textEditingController: fullNameTextEditingController,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(RegExp(r'[A-Z ]',caseSensitive: false)),
+                            ],
                             hintText: "Enter Full Name",
                             icon: Icon(
                               Icons.account_circle,
                               color: kWhiteColor,
                             ),
-                              validator: (value) {
-                              if(value!.isEmpty){
-                                return 'Invalid Name';
-                              }
-                              return null;
-                            },
+
                           ),
                         ),
                         const Expanded(

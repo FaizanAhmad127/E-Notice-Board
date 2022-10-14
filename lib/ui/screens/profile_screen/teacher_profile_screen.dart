@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:notice_board/core/constants/colors.dart';
+import 'package:notice_board/core/constants/strings.dart';
 import 'package:notice_board/core/constants/text_styles.dart';
 import 'package:notice_board/ui/screens/profile_screen/student_profile_screen_vm.dart';
 import 'package:notice_board/ui/screens/profile_screen/teacher_profile_screen_vm.dart';
@@ -16,7 +17,7 @@ class TeacherProfileScreen extends StatelessWidget {
   TeacherProfileScreen({Key? key,required this.userSignupModel}) : super(key: key);
 
   UserSignupModel userSignupModel;
-  String dummyImageUrl="https://uxwing.com/wp-content/themes/uxwing/download/12-peoples-avatars/user-profile.png";
+  String dummyImageUrl=dummyPersonimage;
   ImageProvider buildImage(String? imageUrl){
     if(imageUrl!=null && imageUrl.isNotEmpty)
     {
@@ -42,6 +43,16 @@ class TeacherProfileScreen extends StatelessWidget {
           {
             return Scaffold(
               backgroundColor: kWhiteColor,
+              appBar:  AppBar(
+                backgroundColor: kWhiteColor,
+                elevation: 0,
+                leading: GestureDetector(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child:  Icon(Icons.arrow_back,size: 30,color: kBlackColor,)),
+                actions: [Center(child: Text('Delete',style: kPoppinsMedium500.copyWith(color: kRejectedColor),)),SizedBox(width: 10.w,)],
+              ),
               body: Padding(
                 padding: EdgeInsets.only(
                   left: 0.05.sw,
@@ -51,15 +62,6 @@ class TeacherProfileScreen extends StatelessWidget {
                 ),
                 child: ListView(
                   children: [
-                    Row(
-                      children: [
-                        GestureDetector(
-                            onTap: (){
-                              Navigator.pop(context);
-                            },
-                            child: const Icon(Icons.arrow_back,size: 30,))
-                      ],
-                    ),
                     Center(
                       child: Container(
                         height: 0.2.sh,

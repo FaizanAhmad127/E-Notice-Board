@@ -10,6 +10,8 @@ import 'package:notice_board/core/services/file_management/file_download_open_se
 import 'package:notice_board/core/services/user_documents/student_idea_service.dart';
 import 'package:notice_board/core/services/user_documents/user_profile_service.dart';
 
+import '../../../core/services/chat/chat_service.dart';
+
 class ViewDetailsScreenVM extends ChangeNotifier{
 
   String ideaId;
@@ -17,14 +19,18 @@ class ViewDetailsScreenVM extends ChangeNotifier{
   final UserProfileService _userProfileService=GetIt.I.get<UserProfileService>();
   final FileDownloadOpenService _fileDownloadOpenService=GetIt.I.get<FileDownloadOpenService>();
   IdeaModel? _ideaModel;
+  final ChatService _chatService=GetIt.I.get<ChatService>();
   UserSignupModel? _userSignupModel;
   List<UserSignupModel> _listOfStudents=[];
+  List<UserSignupModel> listOfTeachers=[];
   List<FileModel> _listOfFiles=[];
 
   final Logger _logger=Logger();
   ViewDetailsScreenVM(this.ideaId)
   {
       getIdea();
+      getAllTeacher();
+
   }
 
   Future getIdea()async
@@ -78,6 +84,39 @@ class ViewDetailsScreenVM extends ChangeNotifier{
 
   }
 
+  Future setTitle(String title)async
+  {
+    await _studentIdeaService.editIdeaTitle(title, ideaId);
+    await getIdea();
+  }
+
+  Future getAllTeacher()async
+  {
+    listOfTeachers=await _userProfileService.getAllTeachers();
+  }
+  Future changeSupervisor(String newSupervisorId)async
+  {
+    await _studentIdeaService.changeSupervisor(ideaId, newSupervisorId);
+    await _studentIdeaService.removeIdeaIdFromTeacher(ideaId, userSignupModel?.uid??'');
+    await _studentIdeaService.addIdeaIdToTeacher(ideaId, newSupervisorId);
+
+    List<String> studentUids=listOfStudents.map((e) => e.uid??'').toList();
+    await Future.forEach(studentUids, (stdUid) async{
+
+      bool isChatExist=await _chatService.isChatAlreadyExist(stdUid.toString(),newSupervisorId);
+      if(!isChatExist)
+      {
+        await _chatService.setChatDocument(newSupervisorId,
+            stdUid.toString(), "teacher", "student");
+      }
+
+
+    });
+    resetListOfFiles();
+    resetListOfStudent();
+    await getIdea();
+  }
+
   IdeaModel? get ideaModel=>_ideaModel;
   UserSignupModel? get userSignupModel=>_userSignupModel;
   List<UserSignupModel> get listOfStudents=>_listOfStudents;
@@ -92,6 +131,14 @@ class ViewDetailsScreenVM extends ChangeNotifier{
   {
     _userSignupModel=user;
     notifyListeners();
+  }
+  void resetListOfStudent()
+  {
+    _listOfStudents.clear();
+  }
+  void resetListOfFiles()
+  {
+    _listOfFiles.clear();
   }
   set setListOfStudents(UserSignupModel students)
   {

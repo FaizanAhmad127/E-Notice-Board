@@ -188,4 +188,26 @@ class ChatService {
     }
   }
 
+  Future<bool> isChatAlreadyExist(String uid1,String uid2)async
+  {
+    bool exist=false;
+    try
+    {
+      await _firestore.collection("chat").get().then((querySnap) {
+        for (var queryDoc in querySnap.docs) {
+          final chatModel=ChatModel.fromJson(queryDoc.data());
+          if((chatModel.user1Uid==uid1 && chatModel.user2Uid==uid2) || (chatModel.user1Uid==uid2 && chatModel.user2Uid==uid1))
+            {
+               exist=true;
+               break;
+            }
+
+        }
+      });
+    }
+    catch (error) {
+      _logger.e("error at isChatAlreadyExist/ ChatService.dart $error");
+    }
+    return exist;
+  }
 }

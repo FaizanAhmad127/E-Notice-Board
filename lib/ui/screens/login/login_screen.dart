@@ -72,12 +72,6 @@ class LoginScreen extends StatelessWidget {
                                 Icons.account_circle,
                                 color: kWhiteColor,
                               ),
-                                validator: (value) {
-                              if(value!.isEmpty){
-                                return 'Invalid Name';
-                              }
-                              return null;
-                            },
                             ),
                           ),
                           SizedBox(

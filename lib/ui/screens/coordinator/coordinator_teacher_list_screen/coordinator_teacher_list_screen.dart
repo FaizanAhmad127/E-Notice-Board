@@ -9,6 +9,7 @@ import 'package:notice_board/ui/screens/student/student_teacherList_screen/stude
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/colors.dart';
+import '../../../../core/constants/strings.dart';
 import '../../../../core/services/navigation_service.dart';
 import '../../../custom_widgets/custom_search_field/custom_search_field.dart';
 
@@ -42,8 +43,9 @@ class CoordinatorTeacherListScreen extends StatelessWidget {
                           child: Stack(
                             children: [
                               teacher.profilePicture==""? ClipOval(
-                                child: Container(
-                                  color: Colors.grey,
+                                child:  CachedNetworkImage(
+                                  imageUrl: dummyPersonimage,
+                                  fit: BoxFit.fill,
                                   height: 50.h,
                                   width: 50.h,
                                 ),

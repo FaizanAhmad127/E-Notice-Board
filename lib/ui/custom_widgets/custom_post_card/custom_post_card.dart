@@ -8,6 +8,7 @@ import 'package:notice_board/core/services/date_time_service.dart';
 import 'package:notice_board/ui/custom_widgets/custom_post_card/custom_post_card_vm.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/constants/strings.dart';
 import '../../screens/student/student_home_screen/student_home_screen.dart';
 
 class CustomPostCard extends StatelessWidget {
@@ -29,7 +30,7 @@ class CustomPostCard extends StatelessWidget {
               // height: 150.h,
               child: Card(
                 margin: const EdgeInsets.symmetric(vertical: 7),
-                elevation: 5,
+                elevation: 1,
                 color: kPostBackgroundColor,
                 child: Padding(
                   padding: EdgeInsets.only(top: 10.h, bottom: 5.h, left: 15.w),
@@ -88,10 +89,11 @@ class CustomPostCard extends StatelessWidget {
                                   alignment: Alignment.topLeft,
                                   child: vm.pictureUrl.isEmpty
                                       ? ClipOval(
-                                          child: Container(
-                                            color: Colors.grey,
-                                            height: 40.h,
-                                            width: 40.h,
+                                          child:  CachedNetworkImage(
+                                            imageUrl: dummyPersonimage,
+                                            fit: BoxFit.fill,
+                                            height: 50.h,
+                                            width: 50.h,
                                           ),
                                         )
                                       : ClipOval(
@@ -108,27 +110,30 @@ class CustomPostCard extends StatelessWidget {
                               Align(
                                 alignment: Alignment.topLeft,
                                 child: FittedBox(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        vm.getUserName,
-                                        style: kPoppinsMedium500.copyWith(
-                                            fontSize: 17.sp),
-                                      ), Text(
-                                        vm.getUserID,
-                                        style: kPoppinsMedium500.copyWith(
-                                            fontSize: 17.sp),
-                                      ),
-                                      Text(
-                                        _dateTimeText,
-                                        style: kPoppinsLight300.copyWith(
-                                          fontSize: 15.sp,
-                                          color: kDateColor,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(bottom: 5.h),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          vm.getUserName,
+                                          style: kPoppinsMedium500.copyWith(
+                                              fontSize: 17.sp),
+                                        ), Text(
+                                          vm.getUserID,
+                                          style: kPoppinsRegular400.copyWith(
+                                              fontSize: 15.sp),
                                         ),
-                                      )
-                                    ],
+                                        Text(
+                                          _dateTimeText,
+                                          style: kPoppinsLight300.copyWith(
+                                            fontSize: 12.sp,
+                                            color: kDateColor,
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
                               )
