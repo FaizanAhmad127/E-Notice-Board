@@ -42,6 +42,7 @@ class CoordinatorStudentListScreenVM extends ChangeNotifier
 
   }
 
+
   TextEditingController get searchController=>_searchController;
   List<UserSignupModel> get listOfStudents => _listOfStudents;
   List<UserSignupModel> get getSearchList => _searchList;

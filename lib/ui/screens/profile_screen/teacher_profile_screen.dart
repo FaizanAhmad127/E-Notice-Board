@@ -14,44 +14,49 @@ import '../../custom_widgets/custom_post_card/custom_post_card.dart';
 import '../coordinator/coordinator_home_screen/coordinator_home_screen.dart';
 
 class TeacherProfileScreen extends StatelessWidget {
-  TeacherProfileScreen({Key? key,required this.userSignupModel}) : super(key: key);
+  TeacherProfileScreen(
+      {Key? key, required this.userSignupModel, this.calledByUser = ''})
+      : super(key: key);
 
   UserSignupModel userSignupModel;
-  String dummyImageUrl=dummyPersonimage;
-  ImageProvider buildImage(String? imageUrl){
-    if(imageUrl!=null && imageUrl.isNotEmpty)
-    {
+  String dummyImageUrl = dummyPersonimage;
+  final String calledByUser;
+
+  ImageProvider buildImage(String? imageUrl) {
+    if (imageUrl != null && imageUrl.isNotEmpty) {
       return NetworkImage(
-          userSignupModel.profilePicture??dummyImageUrl
+          userSignupModel.profilePicture ?? dummyImageUrl
       );
     }
-    else
-    {
-      return  NetworkImage(
+    else {
+      return NetworkImage(
           dummyImageUrl
       );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context)=>TeacherProfileScreenVm(userSignupModel),
-      builder: (context,vm)
-      {
+      create: (context) => TeacherProfileScreenVm(userSignupModel),
+      builder: (context, vm) {
         return Consumer<TeacherProfileScreenVm>(
-          builder: (context,vm,child)
-          {
+          builder: (context, vm, child) {
             return Scaffold(
               backgroundColor: kWhiteColor,
-              appBar:  AppBar(
+              appBar: AppBar(
                 backgroundColor: kWhiteColor,
                 elevation: 0,
                 leading: GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       Navigator.pop(context);
                     },
-                    child:  Icon(Icons.arrow_back,size: 30,color: kBlackColor,)),
-                actions: [Center(child: Text('Delete',style: kPoppinsMedium500.copyWith(color: kRejectedColor),)),SizedBox(width: 10.w,)],
+                    child: Icon(
+                      Icons.arrow_back, size: 30, color: kBlackColor,)),
+                // actions: calledByUser == 'coordinator'?[Center(child: Text(
+                //   'Delete',
+                //   style: kPoppinsMedium500.copyWith(color: kRejectedColor),)),
+                // SizedBox(width: 10.w,)]:[],
               ),
               body: Padding(
                 padding: EdgeInsets.only(
@@ -70,7 +75,8 @@ class TeacherProfileScreen extends StatelessWidget {
                             shape: BoxShape.circle,
                             image: DecorationImage(
                                 fit: BoxFit.fill,
-                                image: buildImage(userSignupModel.profilePicture)
+                                image: buildImage(
+                                    userSignupModel.profilePicture)
                             )
                         ),
                       ),
@@ -118,10 +124,10 @@ class TeacherProfileScreen extends StatelessWidget {
                     SizedBox(height: 15.h,),
                     SizedBox(
                         height: 0.52.sh,
-                        child: vm.getIdeasList.isNotEmpty?ListView.builder(
+                        child: vm.getIdeasList.isNotEmpty ? ListView.builder(
                             itemCount: vm.getIdeasList.length,
-                            itemBuilder: (context,index){
-                              IdeaModel idea=vm.getIdeasList[index];
+                            itemBuilder: (context, index) {
+                              IdeaModel idea = vm.getIdeasList[index];
                               return CustomPostCard(
                                 button: AcceptedRejectedButton(
                                   ideaId: vm.getIdeasList[index].ideaId,
@@ -130,7 +136,7 @@ class TeacherProfileScreen extends StatelessWidget {
                                 ),
                                 ideaModel: idea,
                               );
-                            }): Text('No project available')
+                            }) : Text('No project available')
                     ),
 
                   ],

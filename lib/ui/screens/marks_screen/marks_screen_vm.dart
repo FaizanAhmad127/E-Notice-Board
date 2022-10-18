@@ -135,7 +135,6 @@ bool isresultFinaLized = true;
               marksModel.uid, 'student').then((user) {
             if(userType=='student')
             {
-
               if(thisUser?.uid==user?.uid)
               {
                 listOfAllMarks.add(marksModel);

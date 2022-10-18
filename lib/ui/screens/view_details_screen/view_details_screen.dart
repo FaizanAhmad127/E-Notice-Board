@@ -165,11 +165,31 @@ class _ViewDetailsScreenState extends State<ViewDetailsScreen> {
                       padding: EdgeInsets.only(right: 10),
                       child: Row(
                         children: [
-                          Text('Delete',
-                              style: kPoppinsMedium500.copyWith(
-                                  color: kRejectedColor,
-                                  fontSize: 15
-                              )),
+                          GestureDetector(
+                            onTap: ()async{
+                              await showModalBottomSheet(context: context, builder: (context)
+                              {
+                                return BottomSheetWidget(
+                                  title: 'Are you sure?',
+                                  bottomChild: FormSubmitButtonsWidget(
+                                    confirmButtonOnPress: ()async{
+                                      await vm.deleteIdea().whenComplete(() => Navigator.pop(context));
+                                      Navigator.pop(context);
+
+                                    },
+                                    confirmButtonText: 'Yes',
+                                    dangerButtonText: 'No, cancel the process',
+                                    dangerButtonOnPress: ()=>Navigator.pop(context),
+                                  ),
+                                );
+                              });
+                            },
+                            child: Text('Delete',
+                                style: kPoppinsMedium500.copyWith(
+                                    color: kRejectedColor,
+                                    fontSize: 15
+                                )),
+                          ),
                         ],
                       ),
                     ),

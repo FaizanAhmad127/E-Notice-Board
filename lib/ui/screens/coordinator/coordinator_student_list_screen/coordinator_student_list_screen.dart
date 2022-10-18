@@ -21,7 +21,7 @@ class CoordinatorStudentListScreen extends StatelessWidget {
       onTap: ()
       {
         NavigationService().navigatePush(context,
-            StudentProfileScreen( userSignupModel: student));
+            StudentProfileScreen( userSignupModel: student,calledByUser: 'coordinator',));
       },
       child: SizedBox(
           width: double.infinity,

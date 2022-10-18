@@ -4,9 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:logger/logger.dart';
 import 'package:notice_board/core/models/idea/idea_model.dart';
 import 'package:notice_board/core/models/user_authentication/user_signup_model.dart';
+import 'package:notice_board/core/services/user_documents/user_profile_service.dart';
+import 'package:notice_board/main.dart';
 
 class StudentProfileScreenVm extends ChangeNotifier{
   final FirebaseFirestore _firebaseFirestore=FirebaseFirestore.instance;
+  final _userProfileService =locator.get<UserProfileService>();
   final Logger _logger=Logger();
   List<IdeaModel> _ideasList=[];
   bool isFirstTime=true;
@@ -53,6 +56,12 @@ class StudentProfileScreenVm extends ChangeNotifier{
       _logger.e("error at listOfIdeas /StudentHomeScreenVM.dart $error");
 
     }
+  }
+
+
+  Future deleteStudent() async
+  {
+    await _userProfileService.deleteStudent(thisUser.uid??'');
   }
 
   List<IdeaModel> get getIdeasList=>_ideasList;

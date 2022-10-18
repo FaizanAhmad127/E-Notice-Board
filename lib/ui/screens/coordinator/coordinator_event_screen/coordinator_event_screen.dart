@@ -1,6 +1,5 @@
-
-
 import 'package:bot_toast/bot_toast.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -21,11 +20,10 @@ import '../../../custom_widgets/custom_search_field/custom_search_field.dart';
 class CoordinatorEventScreen extends StatelessWidget {
   const CoordinatorEventScreen({Key? key}) : super(key: key);
 
-
-
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: DefaultTabController(
+    return SafeArea(
+        child: DefaultTabController(
       length: 2,
       child: Scaffold(
         //resizeToAvoidBottomInset: false,
@@ -34,61 +32,50 @@ class CoordinatorEventScreen extends StatelessWidget {
           backgroundColor: kPrimaryColor,
           title: Text('Notice'),
           bottom: PreferredSize(
-            preferredSize: Size(1.sw,
-              0.03.sh,),
+            preferredSize: Size(
+              1.sw,
+              0.03.sh,
+            ),
             child: TabBar(
-                labelStyle: kPoppinsRegular400.copyWith(
-                  fontSize: 17
-                ),
-                unselectedLabelStyle:  kPoppinsRegular400.copyWith(
-                    fontSize: 15
-                ),
+                labelStyle: kPoppinsRegular400.copyWith(fontSize: 17),
+                unselectedLabelStyle: kPoppinsRegular400.copyWith(fontSize: 15),
                 indicatorColor: kAcceptedColor,
                 tabs: [
-              Text('Create Notice '),
-              Text('View Notice'),
-            ]),
+                  Text('Create Notice '),
+                  Text('View Notice'),
+                ]),
           ),
         ),
         body: ChangeNotifierProvider(
-          create: (context)=>CoordinatorEventScreenVM(),
-          builder: (context,vm)
-          {
-            return Consumer<CoordinatorEventScreenVM>(builder: (context,vm,child)
-            {
+          create: (context) => CoordinatorEventScreenVM(),
+          builder: (context, vm) {
+            return Consumer<CoordinatorEventScreenVM>(
+                builder: (context, vm, child) {
               return TabBarView(children: [
-
                 ///
                 /// Create Event
                 ///
-               Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(
-                    vertical: 0.05.sh,
-                    horizontal: 0.03.sw
-                  ),
+                      vertical: 0.05.sh, horizontal: 0.03.sw),
                   child: SingleChildScrollView(
-
                     child: Column(
                       children: [
                         TextField(
                           controller: vm.titleContrller,
                           decoration: InputDecoration(
-                            hintText: 'Enter title here',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide(
-                                color: kPrimaryColor,
-                                width: 0
-                              )
-                            ),
-                            label: Text('Title'),
-                            labelStyle: kPoppinsRegular400.copyWith(
-                              color: kPrimaryColor,
-                              fontSize: 15
-                            )
-                          ),
+                              hintText: 'Enter title here',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                      color: kPrimaryColor, width: 0)),
+                              label: Text('Title'),
+                              labelStyle: kPoppinsRegular400.copyWith(
+                                  color: kPrimaryColor, fontSize: 15)),
                         ),
-                        SizedBox(height: 0.05.sh,),
+                        SizedBox(
+                          height: 0.05.sh,
+                        ),
                         TextField(
                           controller: vm.addressController,
                           decoration: InputDecoration(
@@ -96,18 +83,14 @@ class CoordinatorEventScreen extends StatelessWidget {
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(5),
                                   borderSide: BorderSide(
-                                      color: kPrimaryColor,
-                                      width: 0
-                                  )
-                              ),
+                                      color: kPrimaryColor, width: 0)),
                               label: Text('Address or Room'),
                               labelStyle: kPoppinsRegular400.copyWith(
-                                  color: kPrimaryColor,
-                                  fontSize: 15
-                              )
-                          ),
+                                  color: kPrimaryColor, fontSize: 15)),
                         ),
-                        SizedBox(height: 0.05.sh,),
+                        SizedBox(
+                          height: 0.05.sh,
+                        ),
                         TextField(
                           controller: vm.descriptionController,
                           maxLines: 5,
@@ -116,243 +99,290 @@ class CoordinatorEventScreen extends StatelessWidget {
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(5),
                                   borderSide: BorderSide(
-                                      color: kPrimaryColor,
-                                      width: 0
-                                  )
-                              ),
-                              label: Text('Description',
+                                      color: kPrimaryColor, width: 0)),
+                              label: Text(
+                                'Description',
                               ),
                               labelStyle: kPoppinsRegular400.copyWith(
-                                  color: kPrimaryColor,
-                                  fontSize: 15
-                              )
-                          ),
+                                  color: kPrimaryColor, fontSize: 15)),
                         ),
-                        SizedBox(height: 0.03.sh,),
+                        SizedBox(
+                          height: 0.03.sh,
+                        ),
                         Row(
                           children: [
                             Expanded(
                               child: GestureDetector(
-                                onTap: ()
-                                {
-                                  DatePicker.showDateTimePicker(context, showTitleActions: true,
+                                onTap: () {
+                                  DatePicker.showDateTimePicker(context,
+                                      showTitleActions: true,
                                       onChanged: (date) {
-                                        // print('change $date in time zone ' +
-                                        //     date.timeZoneOffset.inHours.toString());
-                                      }, onConfirm: (date) {
-                                        vm.setPickedDateTime=date;
-                                      }, currentTime: DateTime.now());
+                                    // print('change $date in time zone ' +
+                                    //     date.timeZoneOffset.inHours.toString());
+                                  }, onConfirm: (date) {
+                                    vm.setPickedDateTime = date;
+                                  }, currentTime: DateTime.now());
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    color: kPrimaryColor,
-                                    borderRadius: BorderRadius.circular(10)
-                                  ),
+                                      color: kPrimaryColor,
+                                      borderRadius: BorderRadius.circular(10)),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Expanded(child: Icon(FontAwesomeIcons.clock,
-                                      color: kAcceptedColor,)),
-                                      SizedBox(width: 0.01.sw,),
+                                      Expanded(
+                                          child: Icon(
+                                        FontAwesomeIcons.clock,
+                                        color: kAcceptedColor,
+                                      )),
+                                      SizedBox(
+                                        width: 0.01.sw,
+                                      ),
                                       Expanded(
                                           flex: 2,
                                           child: FittedBox(
-                                            child: Text('Pick date & time',
-                                      style: kPoppinsRegular400.copyWith(
-                                        color: kWhiteColor
-                                      ),),
+                                            child: Text(
+                                              'Pick date & time',
+                                              style: kPoppinsRegular400
+                                                  .copyWith(color: kWhiteColor),
+                                            ),
                                           )),
                                     ],
                                   ),
                                 ),
                               ),
                             ),
-                            
-                            SizedBox(width: 0.05.sw,),
+                            SizedBox(
+                              width: 0.05.sw,
+                            ),
                             Expanded(
-                               // flex: 2,
-                                child: Text(vm.getPickedDateTime.isEmpty?'Date/Time will appear here..'
-                                    :vm.getPickedDateTime))
+                                // flex: 2,
+                                child: Text(vm.getPickedDateTime.isEmpty
+                                    ? 'Date/Time will appear here..'
+                                    : vm.getPickedDateTime))
                           ],
                         ),
-                           SizedBox(height: 0.1.sh,),
-                    /* ! vm.isNoticeOpen?  Center(
+                        SizedBox(
+                          height: 0.1.sh,
+                        ),
+                        /* ! vm.isNoticeOpen?  Center(
                           child: NoticeRegisterButton(
                               onPressed: (){
                                 vm.showStudentforNotice(true);
                               }, buttonText: 'Create Notice Specific'),
                         ): */
-                     Column(children: [
-                       CustomSearchField(searchTextEditingController: vm.searchController,
-                         hintText: "Search by Project Title",),
-                       SizedBox(
-                         height: 16.h,
-                       ),
-           /* FittedBox(
+                        Column(
+                          children: [
+                            CustomSearchField(
+                              searchTextEditingController: vm.searchController,
+                              hintText: "Search by Project Title",
+                            ),
+                            SizedBox(
+                              height: 16.h,
+                            ),
+                            /* FittedBox(
             child: Text('Select Project to send Specific notice',
             style: kPoppinsLight300.copyWith(
             color: kDateColor,
             fontSize: 15.sp
             ),),
             ),*/
-                       Padding(
-                         padding: EdgeInsets.only(left: 40,right: 40),
-                         child: GroupDropDown(
-                           vm: vm,
-                           selectedList: (List<String> selectedIdeaList){
-                             vm.setSelectedIdeasList=selectedIdeaList;
-                           },
-                         ),
-                       ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 40, right: 40),
+                              child: GroupDropDown(
+                                vm: vm,
+                                selectedList: (List<String> selectedIdeaList) {
+                                  vm.setSelectedIdeasList = selectedIdeaList;
+                                },
+                              ),
+                            ),
 
-                       // Center(
-                       //   child: NoticeRegisterButton(
-                       //       onPressed: (){
-                       //
-                       //         vm.createEvent(vm.getselectedIdeasList).then((value){
-                       //           if(value==true)
-                       //             {
-                       //         vm.showStudentforNotice(true);
-                       //              // BotToast.showText(text: 'Specific Notice Sent Successfully');
-                       //             }
-                       //         });
-                       //       }, buttonText: 'Create Specific Notice'),
-                       // )
-
-            ],),
-
-                        SizedBox(height: 5,),
+                            // Center(
+                            //   child: NoticeRegisterButton(
+                            //       onPressed: (){
+                            //
+                            //         vm.createEvent(vm.getselectedIdeasList).then((value){
+                            //           if(value==true)
+                            //             {
+                            //         vm.showStudentforNotice(true);
+                            //              // BotToast.showText(text: 'Specific Notice Sent Successfully');
+                            //             }
+                            //         });
+                            //       }, buttonText: 'Create Specific Notice'),
+                            // )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
                         Center(
                           child: LoginRegisterButton(
-                              onPressed: ()  {
-                                 vm.getAllUID();
-                                vm.createEvent(vm.allSelectedIds).then((value){
-                                  if(value==true)
-                                    {
-                                      //do something after event is created;
-                                    }
+                              onPressed: () {
+                                vm.getAllUID();
+                                vm.createEvent(vm.allSelectedIds).then((value) {
+                                  if (value == true) {
+                                    //do something after event is created;
+                                  }
                                 });
-                              }, buttonText: 'Create Notice'),
+                              },
+                              buttonText: 'Create Notice'),
                         )
                       ],
                     ),
                   ),
                 ),
 
-
                 ///
                 /// View Events
                 ///
-                Padding(padding: EdgeInsets.all(15),
-                child: vm.getListOfEvents.isEmpty?
-                Center(
-                  child: Text('List of events will appear here'),
-                ):
-                ListView.builder(
-                    itemCount: vm.getListOfEvents.length,
-                    itemBuilder: (context,index)
-                    {
-                      return Container(
-                        margin: EdgeInsets.only(
-                          bottom: 0.02.sh
-                        ),
-                        padding: EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(
-                            color: kPrimaryColor
-                          )
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    vm.getListOfEvents[index].title??'',
-                                  style: kPoppinsSemiBold600.copyWith(
-                                    fontSize: 18
-                                  ),),
-                                ),
-                                SizedBox(width: 10,),
-                                GestureDetector(
-                                  onTap: ()async
-                                  {
-                                    BotToast.showLoading();
-                                    try
-                                    {
-                                      await EventService().
-                                      deleteEvent(vm.getListOfEvents[index].id??'').then((value) {
-                                        if(value==true)
-                                        {
-                                          vm.getListOfEvents.removeAt(index);
-                                          vm.notifyListeners();
-                                        }
-                                      });
-                                    }
-                                    catch(error)
-                                    {
-                                      BotToast.showText(text: 'Oops! Something wrong happened');
-                                    }
-                                    BotToast.closeAllLoading();
-                                  },
-                                  child: const Icon(FontAwesomeIcons.trashCan,
-                                  size: 20,),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10,),
-                            Row(
-                              children: [
-                                Text('Date: ',
-                                style: kPoppinsMedium500.copyWith(
-                                  fontSize: 14
-                                ),),
-                                Text(DateTimeService().getDate(vm.getListOfEvents[index].dateTime??'')),
-                                SizedBox(width: 40,),
-                                Text('Time: ',
-                                  style:kPoppinsMedium500.copyWith(
-                                      fontSize: 14
-                                  ),),
-                                Text(DateTimeService().getTime(vm.getListOfEvents[index].dateTime??'')),
-
-                              ],
-                            ),
-                            const SizedBox(height: 6,),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Venue:    ',
-                                  style: kPoppinsMedium500.copyWith(
-                                      fontSize: 14
-                                  ),),
-                                Expanded(
-                                    child: Text(vm.getListOfEvents[index].location??'')),
-
-
-                              ],
-                            ),
-                            const SizedBox(height: 6,),
-                            Text('Details of an event: ',
-                            style: kPoppinsMedium500.copyWith(
-                                fontSize: 14
-                            ),),
-                            Text(vm.getListOfEvents[index].description??'',
-                            textAlign: TextAlign.justify,
-                            style: kPoppinsRegular400.copyWith(
-
-                            ),),
-                          ],
-                        ),
-                      );
-                    }),)
+                Padding(
+                  padding: EdgeInsets.all(15),
+                  child: vm.getListOfEvents.isEmpty
+                      ? Center(
+                          child: Text('List of events will appear here'),
+                        )
+                      : ListView.builder(
+                          itemCount: vm.getListOfEvents.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: EdgeInsets.only(bottom: 0.02.sh),
+                              padding: EdgeInsets.all(15),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(color: kPrimaryColor)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          vm.getListOfEvents[index].title ?? '',
+                                          style: kPoppinsSemiBold600.copyWith(
+                                              fontSize: 18),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () async {
+                                          BotToast.showLoading();
+                                          try {
+                                            await EventService()
+                                                .deleteEvent(vm
+                                                        .getListOfEvents[index]
+                                                        .id ??
+                                                    '')
+                                                .then((value) {
+                                              if (value == true) {
+                                                vm.getListOfEvents
+                                                    .removeAt(index);
+                                                vm.notifyListeners();
+                                              }
+                                            });
+                                          } catch (error) {
+                                            BotToast.showText(
+                                                text:
+                                                    'Oops! Something wrong happened');
+                                          }
+                                          BotToast.closeAllLoading();
+                                        },
+                                        child: const Icon(
+                                          FontAwesomeIcons.trashCan,
+                                          size: 20,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Date: ',
+                                        style: kPoppinsMedium500.copyWith(
+                                            fontSize: 14),
+                                      ),
+                                      Text(DateTimeService().getDate(
+                                          vm.getListOfEvents[index].dateTime ??
+                                              '')),
+                                      SizedBox(
+                                        width: 40,
+                                      ),
+                                      Text(
+                                        'Time: ',
+                                        style: kPoppinsMedium500.copyWith(
+                                            fontSize: 14),
+                                      ),
+                                      Text(DateTimeService().getTime(
+                                          vm.getListOfEvents[index].dateTime ??
+                                              '')),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 6,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Created date: ',
+                                        style: kPoppinsMedium500.copyWith(
+                                            fontSize: 14),
+                                      ),
+                                      Text(DateTimeService().getDate(
+                                          Timestamp.fromMillisecondsSinceEpoch(
+                                                  int.parse(
+                                                      vm.getListOfEvents[index]
+                                                              .id ??
+                                                          ''))
+                                              .toDate()
+                                              .toString())),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 6,
+                                  ),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Venue:    ',
+                                        style: kPoppinsMedium500.copyWith(
+                                            fontSize: 14),
+                                      ),
+                                      Expanded(
+                                          child: Text(vm.getListOfEvents[index]
+                                                  .location ??
+                                              '')),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 6,
+                                  ),
+                                  Text(
+                                    'Details of an event: ',
+                                    style: kPoppinsMedium500.copyWith(
+                                        fontSize: 14),
+                                  ),
+                                  Text(
+                                    vm.getListOfEvents[index].description ?? '',
+                                    textAlign: TextAlign.justify,
+                                    style: kPoppinsRegular400.copyWith(),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
+                )
               ]);
             });
           },
-
         ),
       ),
     ));
@@ -360,9 +390,8 @@ class CoordinatorEventScreen extends StatelessWidget {
 }
 
 class GroupDropDown extends StatefulWidget {
-  GroupDropDown({Key? key,
-    required this.vm,
-    required this.selectedList}) : super(key: key);
+  GroupDropDown({Key? key, required this.vm, required this.selectedList})
+      : super(key: key);
   CoordinatorEventScreenVM vm;
   Function(List<String>) selectedList;
 
@@ -371,29 +400,25 @@ class GroupDropDown extends StatefulWidget {
 }
 
 class _GroupDropDownState extends State<GroupDropDown> {
-
   late CoordinatorEventScreenVM vm;
-  List<String> listOfSelectedIdeaId=[];
-
+  List<String> listOfSelectedIdeaId = [];
 
   @override
   void initState() {
     super.initState();
-    vm=widget.vm;
+    vm = widget.vm;
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 10.0),
       decoration:
-      BoxDecoration(border: Border.all(color: Colors.grey.shade200)),
+          BoxDecoration(border: Border.all(color: Colors.grey.shade200)),
       child: ExpansionTile(
         initiallyExpanded: true,
         iconColor: Colors.grey,
-        title:
-        Text('Select Project',
+        title: Text('Select Project',
             style: kPoppinsRegular400.copyWith(
               color: Colors.grey,
               fontWeight: FontWeight.w400,
@@ -403,35 +428,36 @@ class _GroupDropDownState extends State<GroupDropDown> {
           ListView.builder(
               shrinkWrap: true,
               itemCount: vm.getlistOfIdeas.length,
-              itemBuilder: (context,topIndex){
+              itemBuilder: (context, topIndex) {
                 return Container(
                   decoration: BoxDecoration(
                       border: Border.all(
-                        color: Colors.grey.shade100,
-                      )
-                  ),
+                    color: Colors.grey.shade100,
+                  )),
                   child: Padding(
                     padding:
-                    EdgeInsets.only(left: 10.w, right:  10.w,bottom: 10.w),
+                        EdgeInsets.only(left: 10.w, right: 10.w, bottom: 10.w),
                     child: Row(
                       children: [
                         SizedBox(
                           height: 24.0,
                           width: 24.0,
                           child: Checkbox(
-                            value: listOfSelectedIdeaId.isEmpty?false:listOfSelectedIdeaId.contains(vm.getlistOfIdeas[topIndex].ideaId),
+                            value: listOfSelectedIdeaId.isEmpty
+                                ? false
+                                : listOfSelectedIdeaId.contains(
+                                    vm.getlistOfIdeas[topIndex].ideaId),
                             onChanged: (val) {
                               setState(() {
-                                if(listOfSelectedIdeaId.contains(vm.getlistOfIdeas[topIndex].ideaId))
-                                {
-                                  listOfSelectedIdeaId.remove(vm.getlistOfIdeas[topIndex].ideaId);
-                                }
-                                else
-                                {
-                                  listOfSelectedIdeaId.add(vm.getlistOfIdeas[topIndex].ideaId);
+                                if (listOfSelectedIdeaId.contains(
+                                    vm.getlistOfIdeas[topIndex].ideaId)) {
+                                  listOfSelectedIdeaId.remove(
+                                      vm.getlistOfIdeas[topIndex].ideaId);
+                                } else {
+                                  listOfSelectedIdeaId
+                                      .add(vm.getlistOfIdeas[topIndex].ideaId);
                                 }
                                 widget.selectedList(listOfSelectedIdeaId);
-
                               });
                             },
                             activeColor: Colors.blue,
@@ -442,18 +468,19 @@ class _GroupDropDownState extends State<GroupDropDown> {
                         ),
                         Expanded(
                           child: Row(
-                            children: [Expanded(
-                              child: Text(  vm.getlistOfIdeas[topIndex].ideaTitle??"",
-                                  style: kPoppinsRegular400.copyWith(
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 17.0,
-                                  )),
-                            ),],
-
+                            children: [
+                              Expanded(
+                                child: Text(
+                                    vm.getlistOfIdeas[topIndex].ideaTitle ?? "",
+                                    style: kPoppinsRegular400.copyWith(
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 17.0,
+                                    )),
+                              ),
+                            ],
                           ),
                         )
-
                       ],
                     ),
                   ),
@@ -463,5 +490,4 @@ class _GroupDropDownState extends State<GroupDropDown> {
       ),
     );
   }
-
 }

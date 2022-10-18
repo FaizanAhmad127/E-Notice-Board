@@ -71,79 +71,108 @@ class _CoordinatorRootScreenState extends State<CoordinatorRootScreen> with
 
   @override
   Widget build(BuildContext context) {
+    Future<bool> showExitPopup() async {
+      return await showDialog( //show confirm dialogue
+        //the return value will be from "Yes" or "No" options
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Exit App'),
+          content: Text('Do you want to exit an App?'),
+          actions:[
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              //return false when click on "NO"
+              child:Text('No'),
+            ),
+
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              //return true when click on "Yes"
+              child:Text('Yes'),
+            ),
+
+          ],
+        ),
+      )??false; //if showDialouge had returned null, then return false
+    }
+
+
     return ChangeNotifierProvider(
       create: (context)=>CoordinatorDrawerScreenVM(),
       builder: (context,viewModel)
       {
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
+        return WillPopScope(
+          onWillPop: showExitPopup,
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
 
-          drawer:  CoordinatorDrawerScreen(),
-          appBar: AppBar(
-            backgroundColor: kPrimaryColor,
+            drawer:  CoordinatorDrawerScreen(),
+            appBar: AppBar(
+              backgroundColor: kPrimaryColor,
 
-            actions: [
-              GestureDetector(
-                onTap: (){
-                  NavigationService().navigatePush(context, CoordinatorCommitteeScreen());
-                },
-                child: const Icon(
-                    FontAwesomeIcons.clipboardCheck
+              actions: [
+                GestureDetector(
+                  onTap: (){
+                    NavigationService().navigatePush(context, CoordinatorCommitteeScreen());
+                  },
+                  child: const Icon(
+                      FontAwesomeIcons.clipboardCheck
+                  ),
+                ),SizedBox(width: 15.w,),
+              ],
+              bottom: PreferredSize(
+                preferredSize:  Size(1.sw, 25.0),
+                child: TabBar(
+                  controller: controller,
+                  indicatorColor: kBlackColor,
+                  tabs:   [
+                    Column(
+                      children: [
+                        Icon(
+                            Icons.home_rounded
+                        ),
+                        Text('Home')
+                      ],
+                    ),
+                    Column(
+                      children: const [
+                        Icon(
+                            Icons.people_alt
+                        ),
+                        Text('Teachers')
+                      ],
+                    ),
+                    Column(
+                      children: const [
+                        FaIcon(FontAwesomeIcons.graduationCap),
+                        Text('Students')
+                      ],
+                    ),
+                    Column(
+                      children: const [
+                        Icon(
+                            Icons.notifications,
+                        ),
+                        FittedBox(child: Text('Notifications')),
+                      ],
+                    )
+
+                  ],
                 ),
-              ),SizedBox(width: 15.w,),
-            ],
-            bottom: PreferredSize(
-              preferredSize:  Size(1.sw, 25.0),
-              child: TabBar(
-                controller: controller,
-                indicatorColor: kBlackColor,
-                tabs:   [
-                  Column(
-                    children: [
-                      Icon(
-                          Icons.home_rounded
-                      ),
-                      Text('Home')
-                    ],
-                  ),
-                  Column(
-                    children: const [
-                      Icon(
-                          Icons.people_alt
-                      ),
-                      Text('Teachers')
-                    ],
-                  ),
-                  Column(
-                    children: const [
-                      FaIcon(FontAwesomeIcons.graduationCap),
-                      Text('Students')
-                    ],
-                  ),
-                  Column(
-                    children: const [
-                      Icon(
-                          Icons.notifications,
-                      ),
-                      FittedBox(child: Text('Notifications')),
-                    ],
-                  )
-
-                ],
               ),
+
             ),
+            body: TabBarView(
+              controller: controller,
+              children: [
+                CoordinatorProjectStatusScreen(),
+               // CoordinatorHomeScreen(),
+                CoordinatorTeacherListScreen(),
+                CoordinatorStudentListScreen(),
+                CoordinatorNotificationScreen(),
 
-          ),
-          body: TabBarView(
-            controller: controller,
-            children: [
-              CoordinatorProjectStatusScreen(),
-             // CoordinatorHomeScreen(),
-              CoordinatorTeacherListScreen(),
-              CoordinatorStudentListScreen(),
-              CoordinatorNotificationScreen(),
-
-            ],
+              ],
+            ),
           ),
         );
       },

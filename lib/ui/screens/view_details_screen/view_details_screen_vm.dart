@@ -7,6 +7,7 @@ import 'package:notice_board/core/models/idea/file_model.dart';
 import 'package:notice_board/core/models/idea/idea_model.dart';
 import 'package:notice_board/core/models/user_authentication/user_signup_model.dart';
 import 'package:notice_board/core/services/file_management/file_download_open_service.dart';
+import 'package:notice_board/core/services/navigation_service.dart';
 import 'package:notice_board/core/services/user_documents/student_idea_service.dart';
 import 'package:notice_board/core/services/user_documents/user_profile_service.dart';
 
@@ -115,6 +116,11 @@ class ViewDetailsScreenVM extends ChangeNotifier{
     resetListOfFiles();
     resetListOfStudent();
     await getIdea();
+  }
+
+  Future deleteIdea()async
+  {
+    await _studentIdeaService.deleteIdea(ideaId, _listOfStudents.map((e) => e.uid??'').toList());
   }
 
   IdeaModel? get ideaModel=>_ideaModel;

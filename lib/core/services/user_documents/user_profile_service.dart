@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:logger/logger.dart';
+import 'package:notice_board/core/models/idea/idea_model.dart';
 import 'package:notice_board/core/models/user_authentication/user_signup_model.dart';
 
 class UserProfileService{
@@ -201,6 +202,51 @@ class UserProfileService{
     }
     BotToast.closeAllLoading();
     return listOfTeachers;
+  }
+
+  Future deleteStudent(String studentUid)async
+  {
+ 
+    print('student uid is: $studentUid');
+
+    try
+    {
+      ///delete student result
+      await _firebaseFirestore.collection('result').doc('2021-2022').collection('marks').doc(studentUid).delete();
+
+      /// deleting the user from post/idea , if the student is single in an idea and no more teammates then delete the whole idea
+
+      await _firebaseFirestore.collection('post').where('students',arrayContains: studentUid).get().then((querySnap) async{
+        await Future.forEach(querySnap.docs, (QueryDocumentSnapshot queryDoc) async{
+          IdeaModel idea= IdeaModel.fromJson(queryDoc);
+          if(idea.students.length==1)
+          {
+            print('whole post will be removed: post id: ${idea.ideaId}');
+            await queryDoc.reference.delete();
+          }
+          else
+          {
+            List<String> tempList=idea.students;
+            print('temlist length at post is before ${tempList.length}');
+            tempList.remove(studentUid);
+            print('temlist length at post is after ${tempList.length}');
+            await queryDoc.reference.update({'students':tempList});
+          }
+
+        });
+      });
+
+      ///now delete the student
+      await _firebaseFirestore.collection('student').doc(studentUid).delete();
+
+    }
+    catch(error)
+    {
+      _logger.e("error at deleteStudent/UserProfileService.dart $error");
+    }
+
+    
+    
   }
 
 }

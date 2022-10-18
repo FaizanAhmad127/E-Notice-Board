@@ -23,7 +23,7 @@ class CoordinatorTeacherListScreen extends StatelessWidget {
       onTap: ()
       {
         NavigationService().navigatePush(context,
-            TeacherProfileScreen( userSignupModel: teacher));
+            TeacherProfileScreen( userSignupModel: teacher,calledByUser: 'coordinator',));
       },
       child: SizedBox(
           width: double.infinity,

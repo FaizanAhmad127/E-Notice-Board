@@ -66,7 +66,7 @@ class StudentHomeScreen extends StatelessWidget {
               return  viewModel.isAvailable ?FloatingActionButton(
                 onPressed: ()
                 {
-                  NavigationService().navigatePushReplacement(context,  AddIdeaScreen());
+                  NavigationService().navigatePush(context,  AddIdeaScreen());
                 },
                 backgroundColor: kPrimaryColor,
                 child: Icon(
